@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+    // Dependencias de Spring Boot y Spring Data Reactive
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     // Spring Caché
     implementation("org.springframework.boot:spring-boot-starter-cache")
     // Spring Validador
