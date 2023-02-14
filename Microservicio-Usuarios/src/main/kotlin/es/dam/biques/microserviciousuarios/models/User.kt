@@ -4,22 +4,22 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
-@Table(name = "usuarios")
-data class Usuario(
+@Table(name = "users")
+data class User(
     @Id
     val id: Long? = null,
     val uuid: UUID = UUID.randomUUID(),
-    val imagen: String? = null,
+    val image: String? = null,
     @Column("rol")
-    val tipo: String,
+    val type: String,
     val email: String,
     @get:JvmName("userName")
     val username: String,
     @get:JvmName("userPassword")
     val password: String,
-    val direccion: String,
+    val address: String,
 
     // Históricos.
     @Column("created_at")
@@ -32,5 +32,5 @@ data class Usuario(
 )
 
 enum class TipoUsuario {
-    SUPERADMIN, ADMIN, CLIENTE
+    SUPERADMIN, ADMIN, CLIENT
 }

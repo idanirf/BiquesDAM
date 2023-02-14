@@ -1,20 +1,20 @@
 package es.dam.biques.microserviciousuarios.mappers
 
-import es.dam.biques.microserviciousuarios.dto.UsuarioCreateDTO
-import es.dam.biques.microserviciousuarios.dto.UsuarioDTO
-import es.dam.biques.microserviciousuarios.models.Usuario
+import es.dam.biques.microserviciousuarios.dto.UserCreateDTO
+import es.dam.biques.microserviciousuarios.dto.UserDTO
+import es.dam.biques.microserviciousuarios.models.User
 
-fun Usuario.toDTO(): UsuarioDTO {
-    return UsuarioDTO(
+fun User.toDTO(): UserDTO {
+    return UserDTO(
         id = id,
         uuid = uuid,
-        imagen = imagen,
-        tipo = tipo.split(",").map { it.trim() }.toSet(),
+        image = image,
+        type = type.split(",").map { it.trim() }.toSet(),
         email = email,
         username = username,
         password = password,
-        direccion = direccion,
-        metadata = UsuarioDTO.Metadata(
+        address = address,
+        metadata = UserDTO.Metadata(
             createdAt = createdAt,
             updatedAt = updatedAt,
             deleted = deleted
@@ -22,13 +22,13 @@ fun Usuario.toDTO(): UsuarioDTO {
     )
 }
 
-fun UsuarioCreateDTO.toModel(): Usuario {
-    return Usuario(
-        imagen = imagen,
-        tipo = tipo.joinToString(", ") { it.uppercase().trim() },
+fun UserCreateDTO.toModel(): User {
+    return User(
+        image = image,
+        type = type.joinToString(", ") { it.uppercase().trim() },
         email = email,
         username = username,
         password = password,
-        direccion = direccion
+        address = address
     )
 }
