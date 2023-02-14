@@ -18,7 +18,6 @@ fun UserCreateDTO.validate(): UserCreateDTO {
         throw UserBadRequestException("The type cannot be empty")
 
     return this
-
 }
 
 
