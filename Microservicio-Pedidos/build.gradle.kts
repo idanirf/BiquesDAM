@@ -46,6 +46,13 @@ dependencies {
     // Caching Headers
     implementation("io.ktor:ktor-server-caching-headers-jvm:$ktor_version")
 
+    // Koin - Core
+    implementation("io.insert-koin:koin-core:3.2.2")
+
+    // Koin Anotaciones
+    implementation("io.insert-koin:koin-annotations:1.0.3")
+    ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
+
     // Compression
     implementation("io.ktor:ktor-server-compression-jvm:$ktor_version")
     // CORS
