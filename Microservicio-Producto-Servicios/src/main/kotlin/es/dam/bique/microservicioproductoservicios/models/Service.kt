@@ -7,10 +7,10 @@ import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
 @Table("SERVICES")
-data class Services(
+data class Service(
 
     @Id
-    val id: Long?,
+    val id: Long? = null,
 
     val uuid: UUID = UUID.randomUUID(),
 

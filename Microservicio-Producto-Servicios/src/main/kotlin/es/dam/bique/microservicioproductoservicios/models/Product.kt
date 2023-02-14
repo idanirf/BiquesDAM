@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
 @Table(name = "PRODUCTS")
-data class Products(
+data class Product(
     @Id
     val id: Long? = null,
 
