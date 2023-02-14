@@ -61,6 +61,13 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
     implementation("io.github.microutils:kotlin-logging-jvm:$micrologging_version")
 
+    // Mongo Reactivo
+    implementation("org.litote.kmongo:kmongo-async:4.7.2")
+    implementation("org.litote.kmongo:kmongo-coroutine:4.7.2")
+
+    // Serializar KMongo
+    implementation("org.litote.kmongo:kmongo-id-serialization:4.1.3")
+
     // Koin
     implementation("io.insert-koin:koin-ktor:$koin_ktor_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor_version")
