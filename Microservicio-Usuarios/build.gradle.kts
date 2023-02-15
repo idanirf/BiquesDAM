@@ -18,6 +18,8 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
 	// H2 Database
 	runtimeOnly("com.h2database:h2")
 
