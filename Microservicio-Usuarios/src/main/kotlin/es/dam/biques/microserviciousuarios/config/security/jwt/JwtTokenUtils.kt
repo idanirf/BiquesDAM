@@ -38,12 +38,12 @@ class JwtTokenUtils {
     }
 
     fun getUserIdFromJwt(token: String?): String {
-        logger.info { "Getting the user ID:: $token" }
+        logger.info { "Getting the user ID: $token" }
         return validateToken(token!!)!!.subject
     }
 
     fun validateToken(authToken: String): DecodedJWT? {
-        logger.info { "Validate the token: ${authToken}" }
+        logger.info { "Validate the token: $authToken" }
 
         try {
             return JWT.require(Algorithm.HMAC512(jwtSecreto)).build().verify(authToken)
@@ -56,21 +56,21 @@ class JwtTokenUtils {
         validateToken(token)?.claims
 
     fun getUsernameFromJwt(token: String): String {
-        logger.info { "Getting username from token: ${token}" }
+        logger.info { "Getting username from token: $token" }
 
         val claims = getClaimsFromJwt(token)
         return claims!!["username"]!!.asString()
     }
 
     fun getRolesFromJwt(token: String): String {
-        logger.info { "Getting the roles from the token: ${token}" }
+        logger.info { "Getting the roles from the token: $token" }
 
         val claims = getClaimsFromJwt(token)
         return claims!!["types"]!!.asString()
     }
 
     fun isTokenValid(token: String): Boolean {
-        logger.info { "Checking if the token is valid: ${token}" }
+        logger.info { "Checking if the token is valid: $token" }
 
         val claims = getClaimsFromJwt(token)!!
         val expirationDate = claims["exp"]!!.asDate()

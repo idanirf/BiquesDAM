@@ -16,14 +16,13 @@ import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
-
 class JwtAuthenticationFilter(
     private val jwtTokenUtil: JwtTokenUtils,
     private val authenticationManager: AuthenticationManager
 ) : UsernamePasswordAuthenticationFilter() {
 
     override fun attemptAuthentication(req: HttpServletRequest, response: HttpServletResponse): Authentication {
-        logger.info { "Triying autenticate" }
+        logger.info { "Triying authenticate" }
 
         val credentials = ObjectMapper().readValue(req.inputStream, UserLoginDTO::class.java)
         val auth = UsernamePasswordAuthenticationToken(
@@ -38,10 +37,10 @@ class JwtAuthenticationFilter(
         auth: Authentication
     ) {
         logger.info { "Autentication correct" }
+
         val user = auth.principal as User
         val token: String = jwtTokenUtil.generateToken(user)
         res.addHeader("Authorization", token)
-        // Authorization
         res.addHeader("Access-Control-Expose-Headers", JwtTokenUtils.TOKEN_HEADER)
     }
 

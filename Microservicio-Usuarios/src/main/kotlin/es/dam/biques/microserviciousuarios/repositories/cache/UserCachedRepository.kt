@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
+import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -39,6 +40,12 @@ class UserCachedRepository
         logger.info { "findByEmail($email)" }
 
         return@withContext usersRepository.findUserByEmail(email).firstOrNull()
+    }
+
+    override suspend fun findByUUID(uuid: UUID): User? = withContext(Dispatchers.IO) {
+        logger.info { "findByUUID($uuid" }
+
+        return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
     }
 
     @CachePut("users")
@@ -81,7 +88,7 @@ class UserCachedRepository
     }
 
     @CacheEvict("users", allEntries = true)
-    override suspend fun delete(tenista: User) = withContext(Dispatchers.IO) {
+    override suspend fun delete(user: User) = withContext(Dispatchers.IO) {
         logger.info { "deleteAll()" }
 
         return@withContext usersRepository.deleteAll()
