@@ -1,4 +1,4 @@
-package serializers
+package biques.dam.es.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
