@@ -18,8 +18,8 @@ data class OrderLine(
     //@Contextual
     //val product: Id<OnSale>,
     val amount: Int,
-    val price: Float,
-    val total: Int,
+    val price: Double,
+    val total: Double,
     //@Contextual
     //val employee: Id<User>
     )
