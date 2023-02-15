@@ -2,11 +2,10 @@ package biques.dam.es.models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
-import serializers.UUIDSerializer
+import biques.dam.es.serializers.UUIDSerializer
 import java.util.UUID
 
 @Serializable

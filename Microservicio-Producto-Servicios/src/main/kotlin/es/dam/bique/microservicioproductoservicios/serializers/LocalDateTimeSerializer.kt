@@ -1,4 +1,4 @@
-package biques.dam.es.serializers
+package es.dam.bique.microservicioproductoservicios.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
 
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+
     override val descriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): LocalDateTime {
@@ -17,4 +18,5 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
         encoder.encodeString(value.toString())
     }
+
 }
