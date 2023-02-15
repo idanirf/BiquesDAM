@@ -12,7 +12,7 @@ class PropertiesReader(private val fileName: String) {
         if (file != null) {
             properties.load(file)
         } else {
-            throw FileNotFoundException("No se encuentra el fichero $fileName")
+            throw FileNotFoundException("File not found: $fileName")
         }
     }
 
@@ -21,7 +21,7 @@ class PropertiesReader(private val fileName: String) {
         if (value != null) {
             return value
         } else {
-            throw FileNotFoundException("No se encuentra la propiedad $key en el fichero $fileName")
+            throw FileNotFoundException("Property $key not found in file: $fileName")
         }
     }
 }
