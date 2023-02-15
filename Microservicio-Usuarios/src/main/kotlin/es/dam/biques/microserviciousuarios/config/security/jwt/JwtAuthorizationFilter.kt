@@ -1,6 +1,6 @@
 package es.dam.biques.microserviciousuarios.config.security.jwt
 
-import es.dam.biques.microserviciousuarios.service.UsersService
+import es.dam.biques.microserviciousuarios.service.UserService
 import es.dam.biques.microserviciousuarios.utils.toUUID
 import io.netty.handler.codec.http.HttpHeaderNames.AUTHORIZATION
 import jakarta.servlet.FilterChain
@@ -18,7 +18,7 @@ private val logger = mu.KotlinLogging.logger {}
 
 class JwtAuthorizationFilter(
     private val jwtTokenUtil: JwtTokenUtils,
-    private val service: UsersService,
+    private val service: UserService,
     authManager: AuthenticationManager,
 ) : BasicAuthenticationFilter(authManager) {
 
@@ -47,7 +47,7 @@ class JwtAuthorizationFilter(
         val username = jwtTokenUtil.getUsernameFromJwt(token)
         val userId = jwtTokenUtil.getUserIdFromJwt(token)
         val types = jwtTokenUtil.getRolesFromJwt(token)
-        val user = service.loadUserByUuid(userId.toUUID())
+        val user = service.findUserByUuid(userId.toUUID())
         return@runBlocking UsernamePasswordAuthenticationToken(
             user,
             null,
