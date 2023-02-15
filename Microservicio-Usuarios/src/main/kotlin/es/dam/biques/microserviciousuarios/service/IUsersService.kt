@@ -1,9 +1,9 @@
-package es.dam.biques.microserviciousuarios.repositories.cache
+package es.dam.biques.microserviciousuarios.service
 
 import es.dam.biques.microserviciousuarios.models.User
 import kotlinx.coroutines.flow.Flow
 
-interface IUserCachedRepository {
+interface IUsersService {
     suspend fun findAll(): Flow<User>
     suspend fun findById(id: Long): User?
     suspend fun findByEmail(email: String): User?
