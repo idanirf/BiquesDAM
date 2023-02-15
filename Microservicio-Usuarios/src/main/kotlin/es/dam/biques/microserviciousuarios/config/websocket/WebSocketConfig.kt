@@ -14,7 +14,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 class ServerWebSocketConfig : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry.addHandler(webSocketUsersHandler(), "/users")
-
     }
 
     @Bean

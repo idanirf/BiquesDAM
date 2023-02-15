@@ -10,6 +10,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.io.IOException
 import java.time.LocalTime
 import java.util.concurrent.CopyOnWriteArraySet
+
 private val logger = KotlinLogging.logger {}
 
 
@@ -52,7 +53,6 @@ class WebSocketHandler(private val entity: String) : TextWebSocketHandler(), Sub
             }
         }
     }
-
 
     override fun handleTransportError(session: WebSocketSession, exception: Throwable) {
         logger.info { "Transport error with server ${exception.message}" }
