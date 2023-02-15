@@ -6,30 +6,30 @@ import java.util.UUID
 data class ServiceDTO(
 
     val id: Long?,
-    val uuid: UUID,
-    val imagen: String,
+    val uuid: String,
+    val image: String,
     val price: Float,
-    val appointmentDTO : AppointmentDTO,
-    val type : ProductType
+    val appointment : AppointmentDTO,
+    val type : String
 
 )
 
 data class ServiceDTOCreate(
 
-    val uuid: UUID,
-    val imagen: String,
+    val uuid: String,
+    val image: String,
     val price: Float,
-    val appointmentDTO : AppointmentDTO,
-    val type : ProductType
+    val appointment : AppointmentDTO,
+    val type : String
 
 )
 
 data class ServiceDTOUpdate(
 
-    val uuid: UUID,
-    val imagen: String,
+    val uuid: String,
+    val image: String,
     val price: Float,
-    val appointmentDTO : AppointmentDTO,
-    val type : ProductType
+    val appointment : AppointmentDTO,
+    val type : String
 
 )
