@@ -1,4 +1,4 @@
-package es.dam.bique.microservicioproductoservicios.repositories.appointment
+package es.dam.bique.microservicioproductoservicios.repositories.appointments
 
 import es.dam.bique.microservicioproductoservicios.exceptions.AppointmentConflictIntegrityException
 import es.dam.bique.microservicioproductoservicios.models.Appointment
@@ -61,7 +61,6 @@ class AppointmentsCachedRepository
         }
 
         return@withContext null
-
     }
 
     @CacheEvict("appointments")
