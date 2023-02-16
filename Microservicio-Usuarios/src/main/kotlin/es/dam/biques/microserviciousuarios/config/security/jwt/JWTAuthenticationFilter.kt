@@ -13,8 +13,8 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import java.util.*
 
-class JwtAuthenticationFilter(
-    private val jwtTokenUtil: JwtTokenUtils,
+class JWTAuthenticationFilter(
+    private val jwtTokenUtil: JWTTokenUtils,
     private val authenticationManager: AuthenticationManager
 ) : UsernamePasswordAuthenticationFilter() {
 

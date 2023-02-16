@@ -13,7 +13,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @Component
-class JwtTokenUtils {
+class JWTTokenUtils {
 
     @Value("\${jwt.secret:BiquesDam}")
     private val jwtSecret: String? = null
