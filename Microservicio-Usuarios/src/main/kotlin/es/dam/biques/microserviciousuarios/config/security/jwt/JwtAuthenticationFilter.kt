@@ -6,7 +6,6 @@ import es.dam.biques.microserviciousuarios.models.User
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import mu.KotlinLogging
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -14,15 +13,13 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import java.util.*
 
-private val logger = KotlinLogging.logger {}
-
 class JwtAuthenticationFilter(
     private val jwtTokenUtil: JwtTokenUtils,
     private val authenticationManager: AuthenticationManager
 ) : UsernamePasswordAuthenticationFilter() {
 
     override fun attemptAuthentication(req: HttpServletRequest, response: HttpServletResponse): Authentication {
-        logger.info { "Triying authenticate" }
+        logger.info { "Triying to authenticate..." }
 
         val credentials = ObjectMapper().readValue(req.inputStream, UserLoginDTO::class.java)
         val auth = UsernamePasswordAuthenticationToken(
@@ -36,12 +33,11 @@ class JwtAuthenticationFilter(
         req: HttpServletRequest?, res: HttpServletResponse, chain: FilterChain?,
         auth: Authentication
     ) {
-        logger.info { "Autentication correct" }
+        logger.info { "Autentication is correct!" }
 
         val user = auth.principal as User
         val token: String = jwtTokenUtil.generateToken(user)
         res.addHeader("Authorization", token)
-        res.addHeader("Access-Control-Expose-Headers", JwtTokenUtils.TOKEN_HEADER)
     }
 
     override fun unsuccessfulAuthentication(
@@ -56,13 +52,12 @@ class JwtAuthenticationFilter(
         response.contentType = "application/json"
         response.writer.append(error.toString())
     }
-
 }
 
 private data class BadCredentialsError(
     val timestamp: Long = Date().time,
     val status: Int = 401,
-    val message: String = "User or password unauthorized.",
+    val message: String = "User or password incorrect.",
 ) {
     override fun toString(): String {
         return ObjectMapper().writeValueAsString(this)

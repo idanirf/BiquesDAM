@@ -16,29 +16,28 @@ private val logger = KotlinLogging.logger {}
 class JwtTokenUtils {
 
     @Value("\${jwt.secret:BiquesDam}")
-    private val jwtSecreto: String? =
-        null
+    private val jwtSecret: String? = null
 
     @Value("\${jwt.token-expiration:3600}")
-    private val jwtDuracionTokenEnSegundos = 0
+    private val jwtTimeToken = 0
 
     fun generateToken(user: User): String {
         logger.info { "Generate token for user: ${user.username}" }
 
-        val tokenExpirationDate = Date(System.currentTimeMillis() + jwtDuracionTokenEnSegundos * 1000)
+        val tokenExpirationDate = Date(System.currentTimeMillis() + jwtTimeToken * 1000)
 
         return JWT.create()
             .withSubject(user.uuid.toString())
-            .withHeader(mapOf("typ" to TOKEN_TYPE))
             .withIssuedAt(Date())
             .withExpiresAt(tokenExpirationDate)
             .withClaim("username", user.username)
             .withClaim("types", user.type.split(",").toSet().toString())
-            .sign(Algorithm.HMAC512(jwtSecreto))
+            .sign(Algorithm.HMAC512(jwtSecret))
     }
 
     fun getUserIdFromJwt(token: String?): String {
         logger.info { "Getting the user ID: $token" }
+
         return validateToken(token!!)!!.subject
     }
 
@@ -46,14 +45,13 @@ class JwtTokenUtils {
         logger.info { "Validate the token: $authToken" }
 
         try {
-            return JWT.require(Algorithm.HMAC512(jwtSecreto)).build().verify(authToken)
+            return JWT.require(Algorithm.HMAC512(jwtSecret)).build().verify(authToken)
         } catch (e: Exception) {
             throw TokenInvalidException("Invalid or expired token")
         }
     }
 
-    private fun getClaimsFromJwt(token: String) =
-        validateToken(token)?.claims
+    private fun getClaimsFromJwt(token: String) = validateToken(token)?.claims
 
     fun getUsernameFromJwt(token: String): String {
         logger.info { "Getting username from token: $token" }
@@ -75,12 +73,7 @@ class JwtTokenUtils {
         val claims = getClaimsFromJwt(token)!!
         val expirationDate = claims["exp"]!!.asDate()
         val now = Date(System.currentTimeMillis())
-        return now.before(expirationDate)
-    }
 
-    companion object {
-        const val TOKEN_HEADER = "Authorization"
-        const val TOKEN_PREFIX = "BiquesDam "
-        const val TOKEN_TYPE = "JWT"
+        return now.before(expirationDate)
     }
 }
