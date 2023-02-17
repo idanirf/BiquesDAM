@@ -21,6 +21,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.toList
 
 
 // TODO Mirar catchs
@@ -32,14 +33,16 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
         get("/orderline"){
-            val res = orderLineService.getAllOrderLine().collect { orderLine ->
-                orderLine.toDto()
+            val res = mutableListOf<OrderLineDTO>()
+                orderLineService.getAllOrderLine().collect { orderLine ->
+                res.add(orderLine.toDto())
             }
             call.respond(HttpStatusCode.OK, res)
         }
         get("/order"){
-           val res = orderService.getAllOrder().collect { order ->
-               order.toDTO()
+           val res = mutableListOf<OrderDTO>()
+               orderService.getAllOrder().collect { order ->
+               res.add(order.toDTO())
            }
             call.respond(
                 HttpStatusCode.OK,res
