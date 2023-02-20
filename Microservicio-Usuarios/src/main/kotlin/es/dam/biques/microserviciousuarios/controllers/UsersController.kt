@@ -27,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/")
 class UsersController @Autowired constructor(
     private val userService: UserService,
     private val authenticationManager: AuthenticationManager,
@@ -57,7 +57,6 @@ class UsersController @Autowired constructor(
     }
 
 
-
     @PostMapping("/register")
     suspend fun register(@Valid @RequestBody usuarioDto: UserCreateDTO): ResponseEntity<UserTokenDTO> {
         logger.info { "User register: ${usuarioDto.username}" }
@@ -79,7 +78,7 @@ class UsersController @Autowired constructor(
 
 
     // TODO: Revisar este endpoint o en el microservicio A
-    @PreAuthorize("hasRole('ADMIN')"+" || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @GetMapping("/list")
     suspend fun list(@AuthenticationPrincipal user: User): ResponseEntity<List<UserDTO>> {
 
@@ -87,13 +86,6 @@ class UsersController @Autowired constructor(
         val res = userService.findAll().toList().map { it.toDTO() }
         return ResponseEntity.ok(res)
     }
-
-
-
-
-
-
-
 
 
 }
