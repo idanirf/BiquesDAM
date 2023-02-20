@@ -84,8 +84,8 @@ class UserService
         }
     }
 
-    suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
-        logger.info { "update($id, $user)" }
+    suspend fun update( user: User): User? = withContext(Dispatchers.IO) {
+        logger.info { "update($user)" }
 
         logger.info { "Updating user: $user" }
 
