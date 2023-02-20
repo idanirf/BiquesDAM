@@ -46,7 +46,7 @@ class SecurityConfig
             .and()
             .authorizeHttpRequests()
             .requestMatchers("/error/**").permitAll()
-            .requestMatchers("users/login", "users/register").permitAll()
+            .requestMatchers("/login", "/register").permitAll()
             .requestMatchers("/**").permitAll()
             // TODO: ¿Cómo protegemos los endpoints de swagger?
 //            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()

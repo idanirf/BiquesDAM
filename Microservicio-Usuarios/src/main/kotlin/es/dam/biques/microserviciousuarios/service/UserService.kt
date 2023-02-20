@@ -84,8 +84,8 @@ class UserService
         }
     }
 
-    suspend fun update( user: User): User? = withContext(Dispatchers.IO) {
-        logger.info { "update($user)" }
+    suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
+        logger.info { "update($id, $user)" }
 
         logger.info { "Updating user: $user" }
 
@@ -113,6 +113,18 @@ class UserService
             return@withContext usersRepository.save(updtatedUser)
         } catch (e: Exception) {
             throw UserBadRequestException("Error updating user: Username or email already exist.")
+        }
+    }
+
+    suspend fun deleteById(id: Long) = withContext(Dispatchers.IO) {
+        logger.info { "delete($id)" }
+
+        val userDB = usersRepository.findById(id)
+
+        try {
+            return@withContext userDB?.let { usersRepository.delete(it) }
+        } catch (e: Exception) {
+            throw UserBadRequestException("Error deleting user.")
         }
     }
 }
