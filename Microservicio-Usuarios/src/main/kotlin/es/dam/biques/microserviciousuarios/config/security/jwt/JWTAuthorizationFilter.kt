@@ -14,8 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import java.io.IOException
 
-class JwtAuthorizationFilter(
-    private val jwtTokenUtil: JwtTokenUtils,
+class JWTAuthorizationFilter(
+    private val jwtTokenUtil: JWTTokenUtils,
     private val service: UserService,
     authManager: AuthenticationManager,
 ) : BasicAuthenticationFilter(authManager) {
