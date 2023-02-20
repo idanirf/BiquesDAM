@@ -49,7 +49,7 @@ class SecurityConfig
             .requestMatchers("users/login", "users/register").permitAll()
             .requestMatchers("/**").permitAll()
             // TODO: ¿Cómo protegemos los endpoints de swagger?
-            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+//            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilter(JWTAuthenticationFilter(jwtTokenUtils, authenticationManager))
