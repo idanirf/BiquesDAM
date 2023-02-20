@@ -2,6 +2,7 @@ package biques.dam.es.mapper
 
 import biques.dam.es.dto.OrderDTO
 import biques.dam.es.models.Order
+import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 import org.litote.kmongo.id.toId
 import java.util.*
@@ -14,7 +15,7 @@ fun OrderDTO.toEntity(): Order{
         status = Order.StatusOrder.from(status),
         total = this.total,
         IVA = this.IVA,
-        OrderLine = this.OrderLine.toEntity()
+        OrderLine = this.OrderLine.map { it.toEntity() }
     )
 }
 
@@ -25,6 +26,6 @@ fun Order.toDTO(): OrderDTO{
         status = status.name,
         total = this.total,
         IVA = this.IVA,
-        OrderLine = this.OrderLine.toDto()
+        OrderLine = this.OrderLine.map { it.toDto() }
     )
 }
