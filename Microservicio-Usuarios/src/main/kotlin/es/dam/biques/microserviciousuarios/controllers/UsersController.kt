@@ -25,10 +25,8 @@ private val logger = KotlinLogging.logger {}
 @RequestMapping("/users")
 class UsersController @Autowired constructor(
     private val userService: UserService,
-    // TODO: Hacer el bean personalizado para que funcione el autowired.
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenUtils: JWTTokenUtils
-    // TODO: ¿servicio de storage?
 ) {
     @PostMapping("/login")
     fun login(@Valid @RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
