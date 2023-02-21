@@ -15,11 +15,12 @@ import java.util.*
 @Table(name = "SERVICES")
 data class Service(
 
-    @BsonId @Contextual
-    val id: Id<Service> = newId(),
+    @BsonId
+    @Contextual
+    override val id: Id<Product> = newId(),
 
     @Serializable(with = UUIDSerializer::class)
-    val uuid: UUID = UUID.randomUUID(),
+    override val uuid: UUID = UUID.randomUUID(),
 
     @NotEmpty(message = "The image cannot be empty.")
     val image: String,

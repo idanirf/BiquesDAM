@@ -29,17 +29,3 @@ data class ProductCreateDTO(
     val type : String
 
 )
-
-data class ProductUpdateDTO(
-
-    val image: String,
-    val brand: String,
-    val model: String,
-    val description: String,
-    val price: Float,
-    val discountPercentage: Float,
-    val stock : String,
-    val isAvailable: Boolean,
-    val type : String
-
-)

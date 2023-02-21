@@ -6,9 +6,11 @@ import es.dam.bique.microservicioproductoservicios.repositories.products.Product
 import kotlinx.coroutines.flow.Flow
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 private val logger = KotlinLogging.logger {}
 
+@Service
 class ProductsService
     @Autowired constructor(
     private val productsRepository: ProductsCachedRepository
