@@ -14,10 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import java.io.IOException
 
-private val logger = mu.KotlinLogging.logger {}
-
-class JwtAuthorizationFilter(
-    private val jwtTokenUtil: JwtTokenUtils,
+class JWTAuthorizationFilter(
+    private val jwtTokenUtil: JWTTokenUtils,
     private val service: UserService,
     authManager: AuthenticationManager,
 ) : BasicAuthenticationFilter(authManager) {
@@ -30,7 +28,7 @@ class JwtAuthorizationFilter(
     ) {
         logger.info { "Filtrando" }
         val header = req.getHeader(AUTHORIZATION.toString())
-        if (header == null || !header.startsWith(JwtTokenUtils.TOKEN_PREFIX)) {
+        if (header == null) {
             chain.doFilter(req, res)
             return
         }

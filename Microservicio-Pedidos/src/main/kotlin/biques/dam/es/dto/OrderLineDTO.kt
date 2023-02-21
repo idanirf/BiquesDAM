@@ -1,5 +1,9 @@
 package biques.dam.es.dto
 
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 data class OrderLineDTO(
     val id: String,
     val uuid: String,

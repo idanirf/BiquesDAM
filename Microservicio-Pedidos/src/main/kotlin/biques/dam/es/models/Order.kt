@@ -18,7 +18,7 @@ data class Order(
     val status: StatusOrder,
     val total: Double,
     val IVA: Double,
-    val OrderLine: OrderLine,
+    val OrderLine: List<OrderLine>,
     //val cliente: User
 ) {
     enum class StatusOrder(statusOrder: String) {

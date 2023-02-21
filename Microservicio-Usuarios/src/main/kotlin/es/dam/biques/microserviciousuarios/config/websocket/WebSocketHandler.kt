@@ -51,7 +51,7 @@ class WebSocketHandler(private val entity: String) : TextWebSocketHandler(), Sub
     override fun sendPeriodicMessages() {
         for (session in sessions) {
             if (session.isOpen) {
-                val broadcast = "server periodic message " + LocalTime.now()
+                val broadcast = "Server periodic message " + LocalTime.now()
 
                 logger.info("Server sends: {}", broadcast)
                 session.sendMessage(TextMessage(broadcast))

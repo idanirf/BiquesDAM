@@ -15,7 +15,7 @@ object MongoDbManager {
 
     init {
         mongoDbClient = KMongo.createClient(STRING_CONNECTION).coroutine
-        database = mongoDbClient.getDatabase("orders")
+        database = mongoDbClient.getDatabase("order")
     }
 
 }

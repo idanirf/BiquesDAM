@@ -21,11 +21,15 @@ dependencies {
     // Spring Security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+    // H2 Database Reactive
+    runtimeOnly("io.r2dbc:r2dbc-h2")
     // H2 Database
-    runtimeOnly("com.h2database:h2")
+//    runtimeOnly("com.h2database:h2")
 
-    // Dependencias de Spring Boot y Spring Data Reactive
+    // Dependencias de Spring Data Reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    // Dependencias de Spring Data NO REACTIVO.
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Spring Caché
     implementation("org.springframework.boot:spring-boot-starter-cache")
