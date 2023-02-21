@@ -19,12 +19,3 @@ data class AppointmentCreateDTO(
     val description: String
 
 )
-
-data class AppointmentUpdateDTO(
-
-    val user: AppointmentUserDTO,
-    val assistance : String,
-    val date: String,
-    val description: String
-
-)

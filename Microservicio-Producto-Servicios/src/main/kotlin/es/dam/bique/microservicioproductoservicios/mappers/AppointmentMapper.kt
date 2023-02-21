@@ -1,5 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.mappers
 
+import es.dam.bique.microservicioproductoservicios.dto.AppointmentCreateDTO
 import es.dam.bique.microservicioproductoservicios.dto.AppointmentDTO
 import es.dam.bique.microservicioproductoservicios.models.Appointment
 import es.dam.bique.microservicioproductoservicios.models.AssistanceType
@@ -27,5 +28,14 @@ fun Appointment.toDTO(): AppointmentDTO{
         assistance = assistance.value,
         date = date.toString(),
         description = description
+    )
+}
+
+fun AppointmentCreateDTO.toModel(): Appointment{
+    return Appointment(
+        user = this.user,
+        assistance = AssistanceType.from(assistance),
+        date = LocalDateTime.parse(date),
+        description = this.description
     )
 }

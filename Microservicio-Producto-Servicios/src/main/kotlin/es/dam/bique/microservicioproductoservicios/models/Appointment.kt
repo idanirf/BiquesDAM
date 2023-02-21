@@ -23,15 +23,15 @@ data class Appointment(
     @Serializable(with = UUIDSerializer::class)
     val uuid: UUID = UUID.randomUUID(),
 
-    @NotEmpty(message = "El usuario que realiza la cita no puede estar vacío.")
+    @NotEmpty(message = "The user cannot be empty.")
     val user: AppointmentUserDTO,
 
     @Contextual
-    @NotEmpty(message = "El tipo de asistencia no puede estar vacía.")
+    @NotEmpty(message = "Assistance type cannot be empty.")
     val assistance : AssistanceType,
 
     @Serializable(with = LocalDateTimeSerializer::class)
-    @NotEmpty(message = "La fecha no puede estar vacía.")
+    @NotEmpty(message = "The date field cannot be empty.")
     val date: LocalDateTime,
 
     val description: String
