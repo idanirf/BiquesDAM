@@ -1,5 +1,8 @@
 package es.dam.bique.microservicioproductoservicios.mappers
 
+import es.dam.bique.microservicioproductoservicios.dto.OnSaleDTO
+import es.dam.bique.microservicioproductoservicios.dto.ProductDTO
+import es.dam.bique.microservicioproductoservicios.dto.ServiceCreateDTO
 import es.dam.bique.microservicioproductoservicios.dto.ServiceDTO
 import es.dam.bique.microservicioproductoservicios.models.Service
 import es.dam.bique.microservicioproductoservicios.models.ServiceType
@@ -14,7 +17,21 @@ fun ServiceDTO.toEntity(): Service {
         image = image,
         price = price,
         appointment = appointment.toEntity(),
-        type = ServiceType.from(type),
+        type = ServiceType.from(type)
+    )
+}
+
+fun ServiceDTO.toOnSaleDTO (): OnSaleDTO {
+    return OnSaleDTO(
+        productEntity = null,
+        serviceEntity = ServiceDTO(
+            id = id.toString().toLong(),
+            uuid = uuid,
+            image = image,
+            price = price,
+            appointment = appointment,
+            type = type ),
+        type = OnSaleDTO.OnSaleType.SERVICE
     )
 }
 
@@ -27,5 +44,14 @@ fun Service.toDTO(): ServiceDTO{
         price = price,
         appointment = appointment.toDTO(),
         type = type.value
+    )
+}
+
+fun ServiceCreateDTO.toModel(): Service {
+    return Service(
+        image = image,
+        price = price,
+        appointment = appointment.toEntity(),
+        type = ServiceType.from(type)
     )
 }

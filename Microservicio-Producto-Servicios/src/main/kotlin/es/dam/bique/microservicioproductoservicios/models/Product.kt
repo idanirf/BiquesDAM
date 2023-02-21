@@ -7,19 +7,20 @@ import jakarta.validation.constraints.NotNull
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId
-import org.litote.kmongo.newId
 import org.litote.kmongo.Id
+import org.litote.kmongo.newId
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
 @Table(name = "PRODUCTS")
 data class Product(
 
-    @BsonId @Contextual
-    val id: Id<Product> = newId(),
+    @BsonId
+    @Contextual
+    override val id: Id<Product> = newId(),
 
     @Serializable(with = UUIDSerializer::class)
-    val uuid: UUID = UUID.randomUUID(),
+    override val uuid: UUID = UUID.randomUUID(),
 
     @NotEmpty(message = "The image cannot be empty.")
     val image: String,
@@ -36,7 +37,7 @@ data class Product(
     @Min(value = 0, message = "The price cannot be negative.")
     val price: Float,
 
-    @NotNull(message = "The percentage cannot be empty.")
+    @Min(value = 0, message = "The percentage cannot be negative.")
     val discountPercentage: Float,
 
     @Contextual
@@ -48,7 +49,7 @@ data class Product(
 
     @Contextual
     @NotNull(message = "The Product Type cannot be empty.")
-    val type : ProductType
+    val type : ProductType,
 
     ): OnSale
 
