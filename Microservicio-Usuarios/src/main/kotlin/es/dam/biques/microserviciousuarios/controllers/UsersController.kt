@@ -67,10 +67,9 @@ class UsersController @Autowired constructor(
             user.type.forEach { println(it) }
             val userInsert = userService.save(user)
             val jwtToken: String = jwtTokenUtils.generateToken(userInsert)
+
             logger.info { "Token de usuario: $jwtToken" }
             return ResponseEntity.ok(UserTokenDTO(userInsert.toDTO(), jwtToken))
-
-
         } catch (e: UserBadRequestException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }

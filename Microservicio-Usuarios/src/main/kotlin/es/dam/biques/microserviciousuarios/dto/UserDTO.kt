@@ -1,11 +1,10 @@
 package es.dam.biques.microserviciousuarios.dto
 
 import java.time.LocalDateTime
-import java.util.*
 
 data class UserDTO(
     val id: Long?,
-    val uuid: UUID = UUID.randomUUID(),
+    val uuid: String,
     val image: String?,
     val type: Set<String>,
     val email: String,
