@@ -24,21 +24,18 @@ dependencies {
     // H2 Database Reactive
     runtimeOnly("io.r2dbc:r2dbc-h2")
     // H2 Database
-//    runtimeOnly("com.h2database:h2")
+    // runtimeOnly("com.h2database:h2")
 
     // Dependencias de Spring Data Reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     // Dependencias de Spring Data NO REACTIVO.
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    // implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Spring Caché
     implementation("org.springframework.boot:spring-boot-starter-cache")
 
     // Spring Validador
     implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // Spring WebFlux
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     //Spring WebSocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -53,7 +50,7 @@ dependencies {
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
-    // Para mis logs
+    // Loggers
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
 
     // JWT

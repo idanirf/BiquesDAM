@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 import java.util.*
 
-@Table(name = "users")
+@Table(name = "USERS")
 data class User(
     @Id
     val id: Long? = null,

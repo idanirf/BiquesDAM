@@ -1,13 +1,12 @@
 package es.dam.biques.microserviciousuarios.service
 
+import es.dam.biques.microserviciousuarios.db.getUsersInit
 import es.dam.biques.microserviciousuarios.exceptions.UserBadRequestException
 import es.dam.biques.microserviciousuarios.exceptions.UserNotFoundException
 import es.dam.biques.microserviciousuarios.models.User
 import es.dam.biques.microserviciousuarios.repositories.UsersRepository
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -27,6 +26,14 @@ class UserService
     private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
 
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            getUsersInit().forEach {
+                save(it)
+            }
+        }
+    }
+
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
         return@runBlocking usersRepository.findUserByUsername(username!!).firstOrNull()
             ?: throw UserNotFoundException("Usuario no encontrado con username: $username")
@@ -38,12 +45,12 @@ class UserService
         return@withContext usersRepository.findAll()
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     suspend fun findUserById(id: Long) = withContext(Dispatchers.IO) {
         return@withContext usersRepository.findById(id)
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
         return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
     }
