@@ -1,6 +1,5 @@
 package es.dam.biques.microserviciousuarios.service
 
-import es.dam.biques.microserviciousuarios.db.getUsersInit
 import es.dam.biques.microserviciousuarios.exceptions.UserBadRequestException
 import es.dam.biques.microserviciousuarios.exceptions.UserNotFoundException
 import es.dam.biques.microserviciousuarios.models.User
@@ -25,18 +24,9 @@ class UserService
     private val usersRepository: UsersRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            getUsersInit().forEach {
-                save(it)
-            }
-        }
-    }
-
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
         return@runBlocking usersRepository.findUserByUsername(username!!).firstOrNull()
-            ?: throw UserNotFoundException("Usuario no encontrado con username: $username")
+            ?: throw UserNotFoundException("User doesn't found with username: $username")
     }
 
     suspend fun findAll() = withContext(Dispatchers.IO) {
@@ -71,17 +61,15 @@ class UserService
             throw UserBadRequestException("Email already exists.")
         }
 
-        logger.info { "User doesn't exist." }
         var saved = user.copy(
             uuid = UUID.randomUUID(),
             password = passwordEncoder.encode(user.password),
-            type = User.TipoUsuario.CLIENT.name,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
         if (isAdmin)
             saved = saved.copy(
-                type = User.TipoUsuario.CLIENT.name,
+                role = User.TipoUsuario.CLIENT.name,
             )
 
         try {
@@ -109,8 +97,6 @@ class UserService
         if (userDB != null && userDB.id != user.id) {
             throw UserBadRequestException("Email already exists.")
         }
-
-        logger.info { "User doesn't exist." }
 
         val updtatedUser = user.copy(
             updatedAt = LocalDateTime.now()
