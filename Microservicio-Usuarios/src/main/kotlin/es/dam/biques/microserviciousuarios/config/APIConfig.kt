@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class APIConfig {
     companion object {
-        @Value("\${api.path}")
-        const val API_PATH = "/"
-
         @Value("\${api.version}")
         const val API_VERSION = "1.0"
 

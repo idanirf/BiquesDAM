@@ -9,10 +9,9 @@ fun User.toDTO(): UserDTO {
         id = id,
         uuid = uuid.toString(),
         image = image,
-        type = type.split(",").map { it.trim() }.toSet(),
+        role = role.split(",").map { it.trim() }.toSet(),
         email = email,
         username = username,
-        password = password,
         address = address,
         metadata = UserDTO.Metadata(
             createdAt = createdAt,
@@ -25,7 +24,7 @@ fun User.toDTO(): UserDTO {
 fun UserCreateDTO.toModel(): User {
     return User(
         image = image,
-        type = type.joinToString(", ") { it.uppercase().trim() },
+        role = role.joinToString(", ") { it.uppercase().trim() },
         email = email,
         username = username,
         password = password,

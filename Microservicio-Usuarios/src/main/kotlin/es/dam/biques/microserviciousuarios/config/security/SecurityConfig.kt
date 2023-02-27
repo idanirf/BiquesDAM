@@ -37,20 +37,25 @@ class SecurityConfig
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         val authenticationManager = authManager(http)
 
-        http.csrf()
+        http
+            .csrf()
             .disable()
             .exceptionHandling()
             .and()
+
             .authenticationManager(authenticationManager)
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
             .and()
             .authorizeHttpRequests()
             .requestMatchers("/error/**").permitAll()
             .requestMatchers("/login", "/register").permitAll()
             .requestMatchers("/**").permitAll()
+            .requestMatchers("/users", "/users{id}").hasAnyRole("ADMIN", "SUPERADMIN")
             // TODO: ¿Cómo protegemos los endpoints de swagger?
 //            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated()
+
             .and()
             .addFilter(JWTAuthenticationFilter(jwtTokenUtils, authenticationManager))
             .addFilter(JWTAuthorizationFilter(jwtTokenUtils, userService, authenticationManager))

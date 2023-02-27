@@ -9,14 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 import java.util.*
 
-@Table(name = "users")
+@Table(name = "USERS")
 data class User(
     @Id
     val id: Long? = null,
     val uuid: UUID = UUID.randomUUID(),
     val image: String? = null,
     @Column("rol")
-    val type: String = User.TipoUsuario.CLIENT.name,
+    val role: String = User.TipoUsuario.CLIENT.name,
     val email: String,
     @get:JvmName("userName")
     val username: String,
@@ -30,11 +30,11 @@ data class User(
     @Column("updated_at")
     val updatedAt: LocalDateTime = LocalDateTime.now(),
     val deleted: Boolean = false,
-    @Column("last_password_change_at")
+    @Column("last_password_changed_at")
     val lastPasswordChangeAt: LocalDateTime = LocalDateTime.now()
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return type.split(",").map { SimpleGrantedAuthority("ROLE_${it.trim()}") }.toMutableList()
+        return role.split(",").map { SimpleGrantedAuthority("ROLE_${it.trim()}") }.toMutableList()
     }
 
     override fun getPassword(): String {
