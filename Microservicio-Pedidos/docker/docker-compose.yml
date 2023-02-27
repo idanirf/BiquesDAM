@@ -2,7 +2,7 @@
 services:
 
   pedidos-server:
-    build: ./Microservicio-Pedidos/docker
+    build: .
     container_name: pedidos-server
     ports:
       - "8385:8385"
@@ -37,7 +37,7 @@ services:
     networks:
       - mongo-network
     depends_on:
-      - mongodb-server
+      - mongodb-server-pedidos
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: mongoadmin
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongopass

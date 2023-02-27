@@ -18,7 +18,8 @@ data class Order(
     val status: StatusOrder,
     val total: Double,
     val IVA: Double,
-    val OrderLine: List<OrderLine>,
+    @Contextual
+    val orderLine: Id<OrderLine>,
     //val cliente: User
 ) {
     enum class StatusOrder(statusOrder: String) {
