@@ -127,9 +127,9 @@ fun Application.configureRouting() {
             //TODO Comprobar permisos
             try {
                 val id = call.parameters["id"]?.toUUID()!!
-                val dto = call.receive<OrderDTO>()
-                val order = dto.toEntity()
+                val order = orderService.getOrderByUUID(id)
                 val res =  orderService.deleteOrder(order)
+                call.respond(HttpStatusCode.NoContent)
             } catch (e: OrderNotFoundException){
                 call.respond(HttpStatusCode.NotFound, e.message.toString())
             } catch (e: RequestValidationException){
@@ -137,12 +137,11 @@ fun Application.configureRouting() {
             }
         }
         delete("/orderline/{id}"){
-            //TODO Comprobar permisos
             try {
                 val id = call.parameters["id"]?.toUUID()!!
-                val dto = call.receive<OrderLineDTO>()
-                val order = dto.toEntity()
-                val res =  orderLineService.deleteOrderLine(order)
+                val orderLine = orderLineService.getOrderLineByUUID(id)
+                val res =  orderLineService.deleteOrderLine(orderLine)
+                call.respond(HttpStatusCode.NoContent)
             } catch (e: OrderLineNotFoundException){
                 call.respond(HttpStatusCode.NotFound, e.message.toString())
             } catch (e: RequestValidationException){
