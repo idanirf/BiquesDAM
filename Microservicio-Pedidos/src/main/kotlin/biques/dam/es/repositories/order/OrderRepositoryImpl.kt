@@ -4,6 +4,7 @@ import biques.dam.es.db.MongoDbManager
 import biques.dam.es.exceptions.OrderException
 import biques.dam.es.models.Order
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import org.litote.kmongo.Id
 import org.litote.kmongo.coroutine.toList
 import org.litote.kmongo.eq
@@ -18,7 +19,7 @@ class OrderRepositoryImpl: OrderRepository {
     }
 
     override fun findAll(): Flow<Order> {
-        return db.getCollection<Order>().find().toFlow()
+        return db.getCollection<Order>().find().publisher.asFlow()
     }
 
     override suspend fun findById(id: Id<Order>): Order {

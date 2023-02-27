@@ -5,7 +5,7 @@ import io.ktor.server.plugins.requestvalidation.*
 
 fun RequestValidationConfig.orderValidation(){
     validate<OrderDTO>{order ->
-        if(order.OrderLine.isEmpty()){
+        if(order.orderLine.isEmpty()){
             ValidationResult.Invalid("The order line caanot be empty")
         } else if (order.IVA < 0){
             ValidationResult.Invalid("The IVA cannot be negative")
