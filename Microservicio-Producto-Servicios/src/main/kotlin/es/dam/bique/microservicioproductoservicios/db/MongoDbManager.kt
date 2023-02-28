@@ -1,6 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.db
 
-import es.dam.bique.microservicioproductoservicios.utils.PropertiesReader
+/*import es.dam.bique.microservicioproductoservicios.utils.PropertiesReader
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
@@ -20,3 +20,5 @@ object MongoDbManager {
     }
 
 }
+
+ */

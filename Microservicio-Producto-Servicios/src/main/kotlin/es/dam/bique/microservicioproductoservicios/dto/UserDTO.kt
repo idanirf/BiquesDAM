@@ -1,8 +1,9 @@
 package es.dam.bique.microservicioproductoservicios.dto
 
-data class AppointmentUserDTO(
+import kotlinx.serialization.Serializable
 
-    val uuid: String,
+@Serializable
+data class AppointmentUserDTO(
     val email: String,
     val address: String,
 

@@ -44,7 +44,7 @@ class AppointmentService
 
         logger.info { "Service appointments - update() appointment: $appointment" }
 
-        val found = appointmentsRepository.findById(appointment.id.toString().toLong())
+        val found = appointmentsRepository.findByUuid(appointment.uuid)
 
         found?.let {
             //TODO: ¿Queremos notificar el cambio al usuario?

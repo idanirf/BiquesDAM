@@ -4,13 +4,16 @@ import es.dam.bique.microservicioproductoservicios.exceptions.ProductConflictInt
 import es.dam.bique.microservicioproductoservicios.models.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
+import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -32,6 +35,14 @@ class ProductsCachedRepository
 
         logger.info { "Cached products - findById() with id: $id" }
         return@withContext productsRepository.findById(id)
+
+    }
+
+    @Cacheable("products")
+    suspend fun findByUuid(uuid: UUID): Product? = withContext(Dispatchers.IO) {
+
+        logger.info { "Cached products - findByUuid() with id: $uuid" }
+        return@withContext productsRepository.findByUuid(uuid).firstOrNull()
 
     }
 

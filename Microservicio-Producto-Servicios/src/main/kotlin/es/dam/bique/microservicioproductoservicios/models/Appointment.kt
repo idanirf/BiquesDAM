@@ -6,19 +6,18 @@ import es.dam.bique.microservicioproductoservicios.serializers.UUIDSerializer
 import jakarta.validation.constraints.NotEmpty
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import org.litote.kmongo.Id
-import org.litote.kmongo.newId
-
+import nonapi.io.github.classgraph.json.Id
 import org.springframework.data.relational.core.mapping.Table
+
 import java.time.LocalDateTime
 import java.util.*
 
-@Table(name = "APPOINTMENTS")
+@Serializable
+@Table("Appointments")
 data class Appointment(
 
-    @BsonId @Contextual
-    val id: Id<Appointment> = newId(),
+    @Id
+    val id: Long? = null,
 
     @Serializable(with = UUIDSerializer::class)
     val uuid: UUID = UUID.randomUUID(),

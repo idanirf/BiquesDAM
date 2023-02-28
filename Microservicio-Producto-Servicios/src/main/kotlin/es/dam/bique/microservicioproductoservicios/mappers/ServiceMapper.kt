@@ -6,13 +6,12 @@ import es.dam.bique.microservicioproductoservicios.dto.ServiceCreateDTO
 import es.dam.bique.microservicioproductoservicios.dto.ServiceDTO
 import es.dam.bique.microservicioproductoservicios.models.Service
 import es.dam.bique.microservicioproductoservicios.models.ServiceType
-import org.bson.types.ObjectId
-import org.litote.kmongo.id.toId
+
 import java.util.*
 
 fun ServiceDTO.toEntity(): Service {
     return Service(
-        id = ObjectId(id.toString()).toId(),
+        id = id,
         uuid = UUID.fromString(uuid),
         image = image,
         price = price,

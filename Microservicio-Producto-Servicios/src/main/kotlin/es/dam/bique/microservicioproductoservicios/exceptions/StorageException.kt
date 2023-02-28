@@ -14,7 +14,6 @@ class StorageBadRequestException : StorageException {
     constructor(message: String?, cause: Throwable?) : super(message, cause)
 }
 
-
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class StorageFileNotFoundException : StorageException {
     constructor(message: String?) : super(message)

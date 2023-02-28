@@ -1,5 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.controllers
 
+import es.dam.bique.microservicioproductoservicios.config.APIConfig
 import es.dam.bique.microservicioproductoservicios.dto.*
 import es.dam.bique.microservicioproductoservicios.exceptions.*
 import es.dam.bique.microservicioproductoservicios.mappers.toDTO
@@ -23,7 +24,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping("/products&services")
+@RequestMapping(APIConfig.API_PATH + "/products&services")
 class ProductsServicesController
     @Autowired constructor(
         private val productsService: ProductsService,
@@ -31,7 +32,8 @@ class ProductsServicesController
         private val servicesService: ServicesService
     )  {
 
-    @GetMapping("")
+    //TODO: añadir los servicios
+    @GetMapping("/list")
     suspend fun findAll(): ResponseEntity<MutableList<OnSaleDTO>> {
 
         logger.info {" On sale controller - findAll() "}
@@ -39,8 +41,8 @@ class ProductsServicesController
         val resProducts = productsService.findAll().toList()
             .map { it.toDTO().toOnSaleDTO() }
 
-        val resServices = servicesService.findAll().toList()
-            .map { it.toDTO().toOnSaleDTO() }
+        //val resServices = servicesService.findAll().toList()
+        //    .map { it.toDTO().toOnSaleDTO() }
 
         val res : MutableList<OnSaleDTO> = mutableListOf()
 
@@ -48,9 +50,11 @@ class ProductsServicesController
             res.add(it)
         }
 
-        resServices.forEach {
+        /*resServices.forEach {
             res.add(it)
         }
+
+         */
 
         return ResponseEntity.ok(res)
 
@@ -67,6 +71,7 @@ class ProductsServicesController
 
     }
 
+    //TODO: error SQL
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: Long): ResponseEntity<OnSale> {
 
@@ -89,6 +94,7 @@ class ProductsServicesController
         return ResponseEntity.ok(result)
     }
 
+    //TODO: error identifier
     @GetMapping("/appointments/{id}")
     suspend fun findAppointmentById(@PathVariable id: Long): ResponseEntity<AppointmentDTO> {
 
@@ -122,7 +128,8 @@ class ProductsServicesController
         }
     }
 
-    @PostMapping("")
+    //TODO: añadir servicio
+    /*@PostMapping("")
     suspend fun create(@Valid @RequestBody entityDto: ServiceCreateDTO): ResponseEntity<ServiceDTO> {
 
         logger.info { "On sale controller - service create()"}
@@ -139,6 +146,8 @@ class ProductsServicesController
         }
 
     }
+
+     */
 
     @PostMapping("/appointments")
     suspend fun create(@Valid @RequestBody entityDto: AppointmentCreateDTO): ResponseEntity<AppointmentDTO> {
@@ -157,7 +166,7 @@ class ProductsServicesController
     }
 
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     suspend fun update(
         @PathVariable id: UUID,
         @Valid @RequestBody serviceDTO: ServiceCreateDTO
@@ -181,6 +190,8 @@ class ProductsServicesController
         }
     }
 
+     */
+
 
     @PutMapping("/{id}")
     suspend fun update(
@@ -197,11 +208,9 @@ class ProductsServicesController
 
             return ResponseEntity.status(HttpStatus.OK).body(res)
 
-        } catch (e: ServiceNotFoundException) {
+        } catch (e: ProductNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: ServiceNotFoundException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        } catch (e: ServiceBadRequestException) {
+        } catch (e: ProductBadRequestException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }
