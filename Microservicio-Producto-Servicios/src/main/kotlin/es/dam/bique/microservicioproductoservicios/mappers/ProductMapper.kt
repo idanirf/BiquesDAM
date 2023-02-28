@@ -7,13 +7,11 @@ import es.dam.bique.microservicioproductoservicios.dto.ServiceDTO
 import es.dam.bique.microservicioproductoservicios.models.Product
 import es.dam.bique.microservicioproductoservicios.models.ProductType
 import es.dam.bique.microservicioproductoservicios.models.StockType
-import org.bson.types.ObjectId
-import org.litote.kmongo.id.toId
 import java.util.*
 
 fun ProductDTO.toEntity (): Product {
     return Product(
-        id = ObjectId(id.toString()).toId(),
+        id = id,
         uuid = UUID.fromString(uuid),
         image = image,
         brand = brand,

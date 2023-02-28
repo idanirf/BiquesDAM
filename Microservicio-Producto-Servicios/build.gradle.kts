@@ -5,6 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.20"
+
 }
 
 group = "es.dam.bique"
@@ -17,7 +19,6 @@ repositories {
 
 dependencies {
 
-    // Dependencias de Spring Boot y Spring Data Reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 
     // Spring Caché
@@ -33,7 +34,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
     // Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -48,15 +50,8 @@ dependencies {
     // JWT
     implementation("com.auth0:java-jwt:4.2.1")
 
-    // Mongo Reactivo
-    implementation("org.litote.kmongo:kmongo-async:4.7.2")
-    implementation("org.litote.kmongo:kmongo-coroutine:4.7.2")
+    runtimeOnly("io.r2dbc:r2dbc-h2")
 
-    // Serializar KMongo
-    implementation("org.litote.kmongo:kmongo-id-serialization:4.1.3")
-
-    // Bcrypt
-    implementation("org.mindrot:jbcrypt:0.4")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

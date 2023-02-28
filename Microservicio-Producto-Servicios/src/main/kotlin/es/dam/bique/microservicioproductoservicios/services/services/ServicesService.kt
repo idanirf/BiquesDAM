@@ -44,7 +44,7 @@ class ServicesService
         override suspend fun update(service: Service): Service {
 
             logger.info { "Service service - update() service: $service" }
-            val found = serviceRepository.findById(service.id.toString().toLong())
+            val found = serviceRepository.findByUuid(service.uuid)
 
             found?.let {
                 //TODO: ¿Queremos notificar el cambio al usuario?

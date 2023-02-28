@@ -6,18 +6,16 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import org.litote.kmongo.Id
-import org.litote.kmongo.newId
+import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
-@Table(name = "PRODUCTS")
+@Serializable
+@Table("Products")
 data class Product(
 
-    @BsonId
-    @Contextual
-    override val id: Id<Product> = newId(),
+    @Id
+    override val id: Long? = null,
 
     @Serializable(with = UUIDSerializer::class)
     override val uuid: UUID = UUID.randomUUID(),

@@ -40,7 +40,9 @@ class ProductsService
 
         logger.info { "Service products - update() product: $product" }
 
-        val found = productsRepository.findById(product.id.toString().toLong())
+        val found = productsRepository.findByUuid(product.uuid)
+        print(found?.brand)
+
 
         found?.let {
             //TODO: ¿Queremos notificar el cambio al usuario?

@@ -2,8 +2,10 @@ package es.dam.bique.microservicioproductoservicios.repositories.appointments
 
 import es.dam.bique.microservicioproductoservicios.exceptions.AppointmentConflictIntegrityException
 import es.dam.bique.microservicioproductoservicios.models.Appointment
+import es.dam.bique.microservicioproductoservicios.models.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,13 +13,13 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
+import java.util.*
 
 
 private val logger = KotlinLogging.logger {}
 
 @Repository
 class AppointmentsCachedRepository
-
     @Autowired constructor(
         private val appointmentsRepository: AppointmentsRepository
     ) : IAppointmentsCachedRepository {
@@ -34,6 +36,14 @@ class AppointmentsCachedRepository
 
         logger.info { "Cached appointments - findById() with id: $id" }
         return@withContext appointmentsRepository.findById(id)
+
+    }
+
+    @Cacheable("appointments")
+    suspend fun findByUuid(uuid: UUID): Appointment? = withContext(Dispatchers.IO) {
+
+        logger.info { "Cached appointments - findByUuid() with id: $uuid" }
+        return@withContext appointmentsRepository.findByUuid(uuid).firstOrNull()
 
     }
 
