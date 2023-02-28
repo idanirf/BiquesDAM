@@ -1,13 +1,12 @@
 package es.dam.biques.microserviciousuarios.config.security.jwt
 
 import es.dam.biques.microserviciousuarios.service.UserService
-import es.dam.biques.microserviciousuarios.utils.toUUID
-import io.netty.handler.codec.http.HttpHeaderNames.AUTHORIZATION
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.coroutines.runBlocking
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -40,16 +39,16 @@ class JWTAuthorizationFilter(
 
     private fun getAuthentication(token: String): UsernamePasswordAuthenticationToken? = runBlocking {
         logger.info { "Obteniendo autenticación" }
+        val tokenDecoded = jwtTokenUtil.verify(token) ?: return@runBlocking null
 
-        if (!jwtTokenUtil.isTokenValid(token)) return@runBlocking null
-        val username = jwtTokenUtil.getUsernameFromJwt(token)
-        val userId = jwtTokenUtil.getUserIdFromJwt(token)
-        val types = jwtTokenUtil.getRolesFromJwt(token)
-        val user = service.findUserByUuid(userId.toUUID())
+        val username = tokenDecoded.getClaim("username").toString().replace("\"", "")
+
+        val user = service.loadUserByUsername(username)
+
         return@runBlocking UsernamePasswordAuthenticationToken(
             user,
             null,
-            user?.authorities
+            user.authorities
         )
     }
 }

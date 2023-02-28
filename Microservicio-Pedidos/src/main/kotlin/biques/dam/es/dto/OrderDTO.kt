@@ -9,6 +9,6 @@ data class OrderDTO(
     val status: String,
     val total: Double,
     val IVA:Double,
-    val OrderLine: List<OrderLineDTO>
+    val orderLine: String
 ) {
 }

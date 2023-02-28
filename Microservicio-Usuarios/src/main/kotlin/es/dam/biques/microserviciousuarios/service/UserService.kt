@@ -4,10 +4,8 @@ import es.dam.biques.microserviciousuarios.exceptions.UserBadRequestException
 import es.dam.biques.microserviciousuarios.exceptions.UserNotFoundException
 import es.dam.biques.microserviciousuarios.models.User
 import es.dam.biques.microserviciousuarios.repositories.UsersRepository
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -26,10 +24,9 @@ class UserService
     private val usersRepository: UsersRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
-
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
         return@runBlocking usersRepository.findUserByUsername(username!!).firstOrNull()
-            ?: throw UserNotFoundException("Usuario no encontrado con username: $username")
+            ?: throw UserNotFoundException("User doesn't found with username: $username")
     }
 
     suspend fun findAll() = withContext(Dispatchers.IO) {
@@ -38,12 +35,12 @@ class UserService
         return@withContext usersRepository.findAll()
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     suspend fun findUserById(id: Long) = withContext(Dispatchers.IO) {
         return@withContext usersRepository.findById(id)
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
         return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
     }
@@ -64,17 +61,15 @@ class UserService
             throw UserBadRequestException("Email already exists.")
         }
 
-        logger.info { "User doesn't exist." }
         var saved = user.copy(
             uuid = UUID.randomUUID(),
             password = passwordEncoder.encode(user.password),
-            type = User.TipoUsuario.CLIENT.name,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
         if (isAdmin)
             saved = saved.copy(
-                type = User.TipoUsuario.CLIENT.name,
+                role = User.TipoUsuario.CLIENT.name,
             )
 
         try {
@@ -102,8 +97,6 @@ class UserService
         if (userDB != null && userDB.id != user.id) {
             throw UserBadRequestException("Email already exists.")
         }
-
-        logger.info { "User doesn't exist." }
 
         val updtatedUser = user.copy(
             updatedAt = LocalDateTime.now()

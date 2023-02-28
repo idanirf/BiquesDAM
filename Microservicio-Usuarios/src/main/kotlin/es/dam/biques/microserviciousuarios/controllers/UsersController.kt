@@ -15,7 +15,6 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -34,7 +33,7 @@ class UsersController @Autowired constructor(
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenUtils: JWTTokenUtils
 ) {
-    @PostMapping("/login")
+    @GetMapping("/login")
     fun login(@Valid @RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
         logger.info { "User login: ${logingDto.username}" }
 
@@ -52,9 +51,7 @@ class UsersController @Autowired constructor(
         val jwtToken: String = jwtTokenUtils.generateToken(user)
         logger.info { "Token de usuario: $jwtToken" }
 
-        val userWithToken = UserTokenDTO(user.toDTO(), jwtToken)
-
-        return ResponseEntity.ok(userWithToken)
+        return ResponseEntity.ok(UserTokenDTO(user.toDTO(), jwtToken))
     }
 
 
@@ -64,19 +61,18 @@ class UsersController @Autowired constructor(
 
         try {
             val user = usuarioDto.validate().toModel()
-            user.type.forEach { println(it) }
+            user.role.forEach { println(it) }
             val userInsert = userService.save(user)
             val jwtToken: String = jwtTokenUtils.generateToken(userInsert)
+
             logger.info { "Token de usuario: $jwtToken" }
             return ResponseEntity.ok(UserTokenDTO(userInsert.toDTO(), jwtToken))
-
-
         } catch (e: UserBadRequestException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @GetMapping("/users")
     suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserDTO>> {
         logger.info { "API -> findAll()" }
@@ -85,7 +81,7 @@ class UsersController @Autowired constructor(
         return ResponseEntity.ok(res)
     }
 
-    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @GetMapping("/users/{id}")
     suspend fun findById(@PathVariable id: Long): ResponseEntity<UserDTO> {
         logger.info { "API -> findById($id)" }
@@ -98,7 +94,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @PostMapping("/users")
     suspend fun create(@Valid @RequestBody userDTO: UserCreateDTO): ResponseEntity<UserDTO> {
         logger.info { "API -> create($userDTO)" }
@@ -113,7 +109,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @PutMapping("/users/{id}")
     suspend fun update(
         @PathVariable id: Long, @Valid @RequestBody userDTO: UserCreateDTO
@@ -131,7 +127,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
     @DeleteMapping("/users/{id}")
     suspend fun delete(@PathVariable id: Long): ResponseEntity<UserDTO> {
         logger.info { "API -> delete($id)" }

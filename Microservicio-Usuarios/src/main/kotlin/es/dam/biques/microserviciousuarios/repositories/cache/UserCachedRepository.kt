@@ -70,7 +70,7 @@ class UserCachedRepository
             val updated = it.copy(
                 uuid = it.uuid,
                 image = it.image,
-                type = it.type,
+                role = it.role,
                 email = it.email,
                 username = it.username,
                 password = it.password,

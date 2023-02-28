@@ -6,6 +6,9 @@ import es.dam.biques.microserviciousuarios.models.User
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -18,10 +21,11 @@ class JWTAuthenticationFilter(
     private val authenticationManager: AuthenticationManager
 ) : UsernamePasswordAuthenticationFilter() {
 
+    @OptIn(ExperimentalSerializationApi::class)
     override fun attemptAuthentication(req: HttpServletRequest, response: HttpServletResponse): Authentication {
         logger.info { "Triying to authenticate..." }
 
-        val credentials = ObjectMapper().readValue(req.inputStream, UserLoginDTO::class.java)
+        val credentials = Json.decodeFromStream<UserLoginDTO>(req.inputStream)
         val auth = UsernamePasswordAuthenticationToken(
             credentials.username,
             credentials.password,
@@ -38,6 +42,7 @@ class JWTAuthenticationFilter(
         val user = auth.principal as User
         val token: String = jwtTokenUtil.generateToken(user)
         res.addHeader("Authorization", token)
+        res.addHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER)
     }
 
     override fun unsuccessfulAuthentication(

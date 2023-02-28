@@ -1,10 +1,14 @@
 package biques.dam.es.db
 
 import biques.dam.es.utils.PropertiesReader
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import org.bson.UuidRepresentation
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+
 
 object MongoDbManager {
     val properties = PropertiesReader("application.properties")
@@ -14,7 +18,10 @@ object MongoDbManager {
     private val STRING_CONNECTION = properties.getProperty("string_connection")
 
     init {
-        mongoDbClient = KMongo.createClient(STRING_CONNECTION).coroutine
+        val clientSettings = MongoClientSettings.builder()
+            .applyConnectionString(ConnectionString(STRING_CONNECTION))
+            .uuidRepresentation(UuidRepresentation.JAVA_LEGACY).build()
+        mongoDbClient = KMongo.createClient(clientSettings).coroutine
         database = mongoDbClient.getDatabase("order")
     }
 

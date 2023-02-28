@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.22"
 }
 
 group = "es.dam.biques"
@@ -21,24 +22,18 @@ dependencies {
     // Spring Security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // H2 Database Reactive
-    runtimeOnly("io.r2dbc:r2dbc-h2")
     // H2 Database
-//    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("io.r2dbc:r2dbc-h2")
 
     // Dependencias de Spring Data Reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-    // Dependencias de Spring Data NO REACTIVO.
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Spring Caché
     implementation("org.springframework.boot:spring-boot-starter-cache")
 
     // Spring Validador
     implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // Spring WebFlux
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     //Spring WebSocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -53,7 +48,7 @@ dependencies {
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
-    // Para mis logs
+    // Loggers
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
 
     // JWT
@@ -61,6 +56,9 @@ dependencies {
 
     // Bcrypt
     implementation("org.mindrot:jbcrypt:0.4")
+
+    // Kotlin Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
