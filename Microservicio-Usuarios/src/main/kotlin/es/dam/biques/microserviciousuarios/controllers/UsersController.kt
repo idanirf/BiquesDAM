@@ -15,6 +15,7 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -72,7 +73,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/users")
     suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserDTO>> {
         logger.info { "API -> findAll()" }
@@ -81,7 +82,7 @@ class UsersController @Autowired constructor(
         return ResponseEntity.ok(res)
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/users/{id}")
     suspend fun findById(@PathVariable id: Long): ResponseEntity<UserDTO> {
         logger.info { "API -> findById($id)" }
@@ -94,7 +95,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PostMapping("/users")
     suspend fun create(@Valid @RequestBody userDTO: UserCreateDTO): ResponseEntity<UserDTO> {
         logger.info { "API -> create($userDTO)" }
@@ -109,7 +110,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/users/{id}")
     suspend fun update(
         @PathVariable id: Long, @Valid @RequestBody userDTO: UserCreateDTO
@@ -127,7 +128,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @DeleteMapping("/users/{id}")
     suspend fun delete(@PathVariable id: Long): ResponseEntity<UserDTO> {
         logger.info { "API -> delete($id)" }
