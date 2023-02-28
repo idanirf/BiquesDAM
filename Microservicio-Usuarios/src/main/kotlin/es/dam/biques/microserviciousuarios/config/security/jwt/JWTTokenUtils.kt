@@ -17,6 +17,7 @@ class JWTTokenUtils {
 
         return JWT.create()
             .withSubject(user.uuid.toString())
+            .withIssuer("BiquesUsuarios")
             .withHeader(mapOf("typ" to TOKEN_TYPE))
             .withExpiresAt(Date(System.currentTimeMillis() + (60 * 60 * 1000)))
             .withClaim("username", user.username)
