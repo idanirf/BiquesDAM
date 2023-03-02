@@ -36,28 +36,32 @@ class UsersController @Autowired constructor(
 ) {
     @GetMapping("/login")
     fun login(@Valid @RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
-        logger.info { "User login: ${logingDto.username}" }
+        try {
+            logger.info { "User login: ${logingDto.username}" }
 
-        val authentication: Authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                logingDto.username,
-                logingDto.password
+            val authentication: Authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    logingDto.username,
+                    logingDto.password
+                )
             )
-        )
 
-        SecurityContextHolder.getContext().authentication = authentication
+            SecurityContextHolder.getContext().authentication = authentication
 
-        val user = authentication.principal as User
+            val user = authentication.principal as User
 
-        val jwtToken: String = jwtTokenUtils.generateToken(user)
-        logger.info { "Token de usuario: $jwtToken" }
+            val jwtToken: String = jwtTokenUtils.generateToken(user)
+            logger.info { "Token de usuario: $jwtToken" }
 
-        return ResponseEntity.ok(UserTokenDTO(user.toDTO(), jwtToken))
+            return ResponseEntity(UserTokenDTO(user.toDTO(), jwtToken), HttpStatus.OK)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+        }
     }
 
 
     @PostMapping("/register")
-    suspend fun register(@Valid @RequestBody usuarioDto: UserCreateDTO): ResponseEntity<UserTokenDTO> {
+    suspend fun register(@Valid @RequestBody usuarioDto: UserRegisterDTO): ResponseEntity<UserTokenDTO> {
         logger.info { "User register: ${usuarioDto.username}" }
 
         try {
@@ -75,7 +79,7 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/users")
-    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserDTO>> {
+    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserResponseDTO>> {
         logger.info { "API -> findAll()" }
 
         val res = userService.findAll().toList().map { it.toDTO() }
@@ -84,7 +88,7 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/users/{id}")
-    suspend fun findById(@PathVariable id: Long): ResponseEntity<UserDTO> {
+    suspend fun findById(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> findById($id)" }
 
         try {
@@ -97,7 +101,7 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PostMapping("/users")
-    suspend fun create(@Valid @RequestBody userDTO: UserCreateDTO): ResponseEntity<UserDTO> {
+    suspend fun create(@Valid @RequestBody userDTO: UserRegisterDTO): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> create($userDTO)" }
 
         try {
@@ -113,14 +117,22 @@ class UsersController @Autowired constructor(
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/users/{id}")
     suspend fun update(
-        @PathVariable id: Long, @Valid @RequestBody userDTO: UserCreateDTO
-    ): ResponseEntity<UserDTO> {
+        @AuthenticationPrincipal user: User,
+        @PathVariable id: Long, @Valid @RequestBody userDTO: UserUpdateDTO
+    ): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> update($id)" }
 
         try {
-            val rep = userDTO.validate().toModel()
-            val res = userService.update(id, rep)?.toDTO()
-            return ResponseEntity.status(HttpStatus.OK).body(res)
+            val rep = userDTO.validate()
+            val updated = user.copy(
+                username = userDTO.username,
+                email = userDTO.email,
+                image = userDTO.image,
+                address = userDTO.address
+            )
+            val res = userService.update(id, updated)
+
+            return ResponseEntity.status(HttpStatus.OK).body(res?.toDTO())
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: UserBadRequestException) {

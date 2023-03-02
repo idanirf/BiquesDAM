@@ -4,6 +4,7 @@ import es.dam.biques.microserviciousuarios.exceptions.UserBadRequestException
 import es.dam.biques.microserviciousuarios.exceptions.UserNotFoundException
 import es.dam.biques.microserviciousuarios.models.User
 import es.dam.biques.microserviciousuarios.repositories.UsersRepository
+import es.dam.biques.microserviciousuarios.repositories.cache.UserCachedRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 import mu.KotlinLogging
@@ -22,6 +23,7 @@ private val logger = KotlinLogging.logger {}
 class UserService
 @Autowired constructor(
     private val usersRepository: UsersRepository,
+    private val userCachedRepository: UserCachedRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
@@ -32,12 +34,12 @@ class UserService
     suspend fun findAll() = withContext(Dispatchers.IO) {
         logger.info { "findAll()" }
 
-        return@withContext usersRepository.findAll()
+        return@withContext userCachedRepository.findAll()
     }
 
     @Cacheable("USERS")
     suspend fun findUserById(id: Long) = withContext(Dispatchers.IO) {
-        return@withContext usersRepository.findById(id)
+        return@withContext userCachedRepository.findById(id)
     }
 
     @Cacheable("USERS")
@@ -73,51 +75,24 @@ class UserService
             )
 
         try {
-            return@withContext usersRepository.save(saved)
+            return@withContext userCachedRepository.save(saved)
         } catch (e: Exception) {
             throw UserBadRequestException("Error creating the user: Username or email already exist.")
         }
     }
 
     suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
-        logger.info { "update($id, $user)" }
-
-        logger.info { "Updating user: $user" }
-
-        var userDB = usersRepository.findUserByUsername(user.username)
-            .firstOrNull()
-
-        if (userDB != null && userDB.id != user.id) {
-            throw UserBadRequestException("Username already exists.")
-        }
-
-        userDB = usersRepository.findUserByEmail(user.email)
-            .firstOrNull()
-
-        if (userDB != null && userDB.id != user.id) {
-            throw UserBadRequestException("Email already exists.")
-        }
-
-        val updtatedUser = user.copy(
-            updatedAt = LocalDateTime.now()
-        )
-
         try {
-            return@withContext usersRepository.save(updtatedUser)
-        } catch (e: Exception) {
-            throw UserBadRequestException("Error updating user: Username or email already exist.")
+            return@withContext userCachedRepository.update(id, user)
+        } catch (e: UserBadRequestException) {
+            throw UserBadRequestException("Error updating the user.")
+        } catch (ex: UserNotFoundException) {
+            throw UserNotFoundException("User with id $id not found.")
         }
     }
 
-    suspend fun deleteById(id: Long) = withContext(Dispatchers.IO) {
-        logger.info { "delete($id)" }
-
-        val userDB = usersRepository.findById(id)
-
-        try {
-            return@withContext userDB?.let { usersRepository.delete(it) }
-        } catch (e: Exception) {
-            throw UserBadRequestException("Error deleting user.")
-        }
+    suspend fun deleteById(id: Long): User? = withContext(Dispatchers.IO) {
+        return@withContext userCachedRepository.deleteById(id)
+            ?: throw UserNotFoundException("User with id $id not found.")
     }
 }
