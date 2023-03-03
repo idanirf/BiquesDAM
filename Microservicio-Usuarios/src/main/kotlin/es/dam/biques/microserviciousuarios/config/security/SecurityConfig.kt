@@ -52,8 +52,6 @@ class SecurityConfig
             .requestMatchers("/login", "/register").permitAll()
             .requestMatchers("/**").permitAll()
             .requestMatchers("/users", "/users{id}").hasAnyRole("ADMIN", "SUPERADMIN")
-            // TODO: ¿Cómo protegemos los endpoints de swagger?
-//            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated()
 
             .and()

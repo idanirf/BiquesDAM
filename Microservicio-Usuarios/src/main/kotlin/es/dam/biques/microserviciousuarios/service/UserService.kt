@@ -40,6 +40,7 @@ class UserService
     @Cacheable("USERS")
     suspend fun findUserById(id: Long) = withContext(Dispatchers.IO) {
         return@withContext userCachedRepository.findById(id)
+            ?: throw UserNotFoundException("User with id $id not found.")
     }
 
     @Cacheable("USERS")
@@ -49,8 +50,6 @@ class UserService
     }
 
     suspend fun save(user: User, isAdmin: Boolean = false): User = withContext(Dispatchers.IO) {
-        logger.info { "save($user)" }
-
         if (usersRepository.findUserByUsername(user.username)
                 .firstOrNull() != null
         ) {
@@ -78,7 +77,7 @@ class UserService
         try {
             return@withContext userCachedRepository.save(saved)
         } catch (e: Exception) {
-            throw UserBadRequestException("Error creating the user: Username or email already exist.")
+            throw UserBadRequestException("Error creating the user: Username or email already exist. -> ${e.message}")
         }
     }
 

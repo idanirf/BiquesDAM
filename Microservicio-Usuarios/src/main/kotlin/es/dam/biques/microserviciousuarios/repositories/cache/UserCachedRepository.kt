@@ -54,6 +54,7 @@ class UserCachedRepository
         logger.info { "save($user)" }
 
         val saved = user.copy(
+            id = user.id,
             uuid = user.uuid,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()

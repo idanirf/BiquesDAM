@@ -88,16 +88,29 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/users/{id}")
-    suspend fun findById(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {
+    suspend fun findById(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> findById($id)" }
 
         try {
-            val res = userService.findUserById(id)?.toDTO()
+            val res = userService.findUserById(id.toLong())?.toDTO()
             return ResponseEntity.ok(res)
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         }
     }
+
+//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+//    @GetMapping("/users/{uuid}")
+//    suspend fun findByUUID(@PathVariable uuid: String): ResponseEntity<UserResponseDTO> {
+//        logger.info { "API -> findByUUID($uuid)" }
+//
+//        try {
+//            val res = userService.findUserByUuid(UUID.fromString(uuid)).toDTO()
+//            return ResponseEntity.ok(res)
+//        } catch (e: UserNotFoundException) {
+//            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+//        }
+//    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PostMapping("/users")
@@ -118,19 +131,17 @@ class UsersController @Autowired constructor(
     @PutMapping("/users/{id}")
     suspend fun update(
         @AuthenticationPrincipal user: User,
-        @PathVariable id: Long, @Valid @RequestBody userDTO: UserUpdateDTO
+        @PathVariable id: String, @Valid @RequestBody userDTO: UserUpdateDTO
     ): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> update($id)" }
 
         try {
             val rep = userDTO.validate()
             val updated = user.copy(
-                username = userDTO.username,
-                email = userDTO.email,
                 image = userDTO.image,
                 address = userDTO.address
             )
-            val res = userService.update(id, updated)
+            val res = userService.update(id.toLong(), updated)
 
             return ResponseEntity.status(HttpStatus.OK).body(res?.toDTO())
         } catch (e: UserNotFoundException) {
@@ -142,11 +153,11 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @DeleteMapping("/users/{id}")
-    suspend fun delete(@PathVariable id: Long): ResponseEntity<UserDTO> {
+    suspend fun delete(@PathVariable id: String): ResponseEntity<UserDTO> {
         logger.info { "API -> delete($id)" }
 
         try {
-            userService.deleteById(id)
+            userService.deleteById(id.toLong())
             return ResponseEntity.noContent().build()
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
