@@ -82,13 +82,6 @@ class UserCachedRepository
     }
 
     @CacheEvict("USERS")
-    override suspend fun delete(user: User) = withContext(Dispatchers.IO) {
-        logger.info { "deleteAll()" }
-
-        return@withContext usersRepository.deleteAll()
-    }
-
-    @CacheEvict("USERS")
     override suspend fun deleteById(id: Long): User? = withContext(Dispatchers.IO) {
         logger.info { "deleteById($id)" }
 
