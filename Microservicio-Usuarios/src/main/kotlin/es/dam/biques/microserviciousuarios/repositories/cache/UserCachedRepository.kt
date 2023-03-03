@@ -69,23 +69,20 @@ class UserCachedRepository
         var userDB = usersRepository.findUserByUsername(user.username)
             .firstOrNull()
 
-        userDB = usersRepository.findUserByEmail(user.email)
-            .firstOrNull()
 
-        val updtatedUser = user.copy(
-            id = user.id,
-            updatedAt = LocalDateTime.now()
-        )
+        userDB?.let {
+            val updtatedUser = user.copy(
+                id = user.id,
+                updatedAt = LocalDateTime.now()
+            )
+            return@withContext usersRepository.save(updtatedUser)
+        }
+        return@withContext null
 
-        return@withContext usersRepository.save(updtatedUser)
+
+
     }
 
-    @CacheEvict("USERS")
-    override suspend fun delete(user: User) = withContext(Dispatchers.IO) {
-        logger.info { "deleteAll()" }
-
-        return@withContext usersRepository.deleteAll()
-    }
 
     @CacheEvict("USERS")
     override suspend fun deleteById(id: Long): User? = withContext(Dispatchers.IO) {

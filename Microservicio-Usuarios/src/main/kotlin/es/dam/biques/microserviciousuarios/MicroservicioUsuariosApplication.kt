@@ -1,5 +1,6 @@
 package es.dam.biques.microserviciousuarios
 
+import es.dam.biques.microserviciousuarios.db.getUsersInit
 import es.dam.biques.microserviciousuarios.service.UserService
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,9 +18,9 @@ class MicroservicioUsuariosApplication
     private val usersService: UserService
 ) : CommandLineRunner {
     override fun run(vararg args: String?) = runBlocking {
-//        getUsersInit().forEach {
-//            usersService.save(it)
-//        }
+       getUsersInit().forEach {
+          usersService.save(it)
+      }
     }
 }
 
