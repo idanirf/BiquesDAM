@@ -43,11 +43,11 @@ class UserService
             ?: throw UserNotFoundException("User with id $id not found.")
     }
 
-    @Cacheable("USERS")
-    suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
-        return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
-            ?: throw UserNotFoundException("User with uuid $uuid not found.")
-    }
+//    @Cacheable("USERS")
+//    suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
+//        return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
+//            ?: throw UserNotFoundException("User with uuid $uuid not found.")
+//    }
 
     suspend fun save(user: User, isAdmin: Boolean = false): User = withContext(Dispatchers.IO) {
         if (usersRepository.findUserByUsername(user.username)
