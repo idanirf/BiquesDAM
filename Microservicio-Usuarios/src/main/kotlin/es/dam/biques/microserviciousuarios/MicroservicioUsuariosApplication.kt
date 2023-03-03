@@ -18,9 +18,9 @@ class MicroservicioUsuariosApplication
     private val usersService: UserService
 ) : CommandLineRunner {
     override fun run(vararg args: String?) = runBlocking {
-       getUsersInit().forEach {
-          usersService.save(it)
-      }
+        getUsersInit().forEach {
+            usersService.save(it)
+        }
     }
 }
 

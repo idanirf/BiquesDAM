@@ -55,6 +55,7 @@ data class UserLoginDTO(
 @Serializable
 data class UserResponseDTO(
     val id: Long?,
+    val uuid: String,
     val image: String?,
     val rol: Set<String>,
     val email: String,

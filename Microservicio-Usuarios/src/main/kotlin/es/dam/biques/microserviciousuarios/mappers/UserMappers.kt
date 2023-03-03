@@ -8,6 +8,7 @@ import es.dam.biques.microserviciousuarios.models.User
 fun User.toDTO(): UserResponseDTO {
     return UserResponseDTO(
         id = id,
+        uuid = uuid.toString(),
         image = image,
         rol = role.split(",").map { it.trim() }.toSet(),
         email = email,
