@@ -45,6 +45,7 @@ class UserService
     @Cacheable("USERS")
     suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
         return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
+            ?: throw UserNotFoundException("User with uuid $uuid not found.")
     }
 
     suspend fun save(user: User, isAdmin: Boolean = false): User = withContext(Dispatchers.IO) {
