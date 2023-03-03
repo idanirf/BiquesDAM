@@ -10,7 +10,7 @@ data class UserDTO(
     val id: Long?,
     val uuid: String,
     val image: String?,
-    val role: Set<String>,
+    val rol: Set<String>,
     val email: String,
     val username: String,
     val address: String,
@@ -27,9 +27,9 @@ data class UserDTO(
 }
 
 @Serializable
-data class UserCreateDTO(
+data class UserRegisterDTO(
     val image: String?,
-    val role: Set<String>,
+    val rol: Set<String>,
     val email: String,
     val username: String,
     val password: String,
@@ -53,7 +53,18 @@ data class UserLoginDTO(
 )
 
 @Serializable
+data class UserResponseDTO(
+    val id: Long?,
+    val uuid: String,
+    val image: String?,
+    val rol: Set<String>,
+    val email: String,
+    val username: String,
+    val address: String
+)
+
+@Serializable
 data class UserTokenDTO(
-    val user: UserDTO,
+    val user: UserResponseDTO,
     val token: String
 )

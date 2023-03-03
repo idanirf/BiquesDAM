@@ -11,6 +11,5 @@ interface IUserCachedRepository {
     suspend fun findByUUID(uuid: UUID): User?
     suspend fun save(user: User): User
     suspend fun update(id: Long, user: User): User?
-    suspend fun delete(user: User)
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: Long): User?
 }

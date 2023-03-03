@@ -16,7 +16,7 @@ data class User(
     val uuid: UUID = UUID.randomUUID(),
     val image: String? = null,
     @Column("rol")
-    val role: String = User.TipoUsuario.CLIENT.name,
+    val rol: String = User.TipoUsuario.CLIENT.name,
     val email: String,
     @get:JvmName("userName")
     val username: String,
@@ -34,7 +34,7 @@ data class User(
     val lastPasswordChangeAt: LocalDateTime = LocalDateTime.now()
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return role.split(",").map { SimpleGrantedAuthority("ROLE_${it.trim()}") }.toMutableList()
+        return rol.split(",").map { SimpleGrantedAuthority("ROLE_${it.trim()}") }.toMutableList()
     }
 
     override fun getPassword(): String {

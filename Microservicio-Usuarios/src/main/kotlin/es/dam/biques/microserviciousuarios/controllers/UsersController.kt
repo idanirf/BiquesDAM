@@ -15,6 +15,7 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -27,41 +28,44 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/users")
 class UsersController @Autowired constructor(
     private val userService: UserService,
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenUtils: JWTTokenUtils
 ) {
-    @GetMapping("/login")
-    fun login(@Valid @RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
-        logger.info { "User login: ${logingDto.username}" }
+    @PostMapping("/login")
+    fun login(@RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
+        try {
+            logger.info { "User login: ${logingDto.username}" }
 
-        val authentication: Authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                logingDto.username,
-                logingDto.password
+            val authentication: Authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    logingDto.username,
+                    logingDto.password
+                )
             )
-        )
 
-        SecurityContextHolder.getContext().authentication = authentication
+            SecurityContextHolder.getContext().authentication = authentication
 
-        val user = authentication.principal as User
+            val user = authentication.principal as User
 
-        val jwtToken: String = jwtTokenUtils.generateToken(user)
-        logger.info { "Token de usuario: $jwtToken" }
+            val jwtToken: String = jwtTokenUtils.generateToken(user)
+            logger.info { "Token de usuario: $jwtToken" }
 
-        return ResponseEntity.ok(UserTokenDTO(user.toDTO(), jwtToken))
+            return ResponseEntity.ok(UserTokenDTO(user.toDTO(), jwtToken))
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+        }
     }
 
-
     @PostMapping("/register")
-    suspend fun register(@Valid @RequestBody usuarioDto: UserCreateDTO): ResponseEntity<UserTokenDTO> {
+    suspend fun register(@Valid @RequestBody usuarioDto: UserRegisterDTO): ResponseEntity<UserTokenDTO> {
         logger.info { "User register: ${usuarioDto.username}" }
 
         try {
             val user = usuarioDto.validate().toModel()
-            user.role.forEach { println(it) }
+            user.rol.forEach { println(it) }
             val userInsert = userService.save(user)
             val jwtToken: String = jwtTokenUtils.generateToken(userInsert)
 
@@ -72,31 +76,44 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
-    @GetMapping("/users")
-    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserDTO>> {
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @GetMapping("")
+    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserResponseDTO>> {
         logger.info { "API -> findAll()" }
 
         val res = userService.findAll().toList().map { it.toDTO() }
         return ResponseEntity.ok(res)
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
-    @GetMapping("/users/{id}")
-    suspend fun findById(@PathVariable id: Long): ResponseEntity<UserDTO> {
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @GetMapping("/{id}")
+    suspend fun findById(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> findById($id)" }
 
         try {
-            val res = userService.findUserById(id)?.toDTO()
+            val res = userService.findUserById(id.toLong()).toDTO()
             return ResponseEntity.ok(res)
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
-    @PostMapping("/users")
-    suspend fun create(@Valid @RequestBody userDTO: UserCreateDTO): ResponseEntity<UserDTO> {
+//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+//    @GetMapping("/{uuid}")
+//    suspend fun findByUUID(@PathVariable uuid: String): ResponseEntity<UserResponseDTO> {
+//        logger.info { "API -> findByUUID($uuid)" }
+//
+//        try {
+//            val res = userService.findUserByUuid(UUID.fromString(uuid)).toDTO()
+//            return ResponseEntity.ok(res)
+//        } catch (e: UserNotFoundException) {
+//            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+//        }
+//    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PostMapping("")
+    suspend fun create(@Valid @RequestBody userDTO: UserRegisterDTO): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> create($userDTO)" }
 
         try {
@@ -109,17 +126,23 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
-    @PutMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PutMapping("/{id}")
     suspend fun update(
-        @PathVariable id: Long, @Valid @RequestBody userDTO: UserCreateDTO
-    ): ResponseEntity<UserDTO> {
+        @AuthenticationPrincipal user: User,
+        @PathVariable id: String, @Valid @RequestBody userDTO: UserUpdateDTO
+    ): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> update($id)" }
 
         try {
-            val rep = userDTO.validate().toModel()
-            val res = userService.update(id, rep)?.toDTO()
-            return ResponseEntity.status(HttpStatus.OK).body(res)
+            val rep = userDTO.validate()
+            val updated = user.copy(
+                image = userDTO.image,
+                address = userDTO.address
+            )
+            val res = userService.update(id.toLong(), updated)
+
+            return ResponseEntity.status(HttpStatus.OK).body(res?.toDTO())
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: UserBadRequestException) {
@@ -127,13 +150,13 @@ class UsersController @Autowired constructor(
         }
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')" + " || hasRole('SUPERADMIN')")
-    @DeleteMapping("/users/{id}")
-    suspend fun delete(@PathVariable id: Long): ResponseEntity<UserDTO> {
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @DeleteMapping("/{id}")
+    suspend fun delete(@PathVariable id: String): ResponseEntity<UserDTO> {
         logger.info { "API -> delete($id)" }
 
         try {
-            userService.deleteById(id)
+            userService.deleteById(id.toLong())
             return ResponseEntity.noContent().build()
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)

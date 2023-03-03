@@ -42,7 +42,6 @@ class JWTAuthenticationFilter(
         val user = auth.principal as User
         val token: String = jwtTokenUtil.generateToken(user)
         res.addHeader("Authorization", token)
-        res.addHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER)
     }
 
     override fun unsuccessfulAuthentication(
