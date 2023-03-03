@@ -28,27 +28,28 @@ class UserCachedRepository
         return@withContext usersRepository.findAll()
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     override suspend fun findById(id: Long): User? = withContext(Dispatchers.IO) {
         logger.info { "findById($id)" }
 
         return@withContext usersRepository.findById(id)
     }
 
-    @Cacheable("users")
+    @Cacheable("USERS")
     override suspend fun findByEmail(email: String): User? = withContext(Dispatchers.IO) {
         logger.info { "findByEmail($email)" }
 
         return@withContext usersRepository.findUserByEmail(email).firstOrNull()
     }
 
+    @Cacheable("USERS")
     override suspend fun findByUUID(uuid: UUID): User? = withContext(Dispatchers.IO) {
         logger.info { "findByUUID($uuid" }
 
         return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
     }
 
-    @CachePut("users")
+    @CachePut("USERS")
     override suspend fun save(user: User): User = withContext(Dispatchers.IO) {
         logger.info { "save($user)" }
 
@@ -61,44 +62,41 @@ class UserCachedRepository
         return@withContext usersRepository.save(user)
     }
 
-    @Cacheable("users")
+    @CachePut("USERS")
     override suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
-        logger.info { "update($id, $user)" }
+        logger.info { "Updating user: $user" }
 
-        val userDB = usersRepository.findById(id)
-        userDB?.let {
-            val updated = it.copy(
-                uuid = it.uuid,
-                image = it.image,
-                role = it.role,
-                email = it.email,
-                username = it.username,
-                password = it.password,
-                address = it.address,
-                createdAt = it.createdAt,
-                updatedAt = it.updatedAt,
-                deleted = it.deleted,
-                lastPasswordChangeAt = it.lastPasswordChangeAt
-            )
+        var userDB = usersRepository.findUserByUsername(user.username)
+            .firstOrNull()
 
-            return@withContext usersRepository.save(updated)
-        }
+        userDB = usersRepository.findUserByEmail(user.email)
+            .firstOrNull()
 
-        return@withContext null
+        val updtatedUser = user.copy(
+            id = user.id,
+            updatedAt = LocalDateTime.now()
+        )
+
+        return@withContext usersRepository.save(updtatedUser)
     }
 
-    @CacheEvict("users", allEntries = true)
+    @CacheEvict("USERS")
     override suspend fun delete(user: User) = withContext(Dispatchers.IO) {
         logger.info { "deleteAll()" }
 
         return@withContext usersRepository.deleteAll()
     }
 
-    @CacheEvict("users")
-    override suspend fun deleteById(id: Long) = withContext(Dispatchers.IO) {
+    @CacheEvict("USERS")
+    override suspend fun deleteById(id: Long): User? = withContext(Dispatchers.IO) {
         logger.info { "deleteById($id)" }
 
-        return@withContext usersRepository.deleteById(id)
-    }
+        val user = findById(id)
+        user?.let {
+            usersRepository.deleteById(id)
+            return@withContext user
+        }
 
+        return@withContext null
+    }
 }

@@ -17,10 +17,10 @@ class JWTTokenUtils {
 
         return JWT.create()
             .withSubject(user.uuid.toString())
-            .withHeader(mapOf("typ" to TOKEN_TYPE))
+            .withIssuer("BiquesUsuarios")
             .withExpiresAt(Date(System.currentTimeMillis() + (60 * 60 * 1000)))
             .withClaim("username", user.username)
-            .withClaim("role", user.role.split(",").toSet().toString())
+            .withClaim("rol", user.role.split(",").toSet().toString())
             .sign(Algorithm.HMAC512("BiquesDAM"))
     }
 
@@ -32,10 +32,5 @@ class JWTTokenUtils {
         } catch (e: Exception) {
             null
         }
-    }
-
-    companion object {
-        const val TOKEN_HEADER = "Authorization"
-        const val TOKEN_TYPE = "JWT"
     }
 }

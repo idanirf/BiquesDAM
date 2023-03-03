@@ -32,9 +32,6 @@ dependencies {
     // Spring Caché
     implementation("org.springframework.boot:spring-boot-starter-cache")
 
-    // Spring Validador
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-
     //Spring WebSocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
@@ -53,9 +50,6 @@ dependencies {
 
     // JWT
     implementation("com.auth0:java-jwt:4.2.1")
-
-    // Bcrypt
-    implementation("org.mindrot:jbcrypt:0.4")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
