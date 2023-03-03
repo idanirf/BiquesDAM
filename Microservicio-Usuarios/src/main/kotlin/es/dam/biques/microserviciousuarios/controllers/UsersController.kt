@@ -65,7 +65,7 @@ class UsersController @Autowired constructor(
 
         try {
             val user = usuarioDto.validate().toModel()
-            user.role.forEach { println(it) }
+            user.rol.forEach { println(it) }
             val userInsert = userService.save(user)
             val jwtToken: String = jwtTokenUtils.generateToken(userInsert)
 

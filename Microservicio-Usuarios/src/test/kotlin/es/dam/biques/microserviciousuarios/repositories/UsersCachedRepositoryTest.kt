@@ -30,7 +30,7 @@ class UsersCachedRepositoryTest {
         password = "test1234",
         image = "https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png",
         address = "Test Services",
-        role = User.TipoUsuario.CLIENT.name
+        rol = User.TipoUsuario.CLIENT.name
     )
 
     @MockK
@@ -48,7 +48,7 @@ class UsersCachedRepositoryTest {
     @Test
     fun findAll() = runTest {
         coEvery { repository.findAll() } returns flowOf(user)
-        
+
         val result = repositoryCached.findAll().toList()
         assertAll(
             { assertEquals(1, result.size) },
@@ -154,7 +154,7 @@ class UsersCachedRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun update() = runTest {
-        coEvery { repository.findUserByUsername(any()) } returns flowOf( user)
+        coEvery { repository.findUserByUsername(any()) } returns flowOf(user)
         coEvery { repository.save(any()) } returns user
 
         val result = repositoryCached.update(user.id!!, user)!!

@@ -10,7 +10,7 @@ fun User.toDTO(): UserResponseDTO {
         id = id,
         uuid = uuid.toString(),
         image = image,
-        rol = role.split(",").map { it.trim() }.toSet(),
+        rol = rol.split(",").map { it.trim() }.toSet(),
         email = email,
         username = username,
         address = address
@@ -20,7 +20,7 @@ fun User.toDTO(): UserResponseDTO {
 fun UserRegisterDTO.toModel(): User {
     return User(
         image = image,
-        role = rol.joinToString(", ") { it.uppercase().trim() },
+        rol = rol.joinToString(", ") { it.uppercase().trim() },
         email = email,
         username = username,
         password = password,
@@ -31,7 +31,7 @@ fun UserRegisterDTO.toModel(): User {
 fun UserUpdateDTO.toModelFromUpdated(): User {
     return User(
         image = image,
-        role = rol.joinToString(", ") { it.uppercase().trim() },
+        rol = rol.joinToString(", ") { it.uppercase().trim() },
         email = email,
         username = username,
         password = password,

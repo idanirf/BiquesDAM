@@ -20,7 +20,7 @@ class JWTTokenUtils {
             .withIssuer("BiquesUsuarios")
             .withExpiresAt(Date(System.currentTimeMillis() + (60 * 60 * 1000)))
             .withClaim("username", user.username)
-            .withClaim("rol", user.role.split(",").toSet().toString())
+            .withClaim("rol", user.rol.split(",").toSet().toString())
             .sign(Algorithm.HMAC512("BiquesDAM"))
     }
 
