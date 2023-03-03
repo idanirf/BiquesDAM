@@ -11,7 +11,7 @@ fun getUsersInit() = listOf(
         password = "alejandro1234",
         image = "https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png",
         address = "Aranjuez",
-        role = User.TipoUsuario.ADMIN.name
+        rol = User.TipoUsuario.ADMIN.name
     ),
     User(
         uuid = UUID.fromString("c53062e4-31ea-4f5e-a99d-36c228ed01a3"),
@@ -20,6 +20,6 @@ fun getUsersInit() = listOf(
         password = "jorge1234",
         image = "https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png",
         address = "Leganés",
-        role = User.TipoUsuario.CLIENT.name
+        rol = User.TipoUsuario.CLIENT.name
     )
 )

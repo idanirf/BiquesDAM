@@ -45,7 +45,7 @@ class UserService
 
 //    @Cacheable("USERS")
 //    suspend fun findUserByUuid(uuid: UUID) = withContext(Dispatchers.IO) {
-//        return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
+//        return@withContext userCachedRepository.findByUUID(uuid)
 //            ?: throw UserNotFoundException("User with uuid $uuid not found.")
 //    }
 
@@ -71,7 +71,7 @@ class UserService
         )
         if (isAdmin)
             saved = saved.copy(
-                role = User.TipoUsuario.CLIENT.name,
+                rol = User.TipoUsuario.CLIENT.name,
             )
 
         try {
