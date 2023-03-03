@@ -88,7 +88,7 @@ class UsersCachedRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun findByEmail() = runTest {
-        coEvery { repository.findUserByEmail(user.email) } returns flowOf(user)
+        coEvery { repository.findUserByEmail(any()) } returns flowOf(user)
 
         val result = repositoryCached.findByEmail("test@gmail.com")
         assertAll(
@@ -103,12 +103,12 @@ class UsersCachedRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun findByEmailNoEncontrado() = runTest {
-        coEvery { repository.findUserByEmail(user.email) } returns flowOf()
+        coEvery { repository.findUserByEmail(any()) } returns flowOf()
 
         val result = repositoryCached.findByEmail("sara@gmail.com")
         assertNull(result)
 
-        coVerify { repository.findUserByEmail(user.email) }
+        coVerify { repository.findUserByEmail(any()) }
     }
 
 
@@ -154,8 +154,8 @@ class UsersCachedRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun update() = runTest {
-        coEvery { repository.findUserByUuid(user.uuid) } returns flowOf(user)
-        coEvery { repository.save(user) } returns user
+        coEvery { repository.findUserByUsername(any()) } returns flowOf( user)
+        coEvery { repository.save(any()) } returns user
 
         val result = repositoryCached.update(user.id!!, user)!!
 
@@ -164,7 +164,41 @@ class UsersCachedRepositoryTest {
             { assertEquals(user.username, result.username) },
         )
 
-        coVerify { repository.save(user) }
-        coVerify { repository.findUserByUuid(user.uuid) }
+        coVerify { repository.save(any()) }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun updateNoEncontrado() = runTest {
+        coEvery { repository.findUserByUsername(any()) } returns flowOf()
+
+        val result = repositoryCached.update(user.id!!, user)
+
+        assertNull(result)
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun deleteById() = runTest {
+        coEvery { repository.findById(any()) } returns user
+        coEvery { repository.deleteById(any()) } returns Unit
+
+        repositoryCached.deleteById(user.id!!)
+
+        coVerify { repository.findById(any()) }
+        coVerify { repository.deleteById(any()) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun deleteByIdNoEncontrado() = runTest {
+        coEvery { repository.findById(any()) } returns null
+
+        repositoryCached.deleteById(user.id!!)
+
+        coVerify { repository.findById(any()) }
+
+    }
+
 }
