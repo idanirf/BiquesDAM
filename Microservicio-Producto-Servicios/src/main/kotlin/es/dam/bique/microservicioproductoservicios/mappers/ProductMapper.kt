@@ -1,9 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.mappers
 
-import es.dam.bique.microservicioproductoservicios.dto.OnSaleDTO
-import es.dam.bique.microservicioproductoservicios.dto.ProductCreateDTO
-import es.dam.bique.microservicioproductoservicios.dto.ProductDTO
-import es.dam.bique.microservicioproductoservicios.dto.ServiceDTO
+import es.dam.bique.microservicioproductoservicios.dto.*
 import es.dam.bique.microservicioproductoservicios.models.Product
 import es.dam.bique.microservicioproductoservicios.models.ProductType
 import es.dam.bique.microservicioproductoservicios.models.StockType
@@ -28,7 +25,7 @@ fun ProductDTO.toEntity (): Product {
 fun ProductDTO.toOnSaleDTO (): OnSaleDTO {
     return OnSaleDTO(
         productEntity = ProductDTO(
-            id = id.toString().toLong(),
+            id = id,
             uuid = uuid,
             image = image,
             brand = brand,
@@ -41,13 +38,13 @@ fun ProductDTO.toOnSaleDTO (): OnSaleDTO {
             type = type
         ),
         serviceEntity = null,
-        type = OnSaleDTO.OnSaleType.PRODUCT
+        type = OnSaleType.PRODUCT
     )
 }
 
 fun Product.toDTO(): ProductDTO{
     return ProductDTO(
-        id = id.toString().toLong(),
+        id = id,
         uuid = uuid.toString(),
         image = image,
         brand = brand,
@@ -61,8 +58,9 @@ fun Product.toDTO(): ProductDTO{
     )
 }
 
-fun ProductCreateDTO.toModel(): Product{
+fun ProductCreateDTO.toModel(uuid : UUID): Product{
     return Product(
+        uuid = uuid,
         image = image,
         brand = brand,
         model = model,

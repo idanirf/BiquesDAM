@@ -4,8 +4,15 @@ data class OnSaleDTO(
     val productEntity : ProductDTO?,
     val serviceEntity : ServiceDTO?,
     val type : OnSaleType
-){
-    enum class OnSaleType {
-        PRODUCT, SERVICE
-    }
+)
+
+data class OnSaleCreateDTO(
+    val productEntity : ProductCreateDTO?,
+    val serviceEntity : ServiceCreateDTO?,
+    val type : OnSaleType
+)
+
+enum class OnSaleType(val value:String) {
+    PRODUCT("PRODUCT"),
+    SERVICE("SERVICE")
 }

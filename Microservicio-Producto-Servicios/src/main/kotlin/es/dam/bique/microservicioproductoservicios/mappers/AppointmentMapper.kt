@@ -4,37 +4,38 @@ import es.dam.bique.microservicioproductoservicios.dto.AppointmentCreateDTO
 import es.dam.bique.microservicioproductoservicios.dto.AppointmentDTO
 import es.dam.bique.microservicioproductoservicios.models.Appointment
 import es.dam.bique.microservicioproductoservicios.models.AssistanceType
-
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
 fun AppointmentDTO.toEntity(): Appointment{
     return Appointment(
         id = id,
-        uuid = UUID.fromString(this.uuid),
-        user = this.user,
+        uuid = UUID.fromString(uuid),
+        userId = UUID.fromString(user),
         assistance = AssistanceType.from(assistance),
-        date = LocalDateTime.parse(date),
+        date = LocalDate.parse(date),
         description = this.description
     )
 }
 
 fun Appointment.toDTO(): AppointmentDTO{
     return AppointmentDTO(
-        id = id.toString().toLong(),
+        id = id,
         uuid = uuid.toString(),
-        user = user,
+        user = userId.toString(),
         assistance = assistance.value,
         date = date.toString(),
         description = description
     )
 }
 
-fun AppointmentCreateDTO.toModel(): Appointment{
+fun AppointmentCreateDTO.toModel(uuid: UUID): Appointment{
     return Appointment(
-        user = this.user,
+        uuid = uuid,
+        userId = UUID.fromString(userId),
         assistance = AssistanceType.from(assistance),
-        date = LocalDateTime.parse(date),
+        date = LocalDate.parse(date),
         description = this.description
     )
 }

@@ -8,17 +8,16 @@ data class ServiceDTO(
     val uuid: String,
     val image: String,
     val price: Float,
-    val appointment : AppointmentDTO,
+    val appointment : String,
     val type : String
 
 )
 
 data class ServiceCreateDTO(
 
-    val uuid: String,
     val image: String,
     val price: Float,
-    val appointment : AppointmentDTO,
+    val appointment : String,
     val type : String
 
 )

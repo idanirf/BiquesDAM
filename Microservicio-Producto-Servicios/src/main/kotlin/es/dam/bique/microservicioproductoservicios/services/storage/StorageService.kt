@@ -24,23 +24,27 @@ import java.util.stream.Stream
 
 private val logger = KotlinLogging.logger {}
 
-/*@Service
+@Service
 class StorageService(
     @Value("\${upload.root-location}") path: String,
-    @Value("\${spring.profiles.active}") mode: String
-
 ):IStorageService {
 
-    private val rootLocation: Path
+    private val rootLocation: Path = Paths.get(path)
 
     init {
-
         logger.info { "File storage is starting" }
-        rootLocation = Paths.get(path)
-        if (mode == "admin") {
-            this.deleteAll()
-        }
+        initStorageDirectory()
+    }
 
+    final fun initStorageDirectory() {
+        if (!Files.exists(rootLocation)) {
+            logger.info { "Creating storage directory: $rootLocation" }
+            Files.createDirectory(rootLocation)
+        } else {
+            logger.info { "The directory for the storage already exists; data will be deleted" }
+            deleteAll()
+            Files.createDirectory(rootLocation)
+        }
     }
 
 
@@ -151,7 +155,7 @@ class StorageService(
 
     override fun init() {
 
-        logger.info { "Initializing storage file directories" }
+        logger.info { "Initializing storage file directory" }
 
         try {
             if (!Files.exists(rootLocation))
@@ -168,10 +172,11 @@ class StorageService(
         val justFilename: String = StringUtils.getFilename(filename).toString()
         try {
             val file = load(justFilename)
-            if (!Files.exists(file))
-                 throw StorageFileNotFoundException("File $filename does not exist")
-             else
-                 Files.delete(file)
+            if (!Files.exists(file)) {
+                throw StorageFileNotFoundException("File $filename does not exist")
+            }else {
+                Files.delete(file)
+            }
         } catch (e: IOException) {
             throw StorageBadRequestException("An error occurred while deleting a file", e)
         }
@@ -186,5 +191,3 @@ class StorageService(
             .build().toUriString()
     }
 }
-
- */

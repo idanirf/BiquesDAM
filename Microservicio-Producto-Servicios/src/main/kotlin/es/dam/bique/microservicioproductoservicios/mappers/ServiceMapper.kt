@@ -1,9 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.mappers
 
-import es.dam.bique.microservicioproductoservicios.dto.OnSaleDTO
-import es.dam.bique.microservicioproductoservicios.dto.ProductDTO
-import es.dam.bique.microservicioproductoservicios.dto.ServiceCreateDTO
-import es.dam.bique.microservicioproductoservicios.dto.ServiceDTO
+import es.dam.bique.microservicioproductoservicios.dto.*
 import es.dam.bique.microservicioproductoservicios.models.Service
 import es.dam.bique.microservicioproductoservicios.models.ServiceType
 
@@ -15,7 +12,7 @@ fun ServiceDTO.toEntity(): Service {
         uuid = UUID.fromString(uuid),
         image = image,
         price = price,
-        appointment = appointment.toEntity(),
+        appointment = UUID.fromString(appointment),
         type = ServiceType.from(type)
     )
 }
@@ -24,33 +21,33 @@ fun ServiceDTO.toOnSaleDTO (): OnSaleDTO {
     return OnSaleDTO(
         productEntity = null,
         serviceEntity = ServiceDTO(
-            id = id.toString().toLong(),
+            id = id,
             uuid = uuid,
             image = image,
             price = price,
             appointment = appointment,
             type = type ),
-        type = OnSaleDTO.OnSaleType.SERVICE
+        type = OnSaleType.SERVICE
     )
 }
 
-
 fun Service.toDTO(): ServiceDTO{
     return ServiceDTO(
-        id = id.toString().toLong(),
+        id = id,
         uuid = uuid.toString(),
         image = image,
         price = price,
-        appointment = appointment.toDTO(),
+        appointment = appointment.toString(),
         type = type.value
     )
 }
 
-fun ServiceCreateDTO.toModel(): Service {
+fun ServiceCreateDTO.toModel(uuid: UUID): Service {
     return Service(
+        uuid = uuid,
         image = image,
         price = price,
-        appointment = appointment.toEntity(),
+        appointment = UUID.fromString(appointment),
         type = ServiceType.from(type)
     )
 }

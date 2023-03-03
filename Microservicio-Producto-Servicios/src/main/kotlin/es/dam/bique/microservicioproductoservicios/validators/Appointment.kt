@@ -5,7 +5,7 @@ import es.dam.bique.microservicioproductoservicios.exceptions.ProductBadRequestE
 
 fun AppointmentCreateDTO.validate(): AppointmentCreateDTO {
 
-    if (this.user.toString().isBlank())
+    if (this.userId.isBlank())
         throw ProductBadRequestException("The user cannot be empty.")
     if (this.assistance.isBlank())
         throw ProductBadRequestException("Assistance type cannot be empty.")

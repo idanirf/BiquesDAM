@@ -1,6 +1,5 @@
 package es.dam.bique.microservicioproductoservicios.controllers
 
-import es.dam.bique.microservicioproductoservicios.config.APIConfig
 import es.dam.bique.microservicioproductoservicios.dto.*
 import es.dam.bique.microservicioproductoservicios.exceptions.*
 import es.dam.bique.microservicioproductoservicios.mappers.toDTO
@@ -24,7 +23,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping(APIConfig.API_PATH + "/products&services")
+@RequestMapping("/products&services")
 class ProductsServicesController
     @Autowired constructor(
         private val productsService: ProductsService,
@@ -32,7 +31,6 @@ class ProductsServicesController
         private val servicesService: ServicesService
     )  {
 
-    //TODO: añadir los servicios
     @GetMapping("/list")
     suspend fun findAll(): ResponseEntity<MutableList<OnSaleDTO>> {
 
@@ -41,8 +39,8 @@ class ProductsServicesController
         val resProducts = productsService.findAll().toList()
             .map { it.toDTO().toOnSaleDTO() }
 
-        //val resServices = servicesService.findAll().toList()
-        //    .map { it.toDTO().toOnSaleDTO() }
+        val resServices = servicesService.findAll().toList()
+           .map { it.toDTO().toOnSaleDTO() }
 
         val res : MutableList<OnSaleDTO> = mutableListOf()
 
@@ -50,11 +48,9 @@ class ProductsServicesController
             res.add(it)
         }
 
-        /*resServices.forEach {
+        resServices.forEach {
             res.add(it)
         }
-
-         */
 
         return ResponseEntity.ok(res)
 
@@ -71,7 +67,6 @@ class ProductsServicesController
 
     }
 
-    //TODO: error SQL
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: Long): ResponseEntity<OnSale> {
 
@@ -86,7 +81,7 @@ class ProductsServicesController
                 val service = servicesService.findById(id)
                 service
 
-            } catch (e: ServiceNotFoundException) {
+            } catch (e: OnSaleNotFoundException) {
                 throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
 
             }
@@ -94,7 +89,6 @@ class ProductsServicesController
         return ResponseEntity.ok(result)
     }
 
-    //TODO: error identifier
     @GetMapping("/appointments/{id}")
     suspend fun findAppointmentById(@PathVariable id: Long): ResponseEntity<AppointmentDTO> {
 
@@ -113,49 +107,40 @@ class ProductsServicesController
     }
 
     @PostMapping("")
-    suspend fun create(@Valid @RequestBody entityDto: ProductCreateDTO): ResponseEntity<ProductDTO> {
-        logger.info { "On sale controller - product create()"}
+    suspend fun create(@Valid @RequestBody entityDto: OnSaleCreateDTO): ResponseEntity<OnSaleDTO> {
 
-        try {
+        logger.info { "On sale controller - OnSale create()"}
 
-            val rep = entityDto.validate().toModel()
-            val res = productsService.save(rep).toDTO()
+        if(entityDto.type.value == "PRODUCT"){
+            try{
+                val rep = entityDto.productEntity?.validate()?.toModel(UUID.randomUUID())
+                val res = rep?.let { productsService.save(it).toDTO().toOnSaleDTO() }
+                return ResponseEntity.status(HttpStatus.CREATED).body(res)
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(res)
+            } catch (e: ProductBadRequestException) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+            }
+        }else{
+            try {
+                val rep = entityDto.serviceEntity?.validate()?.toModel(UUID.randomUUID())
+                val res = rep?.let { servicesService.save(it).toDTO().toOnSaleDTO() }
 
-        } catch (e: ProductBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        }
-    }
-
-    //TODO: añadir servicio
-    /*@PostMapping("")
-    suspend fun create(@Valid @RequestBody entityDto: ServiceCreateDTO): ResponseEntity<ServiceDTO> {
-
-        logger.info { "On sale controller - service create()"}
-
-        try {
-
-            val rep = entityDto.validate().toModel()
-            val res = servicesService.save(rep).toDTO()
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(res)
-
-        } catch (e: ServiceBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+                return ResponseEntity.status(HttpStatus.CREATED).body(res)
+            } catch (e: ServiceBadRequestException) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+            }
         }
 
     }
-
-     */
 
     @PostMapping("/appointments")
     suspend fun create(@Valid @RequestBody entityDto: AppointmentCreateDTO): ResponseEntity<AppointmentDTO> {
+
         logger.info { "On sale controller - appointment create()"}
 
-        try {
+        try{
 
-            val rep = entityDto.validate().toModel()
+            val rep = entityDto.validate().toModel(UUID.randomUUID())
             val res = appointmentService.save(rep).toDTO()
 
             return ResponseEntity.status(HttpStatus.CREATED).body(res)
@@ -163,69 +148,47 @@ class ProductsServicesController
         } catch (e: ProductBadRequestException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+
     }
 
+    @PutMapping("/{uuid}")
+    suspend fun update(@PathVariable uuid: UUID, @Valid @RequestBody entityDto: OnSaleCreateDTO): ResponseEntity<OnSaleDTO> {
 
-    /*@PutMapping("/{id}")
-    suspend fun update(
-        @PathVariable id: UUID,
-        @Valid @RequestBody serviceDTO: ServiceCreateDTO
-    ): ResponseEntity<ServiceDTO> {
+        logger.info { "On sale controller - OnSale update() : $uuid" }
 
-        logger.info { "On sale controller - service update() : $id" }
+        if(entityDto.type.value == "PRODUCT"){
+            try {
 
-        try {
+                val rep = entityDto.productEntity?.validate()?.toModel(uuid)
+                val res = rep?.let { productsService.update(it).toDTO().toOnSaleDTO() }
 
-            val rep = serviceDTO.validate().toModel()
-            val res = servicesService.update(rep).toDTO()
+                return ResponseEntity.status(HttpStatus.OK).body(res)
 
-            return ResponseEntity.status(HttpStatus.OK).body(res)
+            } catch (e: ProductNotFoundException) {
+                throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+            }
 
-        } catch (e: ServiceNotFoundException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: ServiceNotFoundException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        } catch (e: ServiceBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }else{
+            try {
+                val rep = entityDto.serviceEntity?.validate()?.toModel(uuid)
+                val res = rep?.let { servicesService.update(it).toDTO().toOnSaleDTO() }
+
+                return ResponseEntity.status(HttpStatus.OK).body(res)
+
+            } catch (e: ServiceNotFoundException) {
+                throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+            }
         }
     }
 
-     */
+    @PutMapping("/appointments/{uuid}")
+    suspend fun update(@PathVariable uuid: UUID, @Valid @RequestBody entityDTO: AppointmentCreateDTO): ResponseEntity<AppointmentDTO> {
 
-
-    @PutMapping("/{id}")
-    suspend fun update(
-        @PathVariable id: UUID,
-        @Valid @RequestBody productDTO: ProductCreateDTO
-    ): ResponseEntity<ProductDTO> {
-
-        logger.info { "On sale controller - product update() : $id" }
+        logger.info { "On sale controller - appointment update() : $uuid" }
 
         try {
 
-            val rep = productDTO.validate().toModel()
-            val res = productsService.update(rep).toDTO()
-
-            return ResponseEntity.status(HttpStatus.OK).body(res)
-
-        } catch (e: ProductNotFoundException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: ProductBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        }
-    }
-
-    @PutMapping("/appointments/{id}")
-    suspend fun update(
-        @PathVariable id: UUID,
-        @Valid @RequestBody entityDTO: AppointmentCreateDTO
-    ): ResponseEntity<AppointmentDTO> {
-
-        logger.info { "On sale controller - appointment update() : $id" }
-
-        try {
-
-            val rep = entityDTO.validate().toModel()
+            val rep = entityDTO.validate().toModel(uuid)
             val res = appointmentService.update(rep).toDTO()
 
             return ResponseEntity.status(HttpStatus.OK).body(res)
@@ -240,19 +203,17 @@ class ProductsServicesController
     }
 
 
-    @DeleteMapping("/{id}")
-    suspend fun delete(@PathVariable id: Long): ResponseEntity<OnSaleDTO> {
+    @DeleteMapping("/{uuid}")
+    suspend fun delete(@PathVariable uuid: UUID): ResponseEntity<OnSaleDTO> {
 
-        logger.info { "On sale controller - delete() : $id" }
+        logger.info { "On sale controller - delete() : $uuid" }
 
-        val result: OnSaleDTO = try {
-            val product = productsService.delete(productsService.findById(id)).toDTO().toOnSaleDTO()
-            product
+        try {
+            productsService.delete(productsService.findByUuid(uuid)).toDTO().toOnSaleDTO()
 
         } catch (e: ProductNotFoundException) {
             try {
-                val service = servicesService.delete(servicesService.findById(id)).toDTO().toOnSaleDTO()
-                service
+                servicesService.delete(servicesService.findByUuid(uuid)).toDTO().toOnSaleDTO()
 
             } catch (e: ServiceNotFoundException) {
                 throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
@@ -260,17 +221,17 @@ class ProductsServicesController
             }
         }
 
-        return ResponseEntity.ok(result)
+        return ResponseEntity.noContent().build()
 
     }
 
-    @DeleteMapping("/appointments/{id}")
-    suspend fun deleteAppointment(@PathVariable id: Long): ResponseEntity<AppointmentDTO> {
+    @DeleteMapping("/appointments/{uuid}")
+    suspend fun deleteAppointment(@PathVariable uuid: UUID): ResponseEntity<AppointmentDTO> {
 
-        logger.info { "On sale controller - deleteAppointment() : $id" }
+        logger.info { "On sale controller - deleteAppointment() : $uuid" }
 
         try {
-            appointmentService.delete(appointmentService.findById(id))
+            appointmentService.delete(appointmentService.findByUuid(uuid))
             return ResponseEntity.noContent().build()
         } catch (e: AppointmentNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)

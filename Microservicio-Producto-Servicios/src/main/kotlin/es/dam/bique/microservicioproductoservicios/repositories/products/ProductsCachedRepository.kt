@@ -56,11 +56,11 @@ class ProductsCachedRepository
 
     @CachePut("products")
     override suspend fun update(entity: Product): Product? = withContext(Dispatchers.IO) {
-
         logger.info { "Cached products - update() product: $entity" }
-        val product = productsRepository.findById(entity.id!!.toString().toLong())
+        val product = productsRepository.findByUuid(entity.uuid).firstOrNull()
         product?.let {
             val updated = it.copy(
+                uuid = entity.uuid,
                 image = entity.image,
                 brand = entity.brand,
                 model = entity.model,
