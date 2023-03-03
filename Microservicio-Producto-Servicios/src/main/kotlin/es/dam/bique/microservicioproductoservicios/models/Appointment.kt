@@ -1,15 +1,12 @@
 package es.dam.bique.microservicioproductoservicios.models
 
-import es.dam.bique.microservicioproductoservicios.dto.AppointmentUserDTO
-import es.dam.bique.microservicioproductoservicios.serializers.LocalDateTimeSerializer
+import es.dam.bique.microservicioproductoservicios.serializers.LocalDateSerializer
 import es.dam.bique.microservicioproductoservicios.serializers.UUIDSerializer
-import jakarta.validation.constraints.NotEmpty
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import nonapi.io.github.classgraph.json.Id
+import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
-
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.*
 
 @Serializable
@@ -20,18 +17,16 @@ data class Appointment(
     val id: Long? = null,
 
     @Serializable(with = UUIDSerializer::class)
-    val uuid: UUID = UUID.randomUUID(),
+    val uuid: UUID,
 
-    @NotEmpty(message = "The user cannot be empty.")
-    val user: AppointmentUserDTO,
+    @Serializable(with = UUIDSerializer::class)
+    val userId: UUID,
 
     @Contextual
-    @NotEmpty(message = "Assistance type cannot be empty.")
     val assistance : AssistanceType,
 
-    @Serializable(with = LocalDateTimeSerializer::class)
-    @NotEmpty(message = "The date field cannot be empty.")
-    val date: LocalDateTime,
+    @Serializable(with = LocalDateSerializer::class)
+    val date: LocalDate,
 
     val description: String
 )

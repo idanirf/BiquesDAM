@@ -2,7 +2,6 @@ package es.dam.bique.microservicioproductoservicios.repositories.appointments
 
 import es.dam.bique.microservicioproductoservicios.exceptions.AppointmentConflictIntegrityException
 import es.dam.bique.microservicioproductoservicios.models.Appointment
-import es.dam.bique.microservicioproductoservicios.models.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -59,10 +58,11 @@ class AppointmentsCachedRepository
     override suspend fun update(entity: Appointment): Appointment? = withContext(Dispatchers.IO) {
 
         logger.info { "Cached appointments - update() appointment: $entity" }
-        val appointment = appointmentsRepository.findById(entity.id!!.toString().toLong())
+        val appointment = appointmentsRepository.findByUuid(entity.uuid).firstOrNull()
         appointment?.let{
             val updated = it.copy(
-                user = entity.user,
+                uuid = entity.uuid,
+                userId = entity.userId,
                 assistance = entity.assistance,
                 date = entity.date,
                 description = entity.description,
@@ -77,7 +77,7 @@ class AppointmentsCachedRepository
     override suspend fun delete(entity: Appointment): Boolean = withContext(Dispatchers.IO) {
 
         logger.info { "Cached appointment - delete() product: $entity" }
-        val appointment = appointmentsRepository.findById(entity.id!!.toString().toLong())
+        val appointment = entity.id?.let { appointmentsRepository.findById(it) }
         try {
             appointment?.let {
                 appointmentsRepository.deleteById(it.id!!.toString().toLong())

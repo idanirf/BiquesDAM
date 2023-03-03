@@ -1,9 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.models
 
 import es.dam.bique.microservicioproductoservicios.serializers.UUIDSerializer
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.NotNull
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
@@ -18,35 +15,26 @@ data class Product(
     override val id: Long? = null,
 
     @Serializable(with = UUIDSerializer::class)
-    override val uuid: UUID = UUID.randomUUID(),
+    override val uuid: UUID,
 
-    @NotEmpty(message = "The image cannot be empty.")
     val image: String,
 
-    @NotEmpty(message = "The brand cannot be empty.")
     val brand: String,
 
-    @NotEmpty(message = "The model cannot be empty.")
     val model: String,
 
-    @NotEmpty(message = "The description cannot be empty.")
     val description: String,
 
-    @Min(value = 0, message = "The price cannot be negative.")
     val price: Float,
 
-    @Min(value = 0, message = "The percentage cannot be negative.")
     val discountPercentage: Float,
 
     @Contextual
-    @NotNull(message = "Stock cannot be empty.")
     val stock : StockType,
 
-    @NotNull(message = "Availability cannot be empty.")
     val isAvailable: Boolean,
 
     @Contextual
-    @NotNull(message = "The Product Type cannot be empty.")
     val type : ProductType,
 
     ): OnSale

@@ -18,18 +18,16 @@ data class Service(
     override val id: Long? = null,
 
     @Serializable(with = UUIDSerializer::class)
-    override val uuid: UUID = UUID.randomUUID(),
+    override val uuid: UUID,
 
-    @NotEmpty(message = "The image cannot be empty.")
     val image: String,
 
-    @Min(value = 0, message = "The price cannot be negative.")
     val price: Float = 0.0f,
 
-    val appointment: Appointment,
+    @Serializable(with = UUIDSerializer::class)
+    val appointment: UUID,
 
     @Contextual
-    @NotEmpty(message = "The type cannot be empty.")
     val type: ServiceType
 
 ): OnSale

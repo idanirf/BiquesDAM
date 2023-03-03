@@ -5,17 +5,18 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.LocalDateTime
+import java.time.LocalDate
 
-object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
-    override val descriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+object LocalDateSerializer : KSerializer<LocalDate> {
 
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString())
+    override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): LocalDate {
+        return LocalDate.parse(decoder.decodeString())
     }
 
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+    override fun serialize(encoder: Encoder, value: LocalDate) {
         encoder.encodeString(value.toString())
     }
 
