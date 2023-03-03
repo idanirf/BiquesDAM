@@ -67,18 +67,18 @@ class UserCachedRepository
     override suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
         logger.info { "Updating user: $user" }
 
-        var userDB = usersRepository.findUserByUsername(user.username)
-            .firstOrNull()
+        val userDB = usersRepository.findUserByUsername(user.username).firstOrNull()
 
-        userDB = usersRepository.findUserByEmail(user.email)
-            .firstOrNull()
+        userDB?.let {
+            val updtatedUser = user.copy(
+                id = user.id,
+                updatedAt = LocalDateTime.now()
+            )
 
-        val updtatedUser = user.copy(
-            id = user.id,
-            updatedAt = LocalDateTime.now()
-        )
+            return@withContext usersRepository.save(updtatedUser)
+        }
 
-        return@withContext usersRepository.save(updtatedUser)
+        return@withContext null
     }
 
     @CacheEvict("USERS")

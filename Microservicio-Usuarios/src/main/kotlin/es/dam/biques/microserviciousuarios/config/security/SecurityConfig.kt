@@ -49,7 +49,7 @@ class SecurityConfig
             .and()
             .authorizeHttpRequests()
             .requestMatchers("/error/**").permitAll()
-            .requestMatchers("/login", "/register").permitAll()
+            .requestMatchers("/users/login", "/users/register").permitAll()
             .requestMatchers("/**").permitAll()
             .requestMatchers("/users", "/users{id}").hasAnyRole("ADMIN", "SUPERADMIN")
             .anyRequest().authenticated()

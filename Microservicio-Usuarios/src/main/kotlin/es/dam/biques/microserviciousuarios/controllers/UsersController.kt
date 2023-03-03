@@ -28,14 +28,14 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/users")
 class UsersController @Autowired constructor(
     private val userService: UserService,
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenUtils: JWTTokenUtils
 ) {
-    @GetMapping("/login")
-    fun login(@Valid @RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
+    @PostMapping("/login")
+    fun login(@RequestBody logingDto: UserLoginDTO): ResponseEntity<UserTokenDTO> {
         try {
             logger.info { "User login: ${logingDto.username}" }
 
@@ -53,12 +53,11 @@ class UsersController @Autowired constructor(
             val jwtToken: String = jwtTokenUtils.generateToken(user)
             logger.info { "Token de usuario: $jwtToken" }
 
-            return ResponseEntity(UserTokenDTO(user.toDTO(), jwtToken), HttpStatus.OK)
+            return ResponseEntity.ok(UserTokenDTO(user.toDTO(), jwtToken))
         } catch (e: Exception) {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
         }
     }
-
 
     @PostMapping("/register")
     suspend fun register(@Valid @RequestBody usuarioDto: UserRegisterDTO): ResponseEntity<UserTokenDTO> {
@@ -78,7 +77,7 @@ class UsersController @Autowired constructor(
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @GetMapping("/users")
+    @GetMapping("")
     suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserResponseDTO>> {
         logger.info { "API -> findAll()" }
 
@@ -87,12 +86,12 @@ class UsersController @Autowired constructor(
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> findById($id)" }
 
         try {
-            val res = userService.findUserById(id.toLong())?.toDTO()
+            val res = userService.findUserById(id.toLong()).toDTO()
             return ResponseEntity.ok(res)
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
@@ -100,7 +99,7 @@ class UsersController @Autowired constructor(
     }
 
 //    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-//    @GetMapping("/users/{uuid}")
+//    @GetMapping("/{uuid}")
 //    suspend fun findByUUID(@PathVariable uuid: String): ResponseEntity<UserResponseDTO> {
 //        logger.info { "API -> findByUUID($uuid)" }
 //
@@ -113,7 +112,7 @@ class UsersController @Autowired constructor(
 //    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @PostMapping("/users")
+    @PostMapping("")
     suspend fun create(@Valid @RequestBody userDTO: UserRegisterDTO): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> create($userDTO)" }
 
@@ -128,7 +127,7 @@ class UsersController @Autowired constructor(
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     suspend fun update(
         @AuthenticationPrincipal user: User,
         @PathVariable id: String, @Valid @RequestBody userDTO: UserUpdateDTO
@@ -152,7 +151,7 @@ class UsersController @Autowired constructor(
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<UserDTO> {
         logger.info { "API -> delete($id)" }
 
