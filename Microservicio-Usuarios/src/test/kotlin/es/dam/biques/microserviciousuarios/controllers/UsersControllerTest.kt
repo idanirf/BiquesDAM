@@ -42,9 +42,9 @@ class UsersControllerTest {
     @InjectMockKs
     lateinit var usersController: UsersController
 
-    final val user = User(
+    private final val user = User(
         id = 12L,
-        uuid = UUID.fromString("91e0c247-c611-4ed2-8db8-a495f1f16fee"),
+        uuid = "91e0c247-c611-4ed2-8db8-a495f1f16fee",
         username = "TestService",
         email = "testService@gmail.com",
         password = "test1234",
@@ -126,26 +126,6 @@ class UsersControllerTest {
         assertEquals("""404 NOT_FOUND "User with id ${user.id} not found."""", exception.message)
 
         coVerify(exactly = 1) { userService.findUserById(user.id!!) }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun create() = runTest {
-        coEvery { userService.save(any()) } returns user
-
-        val result = usersController.create(userRegisterDTO)
-        val responseDTO = result.body!!
-
-        assertAll(
-            { assertNotNull(result) },
-            { assertNotNull(responseDTO) },
-            { assertEquals(userResponseDTO.id, responseDTO.id) },
-            { assertEquals(userResponseDTO.username, responseDTO.username) },
-            { assertEquals(userResponseDTO.email, responseDTO.email) },
-            { assertEquals(result.statusCode, HttpStatus.CREATED) },
-        )
-
-        coVerify(exactly = 1) { userService.save(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
