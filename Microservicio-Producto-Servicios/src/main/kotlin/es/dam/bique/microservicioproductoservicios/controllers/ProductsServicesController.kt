@@ -30,6 +30,7 @@ class ProductsServicesController
         private val servicesService: ServicesService
     )  {
 
+
     @GetMapping("/list")
     suspend fun findAll(): ResponseEntity<MutableList<OnSaleDTO>> {
 
@@ -108,10 +109,7 @@ class ProductsServicesController
             return ResponseEntity.ok(result)
         } catch (e: AppointmentNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: AppointmentNotFoundException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         }
-
     }
 
     @PostMapping("")
@@ -147,7 +145,6 @@ class ProductsServicesController
         logger.info { "On sale controller - appointment create()"}
 
         try{
-
             val rep = entityDto.validate().toModel(UUID.randomUUID())
             val res = appointmentService.save(rep).toDTO()
 
@@ -203,10 +200,6 @@ class ProductsServicesController
 
         } catch (e: ServiceNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: ServiceNotFoundException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        } catch (e: ServiceBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }
 
@@ -225,7 +218,6 @@ class ProductsServicesController
 
             } catch (e: ServiceNotFoundException) {
                 throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-
             }
         }
 
@@ -243,8 +235,6 @@ class ProductsServicesController
             return ResponseEntity.noContent().build()
         } catch (e: AppointmentNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: AppointmentConflictIntegrityException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
 
     }
