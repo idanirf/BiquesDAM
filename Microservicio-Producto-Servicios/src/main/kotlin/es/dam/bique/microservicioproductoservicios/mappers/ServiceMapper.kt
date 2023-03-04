@@ -51,3 +51,15 @@ fun ServiceCreateDTO.toModel(uuid: UUID): Service {
         type = ServiceType.from(type)
     )
 }
+
+fun ServiceCreateDTO.toOnSaleCreateDTO (): OnSaleCreateDTO {
+    return OnSaleCreateDTO(
+        productEntity = null,
+        serviceEntity = ServiceCreateDTO(
+            image = image,
+            price = price,
+            appointment = appointment,
+            type = type ),
+        type = OnSaleType.SERVICE
+    )
+}

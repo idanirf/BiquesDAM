@@ -47,11 +47,8 @@ dependencies {
     // Para mis logs
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
 
-    // JWT
-    implementation("com.auth0:java-jwt:4.2.1")
-
+    // Base de datos
     runtimeOnly("io.r2dbc:r2dbc-h2")
-
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

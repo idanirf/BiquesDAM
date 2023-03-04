@@ -1,13 +1,10 @@
 package es.dam.bique.microservicioproductoservicios.models
 
 import es.dam.bique.microservicioproductoservicios.serializers.UUIDSerializer
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotEmpty
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
-
 import java.util.*
 
 @Serializable

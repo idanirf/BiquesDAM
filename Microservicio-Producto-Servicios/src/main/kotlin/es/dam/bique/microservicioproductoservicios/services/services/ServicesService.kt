@@ -1,9 +1,12 @@
 package es.dam.bique.microservicioproductoservicios.services.services
 
+import es.dam.bique.microservicioproductoservicios.exceptions.AppointmentNotFoundException
 import es.dam.bique.microservicioproductoservicios.exceptions.ProductNotFoundException
 import es.dam.bique.microservicioproductoservicios.exceptions.ServiceNotFoundException
+import es.dam.bique.microservicioproductoservicios.models.Appointment
 import es.dam.bique.microservicioproductoservicios.models.Product
 import es.dam.bique.microservicioproductoservicios.models.Service
+import es.dam.bique.microservicioproductoservicios.repositories.appointments.AppointmentsCachedRepository
 import es.dam.bique.microservicioproductoservicios.repositories.services.ServiceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +23,9 @@ class ServicesService
 
     @Autowired
     constructor(
-        private val serviceRepository : ServiceRepository
+        private val serviceRepository : ServiceRepository,
+        private val appointmentRepository: AppointmentsCachedRepository
+
     ): IServicesService {
 
 
@@ -46,11 +51,23 @@ class ServicesService
 
         }
 
+        override suspend fun findAppointment(uuid: UUID): Appointment? {
+            logger.debug { "Service service - findAppointment() with uuid: $uuid" }
+
+            return appointmentRepository.findByUuid(uuid)
+                ?: throw AppointmentNotFoundException("Appointment not found with uuid: $uuid")
+        }
+
         override suspend fun save(service: Service): Service {
 
             logger.info { "Service service - save() service: $service" }
-            //TODO: ¿Queremos notificar el cambio al usuario?
-            return serviceRepository.save(service)
+            val appointment = findAppointment(service.appointment)
+            if(appointment != null) {
+                //TODO: ¿Queremos notificar el cambio al usuario?
+                return serviceRepository.save(service)
+            }else{
+                throw AppointmentNotFoundException("Appointment not found with uuid: ${service.appointment}")
+            }
 
         }
 
@@ -59,9 +76,13 @@ class ServicesService
             logger.info { "Service service - update() service: $service" }
             val found = serviceRepository.findByUuid(service.uuid).firstOrNull()
 
-            //TODO: ¿Queremos notificar el cambio al usuario?
-            return if(found!=null){
-                serviceRepository.save(found)
+            if(found!=null){
+                val appointment = findAppointment(service.appointment)
+                if(appointment != null) {
+                    return serviceRepository.save(found)
+                }else{
+                    throw AppointmentNotFoundException("Appointment not found with uuid: ${service.appointment}")
+                }
             }else{
                 throw ServiceNotFoundException("Not found with uuid: ${service.uuid}")
             }

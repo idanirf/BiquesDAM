@@ -5,7 +5,6 @@ import es.dam.bique.microservicioproductoservicios.dto.AppointmentDTO
 import es.dam.bique.microservicioproductoservicios.models.Appointment
 import es.dam.bique.microservicioproductoservicios.models.AssistanceType
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 fun AppointmentDTO.toEntity(): Appointment{

@@ -72,3 +72,21 @@ fun ProductCreateDTO.toModel(uuid : UUID): Product{
         type = ProductType.from(type)
     )
 }
+
+fun ProductCreateDTO.toOnSaleCreateDTO (): OnSaleCreateDTO {
+    return OnSaleCreateDTO(
+        productEntity = ProductCreateDTO(
+            image = image,
+            brand = brand,
+            model = model,
+            description = description,
+            price = price,
+            discountPercentage = discountPercentage,
+            stock = stock,
+            isAvailable = isAvailable,
+            type = type
+        ),
+        serviceEntity = null,
+        type = OnSaleType.PRODUCT
+    )
+}

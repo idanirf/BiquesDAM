@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 sealed class AppointmentException(message: String): RuntimeException(message)
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-class AppointmentNotFoundException(message: String) : ProductException(message)
+class AppointmentNotFoundException(message: String) : AppointmentException(message)
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-class AppointmentBadRequestException(message: String) : ProductException(message)
+class AppointmentBadRequestException(message: String) : AppointmentException(message)
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-class AppointmentConflictIntegrityException(message: String) : ProductException(message)
+class AppointmentConflictIntegrityException(message: String) : AppointmentException(message)
