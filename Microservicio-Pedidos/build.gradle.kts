@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -43,26 +45,13 @@ dependencies {
     // Content validation
     implementation("io.ktor:ktor-server-request-validation:$ktor_version")
 
-    // Caching Headers
-    implementation("io.ktor:ktor-server-caching-headers-jvm:$ktor_version")
-
     // Koin - Core
     implementation("io.insert-koin:koin-core:3.2.2")
 
     // Koin Anotaciones
     implementation("io.insert-koin:koin-annotations:1.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
-
-    // Compression
-    implementation("io.ktor:ktor-server-compression-jvm:$ktor_version")
-    // CORS
-    implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
-
-    // WebSockets
-    implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
-
-    // Swagger
-    implementation("io.ktor:ktor-server-swagger:$ktor_version")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
@@ -88,4 +77,14 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    implementation(kotlin("stdlib-jdk8"))
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

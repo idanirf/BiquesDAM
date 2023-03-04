@@ -25,7 +25,6 @@ fun Application.configureSecurity() {
 
     val tokenConfig: TokenConfig = get { parametersOf(tokenConfigParams) }
 
-//role
     authentication {
         jwt {
             verifier(jwtService.verifyToken())
@@ -40,7 +39,7 @@ fun Application.configureSecurity() {
             }
 
             challenge { defaultScheme, realm ->
-                call.respond(HttpStatusCode.Unauthorized, "Token invalido o expirado")
+                call.respond(HttpStatusCode.Unauthorized, "Token no valido o ha expirado")
             }
         }
     }
