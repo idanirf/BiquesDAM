@@ -14,11 +14,11 @@ data class OrderLine(
     val id: Id<OrderLine> = newId(),
     @Serializable(with = UUIDSerializer::class)
     val uuid: UUID = UUID.randomUUID(),
-    //@Contextual
-    //val product: Id<OnSale>,
+    @Serializable(with = UUIDSerializer::class)
+    val product: UUID,
     val amount: Int,
     val price: Double,
     val total: Double,
-    //@Contextual
-    //val employee: Id<User>
+    @Serializable(with = UUIDSerializer::class)
+    val employee: UUID
     )

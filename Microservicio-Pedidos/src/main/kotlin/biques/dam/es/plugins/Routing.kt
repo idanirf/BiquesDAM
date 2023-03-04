@@ -16,6 +16,7 @@ import biques.dam.es.services.OrderService
 import biques.dam.es.utils.toUUID
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -28,6 +29,9 @@ import kotlinx.coroutines.flow.toList
 fun Application.configureRouting() {
     val orderService = OrderService(OrderRepositoryImpl())
     val orderLineService = OrderLineService(OrderLineRepositoryImpl())
+    authentication {
+        //TODO Cuando tengamos token meter las rutas aquí
+    }
     routing {
         get("/") {
             call.respondText("Hello World!")
@@ -57,7 +61,6 @@ fun Application.configureRouting() {
             } catch (e: UUIDException) {
                 call.respond(HttpStatusCode.BadRequest, e.message.toString())
             }
-
         }
         get("/orderline/{id}"){
             try {
