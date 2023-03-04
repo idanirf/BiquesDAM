@@ -32,6 +32,8 @@ repositories {
 dependencies {
     // Ktor Core
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-json:$ktor_version")
+
 
     // Auth JWT
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
@@ -79,6 +81,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation("io.mockk:mockk:1.13.2")
+    implementation("io.ktor:ktor-client-json:$ktor_version")
+    implementation("com.google.code.gson:gson:2.8.7")
+
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
