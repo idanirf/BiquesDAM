@@ -14,6 +14,7 @@ class TokensService(
         return JWT.require(Algorithm.HMAC512(tokenConfig.secret))
             .withAudience(tokenConfig.audience)
             .withIssuer(tokenConfig.issuer)
+            .acceptExpiresAt(tokenConfig.expiration.toLong())
             .build()
     }
 }
