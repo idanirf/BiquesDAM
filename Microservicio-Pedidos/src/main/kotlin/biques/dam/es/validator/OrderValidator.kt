@@ -7,7 +7,7 @@ fun RequestValidationConfig.orderValidation(){
     validate<OrderDTO>{order ->
         if(order.orderLine.isEmpty()){
             ValidationResult.Invalid("The order line caanot be empty")
-        } else if (order.IVA < 0){
+        } else if (order.iva < 0){
             ValidationResult.Invalid("The IVA cannot be negative")
         } else if (order.status.isEmpty()){
             ValidationResult.Invalid("The status cannot be empty")

@@ -10,4 +10,5 @@ data class TokenConfig(
     val audience = config["audience"].toString()
     val secret = config["secret"].toString()
     val issuer = config["issuer"].toString()
+    val expiration = config["expiration"].toString()
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
-import kotlin.test.*
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.litote.kmongo.id.toId
