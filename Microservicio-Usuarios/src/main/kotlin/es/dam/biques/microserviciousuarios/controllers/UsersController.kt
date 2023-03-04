@@ -9,7 +9,6 @@ import es.dam.biques.microserviciousuarios.mappers.toModel
 import es.dam.biques.microserviciousuarios.models.User
 import es.dam.biques.microserviciousuarios.service.UserService
 import es.dam.biques.microserviciousuarios.validators.validate
-import jakarta.validation.Valid
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,7 +59,7 @@ class UsersController @Autowired constructor(
     }
 
     @PostMapping("/register")
-    suspend fun register(@Valid @RequestBody usuarioDto: UserRegisterDTO): ResponseEntity<UserTokenDTO> {
+    suspend fun register(@RequestBody usuarioDto: UserRegisterDTO): ResponseEntity<UserTokenDTO> {
         logger.info { "User register: ${usuarioDto.username}" }
 
         try {
@@ -104,7 +103,7 @@ class UsersController @Autowired constructor(
 //        logger.info { "API -> findByUUID($uuid)" }
 //
 //        try {
-//            val res = userService.findUserByUuid(UUID.fromString(uuid)).toDTO()
+//            val res = userService.findUserByUuid(uuid).toDTO()
 //            return ResponseEntity.ok(res)
 //        } catch (e: UserNotFoundException) {
 //            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
@@ -112,25 +111,10 @@ class UsersController @Autowired constructor(
 //    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-    @PostMapping("")
-    suspend fun create(@Valid @RequestBody userDTO: UserRegisterDTO): ResponseEntity<UserResponseDTO> {
-        logger.info { "API -> create($userDTO)" }
-
-        try {
-            val rep = userDTO.validate().toModel()
-            val res = userService.save(rep).toDTO()
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(res)
-        } catch (e: UserBadRequestException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-        }
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/{id}")
     suspend fun update(
         @AuthenticationPrincipal user: User,
-        @PathVariable id: String, @Valid @RequestBody userDTO: UserUpdateDTO
+        @PathVariable id: String, @RequestBody userDTO: UserUpdateDTO
     ): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> update($id)" }
 

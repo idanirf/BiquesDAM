@@ -63,21 +63,16 @@ class UserService
             throw UserBadRequestException("Email already exists.")
         }
 
-        var saved = user.copy(
-            uuid = UUID.randomUUID(),
+        val saved = user.copy(
             password = passwordEncoder.encode(user.password),
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
-        if (isAdmin)
-            saved = saved.copy(
-                rol = User.TipoUsuario.CLIENT.name,
-            )
 
         try {
             return@withContext userCachedRepository.save(saved)
         } catch (e: Exception) {
-            throw UserBadRequestException("Error creating the user: Username or email already exist. -> ${e.message}")
+            throw UserBadRequestException("Error creating the user. -> ${e.message}")
         }
     }
 

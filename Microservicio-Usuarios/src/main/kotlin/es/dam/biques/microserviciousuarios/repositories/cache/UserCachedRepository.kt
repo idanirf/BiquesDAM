@@ -43,7 +43,7 @@ class UserCachedRepository
     }
 
     @Cacheable("USERS")
-    override suspend fun findByUUID(uuid: UUID): User? = withContext(Dispatchers.IO) {
+    override suspend fun findByUUID(uuid: String): User? = withContext(Dispatchers.IO) {
         logger.info { "findByUUID($uuid" }
 
         return@withContext usersRepository.findUserByUuid(uuid).firstOrNull()
