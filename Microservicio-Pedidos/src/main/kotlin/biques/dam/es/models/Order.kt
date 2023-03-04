@@ -17,7 +17,7 @@ data class Order(
     @Contextual
     val status: StatusOrder,
     val total: Double,
-    val IVA: Double,
+    val iva: Double,
     @Contextual
     val orderLine: Id<OrderLine>,
     @Serializable(with = UUIDSerializer::class)
