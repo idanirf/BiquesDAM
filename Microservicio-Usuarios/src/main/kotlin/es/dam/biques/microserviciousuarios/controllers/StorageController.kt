@@ -19,7 +19,7 @@ import java.io.IOException
 import java.time.LocalDateTime
 
 @RestController
-@RequestMapping("/storage")
+@RequestMapping("/users/storage")
 class StorageController
 @Autowired constructor(
     private val storageService: StorageService
@@ -55,6 +55,7 @@ class StorageController
             }
         }
 
+    @PostMapping(value = [""], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun upload(@RequestPart("file") file: MultipartFile): ResponseEntity<Map<String, String>> = runBlocking {
         return@runBlocking try {
             if (!file.isEmpty) {
