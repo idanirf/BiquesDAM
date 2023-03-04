@@ -11,23 +11,24 @@ fun OrderLineDTO.toEntity (): OrderLine {
     return OrderLine(
         id = ObjectId(this.id).toId(),
         uuid = UUID.fromString(this.uuid),
-        //product = ObjectId(this.product).toId(),
+        product =  UUID.fromString(this.product),
         amount = this.amount,
         price = this.price,
         total = this.total,
-        // employee = ObjectId(this.employee).toId()
+        employee = UUID.fromString(this.employee),
     )
 }
+
 
 fun OrderLine.toDto (): OrderLineDTO {
     return OrderLineDTO(
         id = this.id.toString(),
         uuid = this.uuid.toString(),
-        // product = this.product.toString(),
+        product = this.product.toString(),
         amount = this.amount,
         price = this.price,
         total = this.total,
-        // employee = this.employee.toString(),
+        employee = this.employee.toString(),
     )
 }
 

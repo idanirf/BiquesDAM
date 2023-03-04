@@ -20,7 +20,8 @@ data class Order(
     val IVA: Double,
     @Contextual
     val orderLine: Id<OrderLine>,
-    //val cliente: User
+    @Serializable(with = UUIDSerializer::class)
+    val cliente: UUID
 ) {
     enum class StatusOrder(statusOrder: String) {
         IN_PROGRESS("IN_PROGRESS"),

@@ -16,6 +16,7 @@ object MongoDbManager {
     lateinit var database: CoroutineDatabase
 
     private val STRING_CONNECTION = properties.getProperty("string_connection")
+    private val STRING_CONNECTION_TEST = properties.getProperty("string_connection_test")
 
     init {
         val clientSettings = MongoClientSettings.builder()
