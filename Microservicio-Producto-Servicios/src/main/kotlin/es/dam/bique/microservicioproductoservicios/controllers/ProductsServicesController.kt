@@ -5,7 +5,6 @@ import es.dam.bique.microservicioproductoservicios.exceptions.*
 import es.dam.bique.microservicioproductoservicios.mappers.toDTO
 import es.dam.bique.microservicioproductoservicios.mappers.toModel
 import es.dam.bique.microservicioproductoservicios.mappers.toOnSaleDTO
-import es.dam.bique.microservicioproductoservicios.models.OnSale
 import es.dam.bique.microservicioproductoservicios.services.appointments.AppointmentService
 import es.dam.bique.microservicioproductoservicios.services.products.ProductsService
 import es.dam.bique.microservicioproductoservicios.services.services.ServicesService
@@ -68,25 +67,34 @@ class ProductsServicesController
     }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: Long): ResponseEntity<OnSale> {
+    suspend fun findById(@PathVariable id: Long): ResponseEntity<MutableList<OnSaleDTO>> {
 
         logger.info { "On sale controller - findById(): $id" }
 
-        val result: OnSale = try {
-            val product = productsService.findById(id)
-            product
+        val res : MutableList<OnSaleDTO> = mutableListOf()
 
+        val product: OnSaleDTO? = try {
+            productsService.findById(id).toDTO().toOnSaleDTO()
         } catch (e: ProductNotFoundException) {
-            try {
-                val service = servicesService.findById(id)
-                service
-
-            } catch (e: OnSaleNotFoundException) {
-                throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-
-            }
+            null
         }
-        return ResponseEntity.ok(result)
+
+        if (product != null) { res.add(product) }
+
+        val service: OnSaleDTO? = try {
+            servicesService.findById(id).toDTO().toOnSaleDTO()
+        } catch (e: OnSaleNotFoundException) {
+            null
+        }
+
+        if (service != null) { res.add(service) }
+        if (res.isEmpty()) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing found for id: $id")
+
+        }
+
+        return ResponseEntity.ok(res)
+
     }
 
     @GetMapping("/appointments/{id}")
