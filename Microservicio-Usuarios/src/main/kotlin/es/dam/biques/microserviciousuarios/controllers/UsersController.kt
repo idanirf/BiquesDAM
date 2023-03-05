@@ -119,7 +119,7 @@ class UsersController @Autowired constructor(
         logger.info { "API -> update($id)" }
 
         try {
-            val rep = userDTO.validate()
+            userDTO.validate()
             val updated = user.copy(
                 image = userDTO.image,
                 address = userDTO.address
