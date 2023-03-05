@@ -3,6 +3,7 @@ package biques.dam.es.repositories.orders
 import biques.dam.es.dto.OrderDTO
 import biques.dam.es.dto.OrderDTOCreate
 import biques.dam.es.dto.OrderDTOUpdate
+import biques.dam.es.dto.OrderSaveDTO
 import biques.dam.es.exceptions.OrderErrorException
 import biques.dam.es.exceptions.OrderException
 import biques.dam.es.exceptions.OrderNotFoundException
@@ -35,7 +36,7 @@ class KtorFitRepositoryOrders: IOrdersRepository {
         }
     }
 
-    override suspend fun save(token: String, entity: OrderDTOCreate): OrderDTO {
+    override suspend fun save(token: String, entity: OrderSaveDTO): OrderDTO {
        try{
            return client.createOrder(token, entity)
        }catch (e: Exception){

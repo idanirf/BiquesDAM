@@ -1,8 +1,6 @@
 package biques.dam.es.services.sales
 
-import biques.dam.es.dto.AppointmentCreateDTO
-import biques.dam.es.dto.AppointmentDTO
-import biques.dam.es.dto.SaleDTO
+import biques.dam.es.dto.*
 import de.jensklingenberg.ktorfit.http.*
 
 interface KtorFitRestSales {
@@ -20,7 +18,7 @@ interface KtorFitRestSales {
     suspend fun getById(
         @Header("Authorization") token: String,
         @Path("id") id: String
-    ): SaleDTO
+    ): List<SaleDTO>
 
     @GET("/products&services/appointments/{id}")
     suspend fun getAppointmentById(

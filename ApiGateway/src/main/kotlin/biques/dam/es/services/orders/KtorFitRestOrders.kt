@@ -18,7 +18,7 @@ interface KtorFitRestOrders {
     @POST("order")
     suspend fun createOrder(
         @Header("Authorization") token: String,
-        @Body order: OrderDTOCreate
+        @Body order: OrderSaveDTO
     ): OrderDTO
 
     @PUT("order/{id}")
