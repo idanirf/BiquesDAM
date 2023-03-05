@@ -22,9 +22,9 @@ dependencies {
     // Spring Security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // H2 Database
-    runtimeOnly("com.h2database:h2")
-    runtimeOnly("io.r2dbc:r2dbc-h2")
+    // MariaDB Database
+    runtimeOnly("org.mariadb:r2dbc-mariadb:1.1.3")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
     // Dependencias de Spring Data Reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
@@ -41,9 +41,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
-    // Swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
     // Loggers
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")

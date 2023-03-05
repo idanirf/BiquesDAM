@@ -32,7 +32,7 @@ class UserServiceTest {
 
     private val user = User(
         id = 12L,
-        uuid = UUID.fromString("91e0c247-c611-4ed2-8db8-a495f1f16fee"),
+        uuid = "91e0c247-c611-4ed2-8db8-a495f1f16fee",
         username = "Test",
         email = "test@gmail.com",
         password = "test1234",
@@ -61,7 +61,7 @@ class UserServiceTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun loadByUsername() = runTest {
-        coEvery { repository.findUserByUsername(any()) } returns flowOf( user)
+        coEvery { repository.findUserByUsername(any()) } returns flowOf(user)
 
         val result = userService.loadUserByUsername(user.username)
 
@@ -75,7 +75,7 @@ class UserServiceTest {
 
     @Test
     fun loadByUsernameNoEncontrado() = runTest {
-        coEvery { repository.findUserByUsername(any()) } returns flowOf( user)
+        coEvery { repository.findUserByUsername(any()) } returns flowOf(user)
 
         val result = userService.loadUserByUsername(user.username)
 
@@ -168,7 +168,7 @@ class UserServiceTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun save() = runTest {
-        coEvery  { repository.findUserByUsername(any()) } returns flowOf()
+        coEvery { repository.findUserByUsername(any()) } returns flowOf()
         coEvery { repository.findUserByEmail(any()) } returns flowOf()
         coEvery { passwordEncoder.encode(any()) } returns "encoded_password"
         coEvery { repositoryCached.save(any()) } returns user
@@ -180,8 +180,8 @@ class UserServiceTest {
             { assertEquals(user.email, result.email) },
         )
 
-        coVerify (exactly = 1) { repository.findUserByUsername(any()) }
-        coVerify (exactly = 1) { repository.findUserByEmail(any()) }
+        coVerify(exactly = 1) { repository.findUserByUsername(any()) }
+        coVerify(exactly = 1) { repository.findUserByEmail(any()) }
         coVerify(exactly = 1) { passwordEncoder.encode(any()) }
         coVerify(exactly = 1) { repositoryCached.save(any()) }
 
@@ -190,12 +190,12 @@ class UserServiceTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveNoEncontradoUsername() = runTest {
-        coEvery  { repository.findUserByUsername(any()) } returns flowOf(user)
+        coEvery { repository.findUserByUsername(any()) } returns flowOf(user)
 
         assertThrows<UserBadRequestException> { userService.save(user) }
 
-        coVerify (exactly = 1) { repository.findUserByUsername(any()) }
-        coVerify (exactly = 0) { repository.findUserByEmail(any()) }
+        coVerify(exactly = 1) { repository.findUserByUsername(any()) }
+        coVerify(exactly = 0) { repository.findUserByEmail(any()) }
         coVerify(exactly = 0) { passwordEncoder.encode(any()) }
         coVerify(exactly = 0) { repositoryCached.save(any()) }
 
@@ -204,17 +204,18 @@ class UserServiceTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveNoEncontradoEmail() = runTest {
-        coEvery  { repository.findUserByUsername(any()) } returns flowOf()
-        coEvery  { repository.findUserByEmail(any()) } returns flowOf(user)
+        coEvery { repository.findUserByUsername(any()) } returns flowOf()
+        coEvery { repository.findUserByEmail(any()) } returns flowOf(user)
 
         assertThrows<UserBadRequestException> { userService.save(user) }
 
-        coVerify (exactly = 1) { repository.findUserByUsername(any()) }
-        coVerify (exactly = 1) { repository.findUserByEmail(any()) }
+        coVerify(exactly = 1) { repository.findUserByUsername(any()) }
+        coVerify(exactly = 1) { repository.findUserByEmail(any()) }
         coVerify(exactly = 0) { passwordEncoder.encode(any()) }
         coVerify(exactly = 0) { repositoryCached.save(any()) }
 
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun update() = runTest {
@@ -232,14 +233,19 @@ class UserServiceTest {
     }
 
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun updateNoEncontrado() = runTest {
-        coEvery { repositoryCached.update(any(), any()) } throws UserNotFoundException("User with id ${user.id} not found")
+        coEvery {
+            repositoryCached.update(
+                any(),
+                any()
+            )
+        } throws UserNotFoundException("User with id ${user.id} not found")
 
         val result = assertThrows<UserNotFoundException> {
-            userService.update(user.id!!, user)}
+            userService.update(user.id!!, user)
+        }
 
         assertEquals("User with id ${user.id} not found.", result.message)
 
@@ -247,6 +253,7 @@ class UserServiceTest {
 
 
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteById() = runTest {
@@ -263,10 +270,11 @@ class UserServiceTest {
         coVerify { repositoryCached.deleteById(any()) }
 
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteIdNoEncontrado() = runTest {
-        coEvery { repositoryCached.deleteById(any()) }  throws UserNotFoundException("User with id ${user.id} not found.")
+        coEvery { repositoryCached.deleteById(any()) } throws UserNotFoundException("User with id ${user.id} not found.")
 
         val res = assertThrows<UserNotFoundException> {
             userService.deleteById(user.id!!)
@@ -277,7 +285,6 @@ class UserServiceTest {
         coVerify(exactly = 1) { repositoryCached.deleteById(any()) }
 
     }
-
 
 
 }

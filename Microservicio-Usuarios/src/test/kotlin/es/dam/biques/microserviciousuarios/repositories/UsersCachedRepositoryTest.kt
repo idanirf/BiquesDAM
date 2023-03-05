@@ -24,7 +24,7 @@ class UsersCachedRepositoryTest {
 
     private val user = User(
         id = 12L,
-        uuid = UUID.fromString("91e0c247-c611-4ed2-8db8-a495f1f16fee"),
+        uuid = "91e0c247-c611-4ed2-8db8-a495f1f16fee",
         username = "Test",
         email = "test@gmail.com",
         password = "test1234",

@@ -21,8 +21,7 @@ data class UserDTO(
         @Serializable(with = LocalDateTimeSerializer::class)
         val createdAt: LocalDateTime? = LocalDateTime.now(),
         @Serializable(with = LocalDateTimeSerializer::class)
-        val updatedAt: LocalDateTime? = LocalDateTime.now(),
-        val deleted: Boolean = false
+        val updatedAt: LocalDateTime? = LocalDateTime.now()
     )
 }
 
