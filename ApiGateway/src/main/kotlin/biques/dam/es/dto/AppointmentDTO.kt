@@ -1,5 +1,8 @@
 package biques.dam.es.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AppointmentDTO(
     val id: Long?,
     val uuid: String,
@@ -9,6 +12,7 @@ data class AppointmentDTO(
     val description: String
 )
 
+@Serializable
 data class AppointmentCreateDTO(
     val userId: String,
     val assistance : String,

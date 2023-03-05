@@ -14,7 +14,7 @@ import java.util.*
 
 @Single
 @Named("KtorFitRepositorySales")
-class KtorFitRepositorySales : ISalesRepository<SaleDTO, UUID> {
+class KtorFitRepositorySales : ISalesRepository {
 
     private val client by lazy { KtorFitClientSales.instance }
 
@@ -50,9 +50,9 @@ class KtorFitRepositorySales : ISalesRepository<SaleDTO, UUID> {
         }
     }
 
-    override suspend fun findById(token: String, id: UUID): SaleDTO {
+    override suspend fun findById(token: String, id: UUID): Flow<SaleDTO> {
         try {
-            return client.getById(token, id.toString())
+            return client.getById(token, id.toString()).asFlow()
         } catch (e: Exception) {
             throw SaleNotFoundException("Error getting sale with id $id : ${e.message}")
         }

@@ -6,6 +6,7 @@ val micrologging_version: String by project
 val koin_ksp_version: String by project
 val koin_ktor_version: String by project
 val ktor_swagger_ui_version: String by project
+val junit_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.10"
@@ -43,8 +44,7 @@ dependencies {
     ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta16")
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta16")
     implementation("io.github.smiley4:ktor-swagger-ui:$ktor_swagger_ui_version")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
 
     implementation("io.ktor:ktor-client-serialization:2.1.3")
     implementation("io.ktor:ktor-client-content-negotiation:2.1.3")
@@ -60,9 +60,19 @@ dependencies {
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
     ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
 
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    testImplementation("io.mockk:mockk:1.13.2")
+
 
 }
 
 sourceSets.main {
     java.srcDirs("build/generated/ksp/main/kotlin")
+}
+tasks.test {
+    useJUnitPlatform()
 }

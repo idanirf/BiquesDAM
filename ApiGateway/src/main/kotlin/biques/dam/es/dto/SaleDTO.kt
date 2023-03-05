@@ -1,12 +1,18 @@
 package biques.dam.es.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SaleDTO(
     val productEntity : ProductDTO?,
     val serviceEntity : ServiceDTO?,
-    val type : SaleType
+    val type : String
 )
 
-enum class SaleType(val value:String) {
-    PRODUCT("PRODUCT"),
-    SERVICE("SERVICE")
-}
+@Serializable
+data class FinalSaleDTO(
+    val productEntity : ProductDTO?,
+    val serviceEntity : FinalServiceDTO?,
+    val type : String
+)
+

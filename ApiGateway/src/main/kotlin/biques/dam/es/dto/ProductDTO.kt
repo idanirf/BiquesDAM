@@ -1,5 +1,8 @@
 package biques.dam.es.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ProductDTO(
     val id: Long?,
     val uuid: String,
@@ -14,8 +17,8 @@ data class ProductDTO(
     val type : String
 )
 
+@Serializable
 data class ProductCreateDTO(
-
     val image: String,
     val brand: String,
     val model: String,
