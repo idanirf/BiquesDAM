@@ -6,7 +6,7 @@ import java.util.*
 
 fun String.toUUID(): UUID{
     return try {
-        UUID.fromString(this.trim())
+        UUID.fromString(this)
     } catch (e: IllegalArgumentException) {
         throw UUIDException("The id is invalid or not in the UUID format")
     }
