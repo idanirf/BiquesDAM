@@ -18,17 +18,18 @@ class JWTTokenUtils {
         return JWT.create()
             .withSubject(user.uuid.toString())
             .withIssuer("BiquesUsuarios")
+            .withAudience("biquesdam")
             .withExpiresAt(Date(System.currentTimeMillis() + (60 * 60 * 1000)))
             .withClaim("username", user.username)
             .withClaim("rol", user.rol.split(",").toSet().toString())
-            .sign(Algorithm.HMAC512("BiquesDAM"))
+            .sign(Algorithm.HMAC512("biquesdam"))
     }
 
     fun verify(authToken: String): DecodedJWT? {
         logger.info { "Validating the token: $authToken" }
 
         return try {
-            JWT.require(Algorithm.HMAC512("BiquesDAM")).build().verify(authToken)
+            JWT.require(Algorithm.HMAC512("biquesdam")).build().verify(authToken)
         } catch (e: Exception) {
             null
         }
