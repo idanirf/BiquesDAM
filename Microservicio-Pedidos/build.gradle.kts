@@ -8,6 +8,7 @@ val bcrypt_version: String by project
 val koin_ksp_version: String by project
 val koin_ktor_version: String by project
 val micrologging_version: String by project
+val junit_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.10"
@@ -52,6 +53,8 @@ dependencies {
 
     // Koin Anotaciones
     implementation("io.insert-koin:koin-annotations:1.0.3")
+    implementation("io.ktor:ktor-client-content-negotiation:2.2.3")
+    implementation("io.ktor:ktor-serialization-gson:2.2.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
 
@@ -80,6 +83,8 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
     implementation(kotlin("stdlib-jdk8"))
     testImplementation("io.mockk:mockk:1.13.2")
     implementation("io.ktor:ktor-client-json:$ktor_version")
