@@ -1,6 +1,5 @@
 package es.dam.bique.microservicioproductoservicios.services.appointments
 
-import es.dam.bique.microservicioproductoservicios.dto.AppointmentUserDTO
 import es.dam.bique.microservicioproductoservicios.models.Appointment
 import kotlinx.coroutines.flow.Flow
 import java.util.*
