@@ -35,7 +35,6 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-client-json:$ktor_version")
 
-
     // Auth JWT
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
@@ -91,6 +90,11 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.7")
 
 }
+
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
+}
+
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
     jvmTarget = "1.8"
