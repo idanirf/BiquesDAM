@@ -136,7 +136,7 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @DeleteMapping("/{id}")
-    suspend fun delete(@PathVariable id: String): ResponseEntity<UserDTO> {
+    suspend fun delete(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> delete($id)" }
 
         try {
