@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class OrderLineService(
-    val orderLineRepository: OrderLineRepository,
+    private val orderLineRepository: OrderLineRepository,
 ) {
     fun getAllOrderLine(): Flow<OrderLine> {
         return orderLineRepository.findAll()

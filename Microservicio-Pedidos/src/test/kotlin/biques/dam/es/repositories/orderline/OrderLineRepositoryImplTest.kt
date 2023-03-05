@@ -154,7 +154,6 @@ class OrderLineRepositoryImplTest {
             6.0,
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
-
         val lineaTest = orderLineRepository.update(lineaPedidoUpdate)
         assertAll(
             { assertEquals(lineaPedidoUpdate.id, lineaTest.id) },
