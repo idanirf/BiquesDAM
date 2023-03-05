@@ -86,11 +86,11 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
+    suspend fun findById(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> findById($id)" }
 
         try {
-            val res = userService.findUserById(id.toLong()).toDTO()
+            val res = userService.findUserById(id).toDTO()
             return ResponseEntity.ok(res)
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
@@ -114,7 +114,7 @@ class UsersController @Autowired constructor(
     @PutMapping("/{id}")
     suspend fun update(
         @AuthenticationPrincipal user: User,
-        @PathVariable id: String, @RequestBody userDTO: UserUpdateDTO
+        @PathVariable id: Long, @RequestBody userDTO: UserUpdateDTO
     ): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> update($id)" }
 
@@ -124,7 +124,7 @@ class UsersController @Autowired constructor(
                 image = userDTO.image,
                 address = userDTO.address
             )
-            val res = userService.update(id.toLong(), updated)
+            val res = userService.update(id, updated)
 
             return ResponseEntity.status(HttpStatus.OK).body(res?.toDTO())
         } catch (e: UserNotFoundException) {
@@ -136,11 +136,11 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @DeleteMapping("/{id}")
-    suspend fun delete(@PathVariable id: String): ResponseEntity<UserResponseDTO> {
+    suspend fun delete(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> delete($id)" }
 
         try {
-            userService.deleteById(id.toLong())
+            userService.deleteById(id)
             return ResponseEntity.noContent().build()
         } catch (e: UserNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)

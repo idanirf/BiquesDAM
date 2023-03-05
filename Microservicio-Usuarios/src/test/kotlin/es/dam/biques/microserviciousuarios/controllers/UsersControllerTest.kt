@@ -1,7 +1,6 @@
 package es.dam.biques.microserviciousuarios.controllers
 
 import es.dam.biques.microserviciousuarios.config.security.jwt.JWTTokenUtils
-import es.dam.biques.microserviciousuarios.dto.UserRegisterDTO
 import es.dam.biques.microserviciousuarios.dto.UserUpdateDTO
 import es.dam.biques.microserviciousuarios.exceptions.UserNotFoundException
 import es.dam.biques.microserviciousuarios.mappers.toDTO
@@ -55,15 +54,6 @@ class UsersControllerTest {
 
     val userResponseDTO = user.toDTO()
 
-    val userRegisterDTO = UserRegisterDTO(
-        username = "TestService",
-        email = "testService@gmail.com",
-        password = "test1234",
-        image = "https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png",
-        address = "Test Services",
-        rol = setOf(User.TipoUsuario.ADMIN.name)
-    )
-
     val userUpdateDTO = UserUpdateDTO(
         username = "TestService",
         email = "testService@gmail.com",
@@ -99,7 +89,7 @@ class UsersControllerTest {
     fun findById() = runTest {
         coEvery { userService.findUserById(user.id!!) } returns user
 
-        val result = usersController.findById(user.id.toString())
+        val result = usersController.findById(user.id!!)
         val responseDTO = result.body!!
 
         assertAll(
@@ -120,7 +110,7 @@ class UsersControllerTest {
         coEvery { userService.findUserById(user.id!!) } throws UserNotFoundException("User with id ${user.id} not found.")
 
         val exception = assertThrows<ResponseStatusException> {
-            usersController.findById(user.id.toString())
+            usersController.findById(user.id!!)
         }
 
         assertEquals("""404 NOT_FOUND "User with id ${user.id} not found."""", exception.message)
@@ -133,7 +123,7 @@ class UsersControllerTest {
     fun update() = runTest {
         coEvery { userService.update(any(), any()) } returns user
 
-        val result = usersController.update(user, user.id.toString(), userUpdateDTO)
+        val result = usersController.update(user, user.id!!, userUpdateDTO)
         val responseDTO = result.body!!
 
         assertAll(
@@ -154,7 +144,7 @@ class UsersControllerTest {
         coEvery { userService.update(any(), any()) } throws UserNotFoundException("User with id ${user.id} not found.")
 
         val exception = assertThrows<ResponseStatusException> {
-            usersController.update(user, user.id.toString(), userUpdateDTO)
+            usersController.update(user, user.id!!, userUpdateDTO)
         }
 
         assertEquals("""404 NOT_FOUND "User with id ${user.id} not found."""", exception.message)
@@ -167,7 +157,7 @@ class UsersControllerTest {
     fun delete() = runTest {
         coEvery { userService.deleteById(user.id!!) } returns user
 
-        val result = usersController.delete(user.id.toString())
+        val result = usersController.delete(user.id!!)
 
         assertAll(
             { assertNotNull(result) },
@@ -183,7 +173,7 @@ class UsersControllerTest {
         coEvery { userService.deleteById(user.id!!) } throws UserNotFoundException("User with id ${user.id} not found.")
 
         val exception = assertThrows<ResponseStatusException> {
-            usersController.delete(user.id.toString())
+            usersController.delete(user.id!!)
         }
 
         assertEquals("""404 NOT_FOUND "User with id ${user.id} not found."""", exception.message)
