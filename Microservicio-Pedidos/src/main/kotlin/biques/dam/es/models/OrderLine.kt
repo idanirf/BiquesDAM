@@ -19,6 +19,5 @@ data class OrderLine(
     val amount: Int,
     val price: Double,
     val total: Double,
-    @Serializable(with = UUIDSerializer::class)
-    val employee: UUID
+    val employee: Long
     )

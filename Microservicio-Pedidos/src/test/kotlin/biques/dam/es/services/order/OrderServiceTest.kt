@@ -11,6 +11,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.assertAll
 import org.litote.kmongo.id.toId
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockKExtension::class)
@@ -30,7 +32,10 @@ class OrderServiceTest {
         Order.StatusOrder.DELIVERED,
         12.0,
         12.0,
-        UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
+        listOf(
+            "ed6f7d0a-7f7a-45bf-8b63-a1aa21383271",
+            "e213f434-4c2b-4a28-953f-3981b1ff7e00",
+        ),
         UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
     )
 
@@ -40,6 +45,7 @@ class OrderServiceTest {
     @InjectMockKs
     lateinit var service: OrderService
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun findAll() = runTest {
         coEvery { orderRepository.findAll() } returns flowOf(order)
@@ -51,33 +57,36 @@ class OrderServiceTest {
         coVerify(exactly = 1) { orderRepository.findAll() }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun findByUuid() = runTest {
-        coEvery { orderRepository.findByUUID(any()) } returns order
+        coEvery { orderRepository.findByUUID(order.uuid) } returns order
         val result = service.getOrderByUUID(order.uuid)
         assertAll(
             { assertEquals(order.total, result.total) },
             { assertEquals(order.status, result.status) }
         )
-        coVerify { service.getOrderByUUID(any()) }
+        coVerify { service.getOrderByUUID(order.uuid) }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun save() = runTest {
-        coEvery { service.getOrderByUUID(any()) } returns order
-        coEvery { service.saveOrder(any()) } returns order
+        coEvery { service.getOrderByUUID(order.uuid) } returns order
+        coEvery { service.saveOrder(order) } returns order
         val result = service.saveOrder(order)
         assertAll(
             { assertEquals(order.total, result.total) },
             { assertEquals(order.iva, result.iva) },
         )
-        coVerify { service.saveOrder(any()) }
+        coVerify { service.saveOrder(order) }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun update() = runTest {
-        coEvery { service.getOrderByUUID(any()) } returns order
-        coEvery { service.updateOrder(any()) } returns order
+        coEvery { service.getOrderByUUID(order.uuid) } returns order
+        coEvery { service.updateOrder(order) } returns order
 
         val result = service.updateOrder(order)
 
@@ -85,28 +94,27 @@ class OrderServiceTest {
             { assertEquals(order.total, result.total) },
             { assertEquals(order.iva, result.iva) },
         )
-
         coVerify {
-            orderRepository.update(any())
+            orderRepository.update(order)
         }
     }
 
-    /*
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun delete() = runTest {
-        coEvery { service.getOrderByUUID(any()) } returns order
-        coEvery { service.deleteOrder(any()) } returns false
-        coEvery { service.getOrderByUUID(any()) } returns order
+        coEvery { service.getOrderByUUID(order.uuid) } returns order
+        coEvery { service.deleteOrder(order) } returns true
+        coEvery { service.getOrderByUUID(order.uuid) } returns order
 
         val result = service.deleteOrder(order)
 
         assertAll(
-            { assertEquals(order.total, result.total) },
-            { assertEquals(order.iva, result.iva) }
+            { assertTrue(result)}
         )
 
-        coVerify { orderRepository.delete(any()) }
+        coVerify { orderRepository.delete(order) }
     }
 
-     */
+
 }
