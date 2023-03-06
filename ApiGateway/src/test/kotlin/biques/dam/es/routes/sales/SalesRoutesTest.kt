@@ -7,8 +7,16 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.*
 import kotlin.test.assertEquals
+
+private val json = Json {
+    prettyPrint = true
+    isLenient = true
+    ignoreUnknownKeys = true
+}
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -95,7 +103,7 @@ class SalesRoutesTest {
 
         val dto = json.decodeFromString<FinalSaleDTO>(result)
         assertAll(
-            { assertEquals(createService.serviceEntity?.image, dto.image) },
+            { assertEquals(createService.serviceEntity?.image, dto.serviceEntity!!.image) },
             { assertEquals(createService.serviceEntity?.type, dto.type) }
         )
     }
@@ -122,7 +130,7 @@ class SalesRoutesTest {
 
         val dto = json.decodeFromString<SaleDTO>(result)
         assertAll(
-            { assertEquals(createService.productEntity?.image, dto.image) },
+            { assertEquals(createService.productEntity?.image, dto.productEntity!!.image) },
             { assertEquals(createService.productEntity?.brand, dto.type) }
         )
     }

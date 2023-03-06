@@ -24,7 +24,7 @@ class OrderLineRoute {
         3,
         5.0,
         15.0,
-        UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+        1
     )
     private val orderLineDto = orderLine.toDto()
 
@@ -96,7 +96,7 @@ class OrderLineRoute {
             2,
             5.0,
             15.0,
-            UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+            1
         )
         val orderLineDto = orderLine.toDto()
 
