@@ -7,7 +7,7 @@ interface KtorFitRestOrders {
     @GET("order")
     suspend fun getAllOrder(
         @Header("Authorization") token: String
-    ): List<OrderDTO>
+    ): OrderAllDTO
 
     @GET("order/{id}")
     suspend fun getByIdOrder(

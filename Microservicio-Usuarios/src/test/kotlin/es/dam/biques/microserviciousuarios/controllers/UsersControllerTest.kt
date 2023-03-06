@@ -79,7 +79,7 @@ class UsersControllerTest {
         coEvery { userService.findAll() } returns flowOf(user)
 
         val result = usersController.findAll(user)
-        val dtoBody = result.body!!
+        val dtoBody = result.body!!.data
 
         assertAll(
             { assertNotNull(result) },

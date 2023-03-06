@@ -10,10 +10,10 @@ import java.util.UUID
 data class OrderLineDTO(
     val id: String? = newId<OrderLine>().toString(),
     val uuid: String? = UUID.randomUUID().toString(),
-    val product: String,
+    val sale: String,
     val amount: Int,
     val price: Double,
     val total: Double,
-    val employee: String
+    val employee: Long
 ) {
 }

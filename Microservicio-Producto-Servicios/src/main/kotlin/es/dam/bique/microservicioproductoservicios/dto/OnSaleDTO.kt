@@ -16,3 +16,7 @@ enum class OnSaleType(val value:String) {
     PRODUCT("PRODUCT"),
     SERVICE("SERVICE")
 }
+
+data class AllSaleDTO(
+    val data: List<OnSaleDTO>
+)

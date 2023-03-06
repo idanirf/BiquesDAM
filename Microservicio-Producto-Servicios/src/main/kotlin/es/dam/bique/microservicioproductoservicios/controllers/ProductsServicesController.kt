@@ -32,7 +32,7 @@ class ProductsServicesController
 
 
     @GetMapping("/list")
-    suspend fun findAll(): ResponseEntity<MutableList<OnSaleDTO>> {
+    suspend fun findAll(): ResponseEntity<AllSaleDTO> {
 
         logger.info {" On sale controller - findAll() "}
 
@@ -52,7 +52,11 @@ class ProductsServicesController
             res.add(it)
         }
 
-        return ResponseEntity.ok(res)
+        val allSales = AllSaleDTO(
+            res
+        )
+
+        return ResponseEntity.ok(allSales)
 
     }
 
@@ -68,13 +72,15 @@ class ProductsServicesController
     }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: Long): ResponseEntity<MutableList<OnSaleDTO>> {
+    suspend fun findById(@PathVariable id: Long): ResponseEntity<AllSaleDTO> {
 
         logger.info { "On sale controller - findById(): $id" }
 
         val res : MutableList<OnSaleDTO> = mutableListOf()
 
+
         val product: OnSaleDTO? = try {
+
             productsService.findById(id).toDTO().toOnSaleDTO()
         } catch (e: ProductNotFoundException) {
             null
@@ -86,15 +92,21 @@ class ProductsServicesController
             servicesService.findById(id).toDTO().toOnSaleDTO()
         } catch (e: OnSaleNotFoundException) {
             null
+        } catch (e: ServiceNotFoundException) {
+            null
         }
 
         if (service != null) { res.add(service) }
+
         if (res.isEmpty()) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing found for id: $id")
 
         }
+        val result = AllSaleDTO(
+            res
+        )
 
-        return ResponseEntity.ok(res)
+        return ResponseEntity.ok(result)
 
     }
 

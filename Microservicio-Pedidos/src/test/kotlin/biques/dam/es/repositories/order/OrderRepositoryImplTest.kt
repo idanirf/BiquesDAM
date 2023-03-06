@@ -24,6 +24,7 @@ import kotlin.test.assertTrue
 
 class OrderRepositoryImplTest {
     private val db = MongoDbManager.database.database
+    val delete = db.getCollection<Order>().drop()
     private val orderRepository = OrderRepositoryImpl()
     private val order = Order(
         ObjectId("223456789912345678901232").toId(),
@@ -31,7 +32,10 @@ class OrderRepositoryImplTest {
         Order.StatusOrder.DELIVERED,
         12.0,
         12.0,
-        UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
+        listOf(
+            "ed6f7d0a-7f7a-45bf-8b63-a1aa21383271",
+            "e213f434-4c2b-4a28-953f-3981b1ff7e00",
+        ),
         UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
     )
 
@@ -144,7 +148,10 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             2.0,
             12.0,
-            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
+            listOf(
+                "ed6f7d0a-7f7a-45bf-8b63-a1aa21383271",
+                "e213f434-4c2b-4a28-953f-3981b1ff7e00",
+            ),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val orderTest = orderRepository.update(orderUpdate)
@@ -168,7 +175,10 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             12.0,
             12.0,
-            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
+            listOf(
+                "ed6f7d0a-7f7a-45bf-8b63-a1aa21383271",
+                "e213f434-4c2b-4a28-953f-3981b1ff7e00",
+            ),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val id = ObjectId("223456789912345678901232").toId<Order>()
@@ -200,7 +210,10 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             12.0,
             12.0,
-            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
+            listOf(
+                "ed6f7d0a-7f7a-45bf-8b63-a1aa21383271",
+                "e213f434-4c2b-4a28-953f-3981b1ff7e00",
+            ),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val id = ObjectId("222456789912345678901232").toId<OrderLine>()

@@ -2,7 +2,7 @@ package biques.dam.es.routes
 
 import biques.dam.es.dto.FinalSaleDTO
 import biques.dam.es.dto.FinalServiceDTO
-import biques.dam.es.dto.SaleDTO
+import biques.dam.es.dto.SaleCreateDTO
 import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
@@ -10,10 +10,11 @@ import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.async
 import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
@@ -30,25 +31,29 @@ fun Application.salesRoutes() {
             authenticate {
                 get {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val list = salesRepository.findAll(token.toString())
-                            .toList()
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
 
-                        val result : MutableList<FinalSaleDTO> = mutableListOf()
+                        val list = async {
+                            salesRepository.findAll("Bearer $token").toList()
+                        }
 
-                        list.forEach {
+                        val result: MutableList<FinalSaleDTO> = mutableListOf()
+                        list.await().forEach {
                             if (it.type == "SERVICE") {
-                                val service = FinalSaleDTO (
+                                val service = FinalSaleDTO(
                                     productEntity = null,
                                     serviceEntity = FinalServiceDTO(
                                         id = it.serviceEntity!!.id,
                                         uuid = it.serviceEntity.uuid,
                                         image = it.serviceEntity.image,
                                         price = it.serviceEntity.price,
-                                        appointment = appointmentRepository.findById(
-                                            token.toString(),
-                                            UUID.fromString(it.serviceEntity.appointment)
-                                        ),
+                                        appointment = async {
+                                            appointmentRepository.findById(
+                                                "Bearer $token",
+                                                UUID.fromString(it.serviceEntity.appointment)
+                                            )
+                                        }.await(),
                                         type = it.serviceEntity.type
                                     ),
                                     type = "SERVICE"
@@ -56,7 +61,7 @@ fun Application.salesRoutes() {
 
                                 result.add(service)
                             } else {
-                                val product = FinalSaleDTO (
+                                val product = FinalSaleDTO(
                                     productEntity = it.productEntity,
                                     serviceEntity = null,
                                     type = "PRODUCT"
@@ -76,11 +81,14 @@ fun Application.salesRoutes() {
                 get("/product/{id}") {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
-                        val id = call.parameters["id"]
-                        val list = salesRepository.findById(token.toString(), UUID.fromString(id)).toList()
+                        val id = call.parameters["id"]!!
 
-                        list.forEach {
-                            if (it.type== "PRODUCT") {
+                        val list = async {
+                            salesRepository.findById("Bearer $token", id)
+                        }
+
+                        list.await().forEach {
+                            if (it.type == "PRODUCT") {
                                 call.respond(HttpStatusCode.OK, it.productEntity!!)
                             }
                         }
@@ -95,17 +103,25 @@ fun Application.salesRoutes() {
                 get("/service/{id}") {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
-                        val id = call.parameters["id"]
-                        val list = salesRepository.findById(token.toString(), UUID.fromString(id)).toList()
+                        val id = call.parameters["id"]!!
 
-                        list.forEach {
+                        val list = async {
+                            salesRepository.findById("Bearer $token", id)
+                        }
+
+                        list.await().forEach {
                             if (it.type == "SERVICE") {
                                 val result = FinalServiceDTO(
                                     id = it.serviceEntity!!.id,
                                     uuid = it.serviceEntity.uuid,
                                     image = it.serviceEntity.image,
                                     price = it.serviceEntity.price,
-                                    appointment = appointmentRepository.findById(token.toString(), UUID.fromString(it.serviceEntity.appointment)),
+                                    appointment = async {
+                                        appointmentRepository.findById(
+                                            "Bearer $token",
+                                            UUID.fromString(it.serviceEntity.appointment)
+                                        )
+                                    }.await(),
                                     type = it.serviceEntity.type
                                 )
 
@@ -120,27 +136,93 @@ fun Application.salesRoutes() {
                     }
                 }
 
+                post {
+                    try {
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+
+                            val dto = call.receive<SaleCreateDTO>()
+
+                            val result = async {
+                                salesRepository.save("Bearer $token", dto)
+                            }
+
+                            val res = result.await()
+
+                            if (res.type == "SERVICE") {
+                                val res = FinalServiceDTO(
+                                    id = res.serviceEntity!!.id,
+                                    uuid = res.serviceEntity.uuid,
+                                    image = res.serviceEntity.image,
+                                    price = res.serviceEntity.price,
+                                    appointment = async {
+                                        appointmentRepository.findById(
+                                            "Bearer $token",
+                                            UUID.fromString(res.serviceEntity.appointment)
+                                        )
+                                    }.await(),
+                                    type = res.serviceEntity.type
+                                )
+
+                                call.respond(HttpStatusCode.Created, res)
+
+                            } else {
+                                call.respond(HttpStatusCode.Created, res)
+                            }
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
+                        }
+
+                    } catch (e: SaleNotFoundException) {
+                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    }
+
+                }
+
 
                 put("/{id}") {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val id = call.parameters["id"]
-                        val dto = call.receive<SaleDTO>()
-                        val result = salesRepository.update(token.toString(), UUID.fromString(id), dto)
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
 
-                        if (result.type == "SERVICE") {
-                            val result = FinalServiceDTO(
-                                id = result.serviceEntity!!.id,
-                                uuid = result.serviceEntity.uuid,
-                                image = result.serviceEntity.image,
-                                price = result.serviceEntity.price,
-                                appointment = appointmentRepository.findById(token.toString(), UUID.fromString(result.serviceEntity.appointment)),
-                                type = result.serviceEntity.type
-                            )
-                            call.respond(HttpStatusCode.OK, result)
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
 
-                        }else{
-                            call.respond(HttpStatusCode.OK, result)
+                            val id = call.parameters["id"]
+                            val dto = call.receive<SaleCreateDTO>()
+
+                            val result = async {
+                                salesRepository.update("Bearer $token", UUID.fromString(id), dto)
+                            }
+
+                            val res = result.await()
+
+                            if (res.type == "SERVICE") {
+                                val res = FinalServiceDTO(
+                                    id = res.serviceEntity!!.id,
+                                    uuid = res.serviceEntity.uuid,
+                                    image = res.serviceEntity.image,
+                                    price = res.serviceEntity.price,
+                                    appointment = async {
+                                        appointmentRepository.findById(
+                                            "Bearer $token",
+                                            UUID.fromString(res.serviceEntity.appointment)
+                                        )
+                                    }.await(),
+                                    type = res.serviceEntity.type
+                                )
+                                call.respond(HttpStatusCode.OK, res)
+
+                            } else {
+                                call.respond(HttpStatusCode.OK, res)
+                            }
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
                     } catch (e: SaleNotFoundException) {
@@ -151,11 +233,20 @@ fun Application.salesRoutes() {
 
                 delete("/{id}") {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val id = call.parameters["id"]
-                        val result = salesRepository.delete(token.toString(), UUID.fromString(id))
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
 
-                        call.respond(HttpStatusCode.NoContent, result)
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]")) {
+                            val id = call.parameters["id"]
+
+                            val result = async {
+                                salesRepository.delete("Bearer $token", UUID.fromString(id))
+                            }
+
+                            call.respond(HttpStatusCode.NoContent)
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
+                        }
 
                     } catch (e: SaleNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
