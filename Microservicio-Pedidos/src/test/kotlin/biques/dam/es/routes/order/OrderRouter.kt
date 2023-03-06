@@ -23,7 +23,7 @@ class OrderRouter {
         Order.StatusOrder.DELIVERED,
         12.0,
         12.0,
-        ObjectId("123456789912345678901232").toId(),
+        UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
         UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
     )
 
@@ -74,7 +74,7 @@ class OrderRouter {
             Order.StatusOrder.DELIVERED,
             23.0,
             12.0,
-            ObjectId("123456789912345678901232").toId(),
+            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val orderLineDto = order.toDTO()

@@ -18,12 +18,14 @@ import java.util.*
 private const val ENDPOINT = "sales"
 
 fun Application.salesRoutes() {
-    val salesRepository by inject<KtorFitRepositorySales>()
-    val appointmentRepository by inject<KtorFitRepositoryAppointment>()
+    //val salesRepository by inject<KtorFitRepositorySales>()
+    val salesRepository = KtorFitRepositorySales()
+    //val appointmentRepository by inject<KtorFitRepositoryAppointment>()
+    val appointmentRepository = KtorFitRepositoryAppointment()
 
     routing {
         route("/$ENDPOINT") {
-            authenticate {
+            //authenticate {
                 get {
                     try {
                         val token = call.principal<JWTPrincipal>()
@@ -158,7 +160,7 @@ fun Application.salesRoutes() {
                     }
 
                 }
-            }
+            //}
         }
     }
 }

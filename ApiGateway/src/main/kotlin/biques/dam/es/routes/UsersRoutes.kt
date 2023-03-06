@@ -16,12 +16,14 @@ import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.toList
 import org.koin.ktor.ext.inject
 import mu.KotlinLogging
+import org.koin.core.qualifier.named
 
-private val logger = KotlinLogging.logger {}
+ private val logger = KotlinLogging.logger {}
 private const val ENDPOINT = "users"
 
 fun Application.usersRoutes() {
-    val userRepository by inject<KtorFitRepositoryUsers>()
+    //val userRepository by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
+    val userRepository = KtorFitRepositoryUsers()
 
     routing {
         route("/$ENDPOINT") {

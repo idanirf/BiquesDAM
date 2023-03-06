@@ -31,11 +31,11 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
         }
     }
 
-    override suspend fun save(token: String, entity: OrderLineCreateDTO): OrderLineDTO {
+    override fun save(token: String, entity: OrderLineCreateDTO): OrderLineDTO {
        try{
            return client.createOrderLine(token, entity)
        }catch (e: Exception){
-           throw OrderLineErrorException("Error creating order")
+           throw OrderLineErrorException("Error creating orderLine")
        }
     }
 
