@@ -41,6 +41,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-serialization-gson:2.2.4")
     ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta16")
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta16")
     implementation("io.github.smiley4:ktor-swagger-ui:$ktor_swagger_ui_version")
@@ -66,6 +67,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
     testImplementation("io.mockk:mockk:1.13.2")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
 
 }

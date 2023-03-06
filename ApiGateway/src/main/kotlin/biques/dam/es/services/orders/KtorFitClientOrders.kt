@@ -6,17 +6,18 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.gson.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
+
 
 object KtorFitClientOrders {
-    private const val API_URL = "https://localhost:7878/"
+    private const val API_URL = "http://localhost:7878/"
 
     private val ktorfit by lazy {
         Ktorfit.Builder()
             .httpClient {
                 install(ContentNegotiation) {
-                    json(Json { isLenient = true; ignoreUnknownKeys = true })
+                    gson()
                 }
                 install(DefaultRequest) {
                     header(HttpHeaders.ContentType, ContentType.Application.Json)

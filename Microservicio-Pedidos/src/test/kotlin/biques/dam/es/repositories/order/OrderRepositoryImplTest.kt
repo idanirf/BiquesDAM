@@ -31,7 +31,7 @@ class OrderRepositoryImplTest {
         Order.StatusOrder.DELIVERED,
         12.0,
         12.0,
-        ObjectId("123456789912345678901232").toId(),
+        UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
         UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
     )
 
@@ -144,7 +144,7 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             2.0,
             12.0,
-            ObjectId("123456789912345678901232").toId(),
+            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val orderTest = orderRepository.update(orderUpdate)
@@ -168,7 +168,7 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             12.0,
             12.0,
-            ObjectId("123456789912345678901232").toId(),
+            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val id = ObjectId("223456789912345678901232").toId<Order>()
@@ -200,7 +200,7 @@ class OrderRepositoryImplTest {
             Order.StatusOrder.DELIVERED,
             12.0,
             12.0,
-            ObjectId("123456789912345678901232").toId(),
+            UUID.fromString("4ae1d306-98c1-43d4-a622-aea93ccbcd01"),
             UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
         )
         val id = ObjectId("222456789912345678901232").toId<OrderLine>()

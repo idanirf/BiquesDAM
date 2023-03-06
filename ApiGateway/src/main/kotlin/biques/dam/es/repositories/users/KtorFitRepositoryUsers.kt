@@ -15,17 +15,18 @@ import org.koin.core.annotation.Single
 
 private val logger = KotlinLogging.logger {}
 
+
 @Single
 @Named("KtorFitRepositoryUsers")
 class KtorFitRepositoryUsers: IUsersRepository {
     private val client by lazy { KtorFitClientUsers.instance }
 
-    override suspend fun findAll(token: String): Flow<UserResponseDTO> = withContext(Dispatchers.IO) {
+    override suspend fun findAll(token: String): List<UserResponseDTO> = withContext(Dispatchers.IO) {
         logger.debug { "findAll()" }
 
         val call = client.findAll(token)
         try {
-            return@withContext call.asFlow()
+            return@withContext call
         } catch (e: Exception) {
             throw UserNotFoundException("Error getting users: ${e.message}")
         }
