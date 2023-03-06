@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import org.koin.core.annotation.Single
 
 @Single
-class TokensService(
+class TokenService(
     private val tokenConfig: TokenConfig
 ) {
     fun verifyToken(): JWTVerifier {

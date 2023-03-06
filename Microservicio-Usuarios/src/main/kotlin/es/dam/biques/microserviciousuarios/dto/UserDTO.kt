@@ -67,3 +67,8 @@ data class UserTokenDTO(
     val user: UserResponseDTO,
     val token: String
 )
+
+@Serializable
+data class UserDataDTO(
+    val data: List<UserResponseDTO>
+)

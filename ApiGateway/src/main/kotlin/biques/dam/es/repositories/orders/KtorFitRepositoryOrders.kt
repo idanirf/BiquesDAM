@@ -40,7 +40,7 @@ class KtorFitRepositoryOrders: IOrdersRepository {
        try{
            return client.createOrder(token, entity)
        }catch (e: Exception){
-           throw OrderErrorException("Error creating order")
+           throw OrderErrorException("Error creating order: ${e.message}")
        }
     }
 

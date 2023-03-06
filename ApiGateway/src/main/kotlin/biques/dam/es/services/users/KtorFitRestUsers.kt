@@ -2,12 +2,13 @@ package biques.dam.es.services.users
 
 import biques.dam.es.dto.*
 import de.jensklingenberg.ktorfit.http.*
+import io.ktor.server.auth.jwt.*
 
 interface KtorFitRestUsers {
     @GET("users")
     suspend fun findAll(
         @Header("Authorization") token: String
-    ): List<UserResponseDTO>
+    ): UserDataDTO
 
     @GET("users/{id}")
     suspend fun findById(
