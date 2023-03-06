@@ -16,7 +16,7 @@ interface KtorFitRestOrders {
     ): OrderDTO
 
     @POST("order")
-    suspend fun createOrder(
+    fun createOrder(
         @Header("Authorization") token: String,
         @Body order: OrderSaveDTO
     ): OrderDTO
@@ -46,7 +46,7 @@ interface KtorFitRestOrders {
     ): OrderLineDTO
 
     @POST("orderline")
-    suspend fun createOrderLine(
+    fun createOrderLine(
         @Header("Authorization") token: String,
         @Body order: OrderLineCreateDTO
     ): OrderLineDTO

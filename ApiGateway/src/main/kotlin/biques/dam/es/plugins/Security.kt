@@ -28,11 +28,12 @@ fun Application.configureSecurity() {
             verifier(jwtService.verifyJWT())
             realm = tokenConfig.realm
             validate { credential ->
-                if (credential.payload.audience.contains(tokenConfig.audience) &&
+                /*if (credential.payload.audience.contains(tokenConfig.audience) &&
                     credential.payload.getClaim("username").asString().isNotEmpty()
                 )
+                 */
                     JWTPrincipal(credential.payload)
-                else null
+                //else null
             }
 
             challenge { defaultScheme, realm ->

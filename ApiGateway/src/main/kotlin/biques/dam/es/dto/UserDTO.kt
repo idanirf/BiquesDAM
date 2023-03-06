@@ -1,8 +1,8 @@
 package biques.dam.es.dto
 
-import kotlinx.serialization.Serializable
 
-@Serializable
+
+@kotlinx.serialization.Serializable
 data class UserRegisterDTO(
     val image: String?,
     val rol: Set<String>,
@@ -12,7 +12,7 @@ data class UserRegisterDTO(
     val address: String
 )
 
-@Serializable
+@kotlinx.serialization.Serializable
 data class UserUpdateDTO(
     val image: String?,
     val rol: Set<String>,
@@ -22,25 +22,25 @@ data class UserUpdateDTO(
     val address: String
 )
 
-@Serializable
+@kotlinx.serialization.Serializable
 data class UserLoginDTO(
     val username: String,
     val password: String
 )
 
-@Serializable
+@kotlinx.serialization.Serializable
 data class UserResponseDTO(
     val id: Long?,
-    val uuid: String,
+    val uuid: String?,
     val image: String?,
-    val rol: Set<String>,
-    val email: String,
-    val username: String,
-    val address: String
+    val rol: Set<String>?,
+    val email: String?,
+    val username: String?,
+    val address: String?
 )
 
-@Serializable
+@kotlinx.serialization.Serializable
 data class UserTokenDTO(
-    val user: UserResponseDTO,
-    val token: String
+    val user: UserResponseDTO?,
+    val token: String?
 )

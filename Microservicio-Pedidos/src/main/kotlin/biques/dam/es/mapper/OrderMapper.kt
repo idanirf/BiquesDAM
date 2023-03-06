@@ -14,7 +14,7 @@ fun OrderDTO.toEntity(): Order{
         status = Order.StatusOrder.from(status),
         total = this.total,
         iva = this.iva,
-        orderLine = ObjectId(this.orderLine).toId(),
+        orderLine = this.orderLine,
         cliente = UUID.fromString(this.cliente),
     )
 }
@@ -26,7 +26,7 @@ fun Order.toDTO(): OrderDTO{
         status = status.name,
         total = this.total,
         iva = this.iva,
-        orderLine = this.orderLine.toString(),
+        orderLine = this.orderLine,
         cliente = this.cliente.toString()
     )
 }

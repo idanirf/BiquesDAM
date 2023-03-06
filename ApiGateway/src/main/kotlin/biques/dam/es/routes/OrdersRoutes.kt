@@ -24,13 +24,16 @@ import java.util.*
 private const val ENDPOINT = "order"
 
 fun Application.ordersRoutes() {
-    val orderRepository by inject<KtorFitRepositoryOrders>()
-    val orderLineRepository by inject<KtorFitRepositoryOrdersLine>()
-    val userRepopsitory by inject<KtorFitRepositoryUsers>()
+    //val orderRepository by inject<KtorFitRepositoryOrders>()
+    val orderRepository = KtorFitRepositoryOrders()
+    //val orderLineRepository by inject<KtorFitRepositoryOrdersLine>()
+    val orderLineRepository = KtorFitRepositoryOrdersLine()
+    //val userRepopsitory by inject<KtorFitRepositoryUsers>()
+    val userRepopsitory = KtorFitRepositoryUsers()
 
     routing {
         route("/$ENDPOINT") {
-            authenticate {
+           //authenticate {
                 // ORDERS
                 get {
                     try {
@@ -126,7 +129,7 @@ fun Application.ordersRoutes() {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
                 }
-            }
+            //}
         }
     }
 

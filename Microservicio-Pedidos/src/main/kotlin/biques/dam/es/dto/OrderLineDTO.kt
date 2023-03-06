@@ -1,12 +1,15 @@
 package biques.dam.es.dto
 
+import biques.dam.es.models.OrderLine
 import kotlinx.serialization.Serializable
+import org.litote.kmongo.newId
+import java.util.UUID
 
 
 @Serializable
 data class OrderLineDTO(
-    val id: String,
-    val uuid: String,
+    val id: String? = newId<OrderLine>().toString(),
+    val uuid: String? = UUID.randomUUID().toString(),
     val product: String,
     val amount: Int,
     val price: Double,
