@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  mariadb:
+  mariadb-user:
     image: mariadb
     container_name: mariadb
     environment:

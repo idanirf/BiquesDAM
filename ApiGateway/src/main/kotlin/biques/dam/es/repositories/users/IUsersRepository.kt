@@ -1,6 +1,7 @@
 package biques.dam.es.repositories.users
 
 import biques.dam.es.dto.*
+import io.ktor.server.auth.jwt.*
 import kotlinx.coroutines.flow.Flow
 
 interface IUsersRepository {

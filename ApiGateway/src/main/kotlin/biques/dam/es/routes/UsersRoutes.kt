@@ -6,6 +6,7 @@ import biques.dam.es.dto.UserUpdateDTO
 import biques.dam.es.exceptions.UserBadRequestException
 import biques.dam.es.exceptions.UserNotFoundException
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
+import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -13,17 +14,21 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.toList
 import org.koin.ktor.ext.inject
 import mu.KotlinLogging
+import org.koin.core.component.getScopeId
 import org.koin.core.qualifier.named
 
  private val logger = KotlinLogging.logger {}
 private const val ENDPOINT = "users"
 
 fun Application.usersRoutes() {
-    //val userRepository by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
-    val userRepository = KtorFitRepositoryUsers()
+    val userRepository by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
+    //val userRepository = KtorFitRepositoryUsers()
+    val tokenService by inject<TokensService>()
+
 
     routing {
         route("/$ENDPOINT") {
@@ -58,10 +63,13 @@ fun Application.usersRoutes() {
             authenticate {
                 get {
                     logger.debug { "API Gateway -> /users" }
-
                     try {
-                        val token = call.principal<JWTPrincipal>()
-                        val users = userRepository.findAll(token.toString()).toList()
+                        val token = tokenService.generateToken(call.principal()!!)
+
+                        val res = async {
+                            userRepository.findAll("Bearer $token")
+                        }
+                        val users = res.await()
 
                         call.respond(HttpStatusCode.OK, users)
 
@@ -74,9 +82,9 @@ fun Application.usersRoutes() {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
-                        val user = userRepository.findById(token.toString(), id!!.toLong())
+                        val user = userRepository.findById(token, id!!.toLong())
 
                         call.respond(HttpStatusCode.OK, user)
 
@@ -89,10 +97,10 @@ fun Application.usersRoutes() {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val user = call.receive<UserUpdateDTO>()
-                        val updatedUser = userRepository.update(token.toString(), id!!.toLong(), user)
+                        val updatedUser = userRepository.update(token, id!!.toLong(), user)
 
                         call.respond(HttpStatusCode.OK, updatedUser)
 
@@ -107,7 +115,7 @@ fun Application.usersRoutes() {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
 
                         userRepository.delete(token.toString(), id!!.toLong())
