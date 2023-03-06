@@ -10,6 +10,7 @@ import biques.dam.es.repositories.orders.KtorFitRepositoryOrders
 import biques.dam.es.repositories.ordersLine.KtorFitRepositoryOrdersLine
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
+import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -18,26 +19,25 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.toList
+import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
 
 private const val ENDPOINT = "order"
 
 fun Application.ordersRoutes() {
-    //val orderRepository by inject<KtorFitRepositoryOrders>()
-    val orderRepository = KtorFitRepositoryOrders()
-    //val orderLineRepository by inject<KtorFitRepositoryOrdersLine>()
-    val orderLineRepository = KtorFitRepositoryOrdersLine()
-    //val userRepopsitory by inject<KtorFitRepositoryUsers>()
-    val userRepopsitory = KtorFitRepositoryUsers()
+    val orderRepository by inject<KtorFitRepositoryOrders>(named("KtorFitRepositoryOrders"))
+    val orderLineRepository by inject<KtorFitRepositoryOrdersLine>(named("KtorFitRepositoryOrdersLine"))
+    val userRepopsitory by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
+    val tokenService by inject<TokensService>()
 
     routing {
         route("/$ENDPOINT") {
-           //authenticate {
+           authenticate {
                 // ORDERS
                 get {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val orderDTO = orderRepository.findAll(token.toString()).toList()
                         call.respond(HttpStatusCode.OK, orderDTO)
                     } catch (e: OrderNotFoundException) {
@@ -47,7 +47,7 @@ fun Application.ordersRoutes() {
 
                 get("/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = UUID.fromString(call.parameters["id"])!!
                         val orderDTO = orderRepository.findById(token.toString(), id)
                         val res = mutableListOf<OrderLineDTO>()
@@ -71,7 +71,7 @@ fun Application.ordersRoutes() {
 
                 post {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val orderCreate = call.receive<OrderDTOCreate>()
                         val res = mutableListOf<String>()
                         orderCreate.orderLine.forEach {
@@ -93,7 +93,7 @@ fun Application.ordersRoutes() {
 
                 put("/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = UUID.fromString(call.parameters["id"])!!
                         val orderUpdate = call.receive<OrderDTOUpdate>()
                         val res = mutableListOf<String>()
@@ -118,7 +118,7 @@ fun Application.ordersRoutes() {
 
                 delete("/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = UUID.fromString(call.parameters["id"])!!
                         val order = orderRepository.findById(token.toString(), id)
                         order.orderLine.forEach {
@@ -129,7 +129,7 @@ fun Application.ordersRoutes() {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
                 }
-            //}
+           }
         }
     }
 

@@ -5,16 +5,15 @@ import biques.dam.es.dto.UserResponseDTO
 import biques.dam.es.exceptions.UserBadRequestException
 import biques.dam.es.exceptions.UserNotFoundException
 import biques.dam.es.services.users.KtorFitClientUsers
+import io.ktor.server.auth.jwt.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 private val logger = KotlinLogging.logger {}
-
 
 @Single
 @Named("KtorFitRepositoryUsers")
@@ -24,65 +23,82 @@ class KtorFitRepositoryUsers: IUsersRepository {
     override suspend fun findAll(token: String): List<UserResponseDTO> = withContext(Dispatchers.IO) {
         logger.debug { "findAll()" }
 
-        val call = client.findAll(token)
+        val call = async {
+            client.findAll(token)
+        }
+
         try {
-            return@withContext call
+            return@withContext call.await().data!!
         } catch (e: Exception) {
             throw UserNotFoundException("Error getting users: ${e.message}")
         }
     }
 
-    override suspend fun findById(token: String, id: Long): UserResponseDTO {
+    override suspend fun findById(token: String, id: Long): UserResponseDTO = withContext(Dispatchers.IO) {
         logger.debug { "finById($id)" }
 
-        val call = client.findById(token, id)
+        val call = async {
+            client.findById(token, id)
+        }
 
         try {
-            return call
+            return@withContext call.await()
         } catch (e: Exception) {
             throw UserNotFoundException("Error getting user with id $id ${e.message}")
         }
     }
 
-    override suspend fun login(entity: UserLoginDTO): UserTokenDTO {
+    override suspend fun login(entity: UserLoginDTO): UserTokenDTO = withContext(Dispatchers.IO) {
         logger.debug { "login($entity)" }
 
-        val call = client.login(entity)
+        val call = async {
+            client.login(entity)
+        }
 
         try {
-            return call
+            return@withContext call.await()
         } catch (e: Exception) {
             throw UserBadRequestException("Error logging user: ${e.message}")
         }
     }
 
-    override suspend fun register(entity: UserRegisterDTO): UserTokenDTO {
+    override suspend fun register(entity: UserRegisterDTO): UserTokenDTO = withContext(Dispatchers.IO) {
         logger.debug { "register($entity)" }
 
-        val call = client.register(entity)
+        val call = async {
+            client.register(entity)
+        }
 
         try {
-            return call
+            return@withContext call.await()
         } catch (e: Exception) {
             throw UserBadRequestException("Error registering user: ${e.message}")
         }
     }
 
-    override suspend fun update(token: String, id: Long, entity: UserUpdateDTO): UserResponseDTO {
+    override suspend fun update(token: String, id: Long, entity: UserUpdateDTO): UserResponseDTO = withContext(Dispatchers.IO) {
         logger.debug { "update($entity)" }
 
+        val call = async {
+            client.update(token, id, entity)
+        }
+
         try {
-            return client.update(token, id, entity)
+            return@withContext call.await()
         } catch (e: Exception) {
             throw UserNotFoundException("Error finding user with id $id: ${e.message}")
         }
     }
 
-    override suspend fun delete(token: String, id: Long) {
+    override suspend fun delete(token: String, id: Long) = withContext(Dispatchers.IO) {
         logger.debug { "delete($id)" }
 
-        try {
+        val call = async {
             client.delete(token, id)
+        }
+
+        try {
+            return@withContext call.await()
         } catch (e: Exception) {
             throw UserNotFoundException("Error deleting user with id $id: ${e.message}")
         }

@@ -11,4 +11,5 @@ data class TokenConfig(
     val secret = config["secret"].toString()
     val issuer = config["issuer"].toString()
     val expiration = config["expiration"].toString()
+    val realm = config["realm"].toString()
 }

@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
+import kotlin.collections.ArrayList
 
 private val logger = KotlinLogging.logger {}
 
@@ -77,11 +78,12 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("")
-    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<List<UserResponseDTO>> {
+    suspend fun findAll(@AuthenticationPrincipal user: User): ResponseEntity<UserDataDTO> {
         logger.info { "API -> findAll()" }
 
         val res = userService.findAll().toList().map { it.toDTO() }
-        return ResponseEntity.ok(res)
+        val res2 = UserDataDTO(res)
+        return ResponseEntity.ok(res2)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")

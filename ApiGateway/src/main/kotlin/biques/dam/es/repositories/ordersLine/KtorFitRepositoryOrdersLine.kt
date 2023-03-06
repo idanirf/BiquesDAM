@@ -31,7 +31,7 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
         }
     }
 
-    override fun save(token: String, entity: OrderLineCreateDTO): OrderLineDTO {
+    override suspend fun save(token: String, entity: OrderLineCreateDTO): OrderLineDTO {
        try{
            return client.createOrderLine(token, entity)
        }catch (e: Exception){

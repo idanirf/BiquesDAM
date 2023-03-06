@@ -29,9 +29,6 @@ import kotlinx.coroutines.flow.toList
 fun Application.configureRouting() {
     val orderService = OrderService(OrderRepositoryImpl())
     val orderLineService = OrderLineService(OrderLineRepositoryImpl())
-    authentication {
-        //TODO Cuando tengamos token meter las rutas aquí
-    }
     routing {
         get("/") {
             call.respondText("Hello World!")

@@ -1,34 +1,36 @@
 package biques.dam.es.routes
 
-import biques.dam.es.dto.*
+import biques.dam.es.dto.FinalSaleDTO
+import biques.dam.es.dto.FinalServiceDTO
+import biques.dam.es.dto.SaleDTO
 import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
+import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.toList
+import org.koin.core.qualifier.named
+import org.koin.ktor.ext.inject
 import java.util.*
 
 private const val ENDPOINT = "sales"
 
 fun Application.salesRoutes() {
-    //val salesRepository by inject<KtorFitRepositorySales>()
-    val salesRepository = KtorFitRepositorySales()
-    //val appointmentRepository by inject<KtorFitRepositoryAppointment>()
-    val appointmentRepository = KtorFitRepositoryAppointment()
+    val salesRepository by inject<KtorFitRepositorySales>(named("KtorFitRepositorySales"))
+    val appointmentRepository by inject<KtorFitRepositoryAppointment>(named("KtorFitRepositoryAppointment"))
+    val tokenService by inject<TokensService>()
 
     routing {
         route("/$ENDPOINT") {
-            //authenticate {
+            authenticate {
                 get {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val list = salesRepository.findAll(token.toString())
                             .toList()
 
@@ -73,7 +75,7 @@ fun Application.salesRoutes() {
 
                 get("/product/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val list = salesRepository.findById(token.toString(), UUID.fromString(id)).toList()
 
@@ -92,7 +94,7 @@ fun Application.salesRoutes() {
 
                 get("/service/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val list = salesRepository.findById(token.toString(), UUID.fromString(id)).toList()
 
@@ -121,7 +123,7 @@ fun Application.salesRoutes() {
 
                 put("/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val dto = call.receive<SaleDTO>()
                         val result = salesRepository.update(token.toString(), UUID.fromString(id), dto)
@@ -149,7 +151,7 @@ fun Application.salesRoutes() {
 
                 delete("/{id}") {
                     try {
-                        val token = call.principal<JWTPrincipal>()
+                        val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val result = salesRepository.delete(token.toString(), UUID.fromString(id))
 
@@ -160,7 +162,7 @@ fun Application.salesRoutes() {
                     }
 
                 }
-            //}
+            }
         }
     }
 }
