@@ -6,6 +6,7 @@ import biques.dam.es.exceptions.OrderLineNotFoundException
 import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.models.Order
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import org.litote.kmongo.Id
 import org.litote.kmongo.coroutine.toList
@@ -18,7 +19,7 @@ import java.util.*
 class OrderRepositoryImpl: OrderRepository {
     private val db = MongoDbManager.database
     override suspend fun findByUUID(uuid: UUID): Order {
-        return db.getCollection<Order>().findOne(Order::uuid eq uuid)?: throw OrderNotFoundException("The order with uuid $uuid does not exist")
+        return db.getCollection<Order>().find().publisher.asFlow().toList().firstOrNull { it.uuid == uuid }?: throw OrderNotFoundException("The order with uuid $uuid does not exist")
     }
 
     override fun findAll(): Flow<Order> {

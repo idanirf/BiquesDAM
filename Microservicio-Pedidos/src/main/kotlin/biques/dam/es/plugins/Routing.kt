@@ -1,7 +1,9 @@
 package biques.dam.es.plugins
 
+import biques.dam.es.dto.OrderAllDTO
 import biques.dam.es.dto.OrderDTO
 import biques.dam.es.dto.OrderLineDTO
+import biques.dam.es.dto.OrderUpdateDTO
 import biques.dam.es.exceptions.OrderLineNotFoundException
 import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.exceptions.UUIDException
@@ -45,8 +47,12 @@ fun Application.configureRouting() {
                orderService.getAllOrder().collect { order ->
                res.add(order.toDTO())
            }
+
+            val orders = OrderAllDTO(
+                res
+            )
             call.respond(
-                HttpStatusCode.OK,res
+                HttpStatusCode.OK,orders
             )
 
         }
@@ -100,8 +106,18 @@ fun Application.configureRouting() {
             try {
                 val id = call.parameters["id"]?.toUUID()!!
                 val dto = call.receive<OrderDTO>()
-                val order = dto.toEntity()
-                val res =  orderService.updateOrder(order)
+                val oldOrder = orderService.getAllOrder().toList().firstOrNull { it.uuid == id }
+                val orderUpdateDto = OrderUpdateDTO(
+                    oldOrder!!.id.toString(),
+                    oldOrder.uuid.toString(),
+                    dto.status,
+                    dto.total,
+                    dto.iva,
+                    dto.orderLine,
+                    dto.cliente
+                )
+                val orderUpdate = orderUpdateDto.toEntity()
+                val res =  orderService.updateOrder(orderUpdate)
                 call.respond(HttpStatusCode.OK, res.toDTO())
             } catch (e: OrderNotFoundException){
                 call.respond(HttpStatusCode.NotFound, e.message.toString())
@@ -124,7 +140,6 @@ fun Application.configureRouting() {
             }
         }
         delete("/order/{id}"){
-            //TODO Comprobar permisos
             try {
                 val id = call.parameters["id"]?.toUUID()!!
                 val order = orderService.getOrderByUUID(id)

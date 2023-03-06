@@ -1,4 +1,4 @@
- package biques.dam.es.routes
+package biques.dam.es.routes
 
 import biques.dam.es.dto.UserLoginDTO
 import biques.dam.es.dto.UserRegisterDTO
@@ -10,25 +10,21 @@ import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.toList
-import org.koin.ktor.ext.inject
 import mu.KotlinLogging
-import org.koin.core.component.getScopeId
 import org.koin.core.qualifier.named
+import org.koin.ktor.ext.inject
 
- private val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 private const val ENDPOINT = "users"
 
 fun Application.usersRoutes() {
     val userRepository by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
     //val userRepository = KtorFitRepositoryUsers()
     val tokenService by inject<TokensService>()
-
 
     routing {
         route("/$ENDPOINT") {
@@ -37,9 +33,12 @@ fun Application.usersRoutes() {
 
                 try {
                     val login = call.receive<UserLoginDTO>()
-                    val user = userRepository.login(login)
 
-                    call.respond(HttpStatusCode.OK, user)
+                    val user = async {
+                        userRepository.login(login)
+                    }
+
+                    call.respond(HttpStatusCode.OK, user.await())
 
                 } catch (e: UserBadRequestException) {
                     call.respond(HttpStatusCode.BadRequest, e.message.toString())
@@ -51,9 +50,12 @@ fun Application.usersRoutes() {
 
                 try {
                     val register = call.receive<UserRegisterDTO>()
-                    val user = userRepository.register(register)
 
-                    call.respond(HttpStatusCode.Created, user)
+                    val user = async {
+                        userRepository.register(register)
+                    }
+
+                    call.respond(HttpStatusCode.Created, user.await())
 
                 } catch (e: UserBadRequestException) {
                     call.respond(HttpStatusCode.BadRequest, e.message.toString())
@@ -84,9 +86,12 @@ fun Application.usersRoutes() {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
-                        val user = userRepository.findById(token, id!!.toLong())
 
-                        call.respond(HttpStatusCode.OK, user)
+                        val user = async {
+                            userRepository.findById("Bearer $token", id!!.toLong())
+                        }
+
+                        call.respond(HttpStatusCode.OK, user.await())
 
                     } catch (e: UserNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
@@ -100,9 +105,12 @@ fun Application.usersRoutes() {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
                         val user = call.receive<UserUpdateDTO>()
-                        val updatedUser = userRepository.update(token, id!!.toLong(), user)
 
-                        call.respond(HttpStatusCode.OK, updatedUser)
+                        val updatedUser = async {
+                            userRepository.update("Bearer $token", id!!.toLong(), user)
+                        }
+
+                        call.respond(HttpStatusCode.OK, updatedUser.await())
 
                     } catch (e: UserNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
@@ -118,7 +126,7 @@ fun Application.usersRoutes() {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]
 
-                        userRepository.delete(token.toString(), id!!.toLong())
+                        userRepository.delete("Bearer $token", id!!.toLong())
 
                         call.respond(HttpStatusCode.NoContent)
                     } catch (e: UserNotFoundException) {

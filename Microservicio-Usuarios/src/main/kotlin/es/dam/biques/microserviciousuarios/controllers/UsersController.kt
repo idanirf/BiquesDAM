@@ -99,19 +99,6 @@ class UsersController @Autowired constructor(
         }
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
-//    @GetMapping("/{uuid}")
-//    suspend fun findByUUID(@PathVariable uuid: String): ResponseEntity<UserResponseDTO> {
-//        logger.info { "API -> findByUUID($uuid)" }
-//
-//        try {
-//            val res = userService.findUserByUuid(uuid).toDTO()
-//            return ResponseEntity.ok(res)
-//        } catch (e: UserNotFoundException) {
-//            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-//        }
-//    }
-
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/{id}")
     suspend fun update(
@@ -136,7 +123,7 @@ class UsersController @Autowired constructor(
         }
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN')")
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {
         logger.info { "API -> delete($id)" }

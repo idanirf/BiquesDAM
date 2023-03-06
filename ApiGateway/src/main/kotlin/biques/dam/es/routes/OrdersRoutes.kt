@@ -3,12 +3,8 @@ package biques.dam.es.routes
 import biques.dam.es.dto.*
 import biques.dam.es.exceptions.OrderBadRequestException
 import biques.dam.es.exceptions.OrderNotFoundException
-import biques.dam.es.exceptions.OrderLineBadRequestException
-import biques.dam.es.exceptions.OrderLineNotFoundException
-import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.orders.KtorFitRepositoryOrders
 import biques.dam.es.repositories.ordersLine.KtorFitRepositoryOrdersLine
-import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
 import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
@@ -18,7 +14,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.async
 import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
@@ -33,13 +29,19 @@ fun Application.ordersRoutes() {
 
     routing {
         route("/$ENDPOINT") {
-           authenticate {
+            authenticate {
                 // ORDERS
                 get {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val orderDTO = orderRepository.findAll(token.toString()).toList()
-                        call.respond(HttpStatusCode.OK, orderDTO)
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+                        //if(originalToken.payload.getClaim("rol").split(",").toSet().toString())
+
+                        val orderDTO = async {
+                            orderRepository.findAll("Bearer $token").toList()
+                        }
+
+                        call.respond(HttpStatusCode.OK, orderDTO.await())
                     } catch (e: OrderNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
@@ -49,19 +51,30 @@ fun Application.ordersRoutes() {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = UUID.fromString(call.parameters["id"])!!
-                        val orderDTO = orderRepository.findById(token.toString(), id)
+
+                        val orderDTO = async {
+                            orderRepository.findById("Bearer $token", id)
+                        }.await()
+
                         val res = mutableListOf<OrderLineDTO>()
-                        val user = userRepopsitory.findById(token.toString(), orderDTO.cliente.toLong())
+
+
                         orderDTO.orderLine.forEach {
-                            res.add(orderLineRepository.findById(token.toString(), UUID.fromString(it)))
+                            res.add(
+                                async {
+                                    orderLineRepository.findById("Bearer $token", UUID.fromString(it))
+                                }.await()
+                            )
                         }
+                        val cliente = userRepopsitory.findById("Bearer $token", orderDTO.cliente.toLong())
+
                         val finalOrder = FinalOrderDTO(
                             orderDTO.uuid,
                             orderDTO.status,
                             orderDTO.total,
                             orderDTO.iva,
                             res,
-                            user
+                            cliente
                         )
                         call.respond(HttpStatusCode.OK, finalOrder)
                     } catch (e: OrderNotFoundException) {
@@ -71,21 +84,41 @@ fun Application.ordersRoutes() {
 
                 post {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val orderCreate = call.receive<OrderDTOCreate>()
-                        val res = mutableListOf<String>()
-                        orderCreate.orderLine.forEach {
-                            res.add(orderLineRepository.save(token.toString(), it).uuid)
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+                            val orderCreate = call.receive<OrderDTOCreate>()
+                            val res = mutableListOf<String>()
+
+                            orderCreate.orderLine.forEach {
+                                res.add(
+                                    async {
+                                        orderLineRepository.save("Bearer $token", it).uuid
+                                    }.await()!!
+                                )
+                            }
+
+                            val saveOrder = OrderSaveDTO(
+                                orderCreate.status,
+                                orderCreate.total,
+                                orderCreate.iva,
+                                res,
+                                orderCreate.cliente
+                            )
+
+                            val resOrder = async {
+                                orderRepository.save("Bearer $token", saveOrder)
+                            }.await()
+
+                            call.respond(HttpStatusCode.Created, resOrder)
+
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-                        val saveOrder = OrderSaveDTO(
-                            orderCreate.status,
-                            orderCreate.total,
-                            orderCreate.iva,
-                            res,
-                            orderCreate.cliente
-                        )
-                        val resOrder = orderRepository.save(token.toString(), saveOrder)
-                        call.respond(HttpStatusCode.Created, resOrder)
+
                     } catch (e: OrderBadRequestException) {
                         call.respond(HttpStatusCode.BadRequest, e.message.toString())
                     }
@@ -93,22 +126,41 @@ fun Application.ordersRoutes() {
 
                 put("/{id}") {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val id = UUID.fromString(call.parameters["id"])!!
-                        val orderUpdate = call.receive<OrderDTOUpdate>()
-                        val res = mutableListOf<String>()
-                        orderUpdate.orderLine.forEach {
-                            res.add(orderLineRepository.findById(token.toString(), UUID.fromString(it)).uuid)
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+                            val id = UUID.fromString(call.parameters["id"])!!
+                            val orderUpdate = call.receive<OrderDTOUpdate>()
+                            val res = mutableListOf<String>()
+
+                            orderUpdate.orderLine.forEach {
+                                res.add(
+                                    async {
+                                        orderLineRepository.findById("Bearer $token", UUID.fromString(it)).uuid
+                                    }.await()!!
+                                )
+                            }
+
+                            val saveOrder = OrderDTOUpdate(
+                                orderUpdate.status,
+                                orderUpdate.total,
+                                orderUpdate.iva,
+                                res,
+                                orderUpdate.cliente
+                            )
+
+                            val resOrder = async {
+                                orderRepository.update("Bearer $token", id, saveOrder)
+                            }.await()
+
+                            call.respond(HttpStatusCode.OK, resOrder)
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-                        val saveOrder = OrderDTOUpdate(
-                            orderUpdate.status,
-                            orderUpdate.total,
-                            orderUpdate.iva,
-                            res,
-                            orderUpdate.cliente
-                        )
-                        val resOrder = orderRepository.update(token.toString(), id, saveOrder)
-                        call.respond(HttpStatusCode.Created, resOrder)
+
                     } catch (e: OrderNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     } catch (e: OrderBadRequestException) {
@@ -118,18 +170,36 @@ fun Application.ordersRoutes() {
 
                 delete("/{id}") {
                     try {
-                        val token = tokenService.generateToken(call.principal()!!)
-                        val id = UUID.fromString(call.parameters["id"])!!
-                        val order = orderRepository.findById(token.toString(), id)
-                        order.orderLine.forEach {
-                            orderLineRepository.delete(token.toString(), UUID.fromString(it))
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+
+                        if (originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")) {
+                            val id = UUID.fromString(call.parameters["id"])!!
+
+                            val order = async {
+                                orderRepository.findById("Bearer $token", id)
+                            }.await()
+
+                            order.orderLine.forEach {
+                                async {
+                                    orderLineRepository.delete("Bearer $token", UUID.fromString(it))
+                                }.await()
+                            }
+
+                            async {
+                                orderRepository.delete("Bearer $token", UUID.fromString(order.uuid))
+                            }.await()
+
+                            call.respond(HttpStatusCode.NoContent)
+
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-                        orderRepository.delete(token.toString(), UUID.fromString(order.uuid))
                     } catch (e: OrderNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
                 }
-           }
+            }
         }
     }
 
