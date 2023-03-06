@@ -89,7 +89,7 @@ internal class ProductsServicesControllerTest {
         coEvery { serviceService.findAppointment(any()) } returns appointment
 
         val result = controller.findAll()
-        val res = result.body
+        val res = result.body?.data
 
         assertAll(
             { assertNotNull(result) },
@@ -151,7 +151,7 @@ internal class ProductsServicesControllerTest {
         coEvery { serviceService.findById(any()) } returns service
 
         val result = controller.findById(product.id!!)
-        val res = result.body
+        val res = result.body?.data
 
         assertAll(
             { assertNotNull(result) },
@@ -188,11 +188,11 @@ internal class ProductsServicesControllerTest {
         coEvery { productService.findById(any()) } throws ProductNotFoundException("Not found with id: ${product.id}")
         coEvery { serviceService.findById(any()) } throws ServiceNotFoundException("Not found with id: ${service.id}")
 
-        val res = assertThrows<ServiceNotFoundException> {
+        val res = assertThrows<ResponseStatusException> {
            controller.findById(1L)
         }
 
-        assertEquals("Not found with id: ${product.id}", res.message)
+        assertEquals("""404 NOT_FOUND "Nothing found for id: ${product.id}"""", res.message)
 
         coVerify { productService.findById(any()) }
         coVerify { serviceService.findById(any()) }

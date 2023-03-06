@@ -33,10 +33,8 @@ class OrderLineRepositoryImplTest {
         3,
         5.0,
         15.0,
-        UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+        1
     )
-
-
 
     @BeforeEach
     fun setUp(): Unit = runBlocking {
@@ -152,7 +150,7 @@ class OrderLineRepositoryImplTest {
             1,
             6.0,
             6.0,
-            UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+            1
         )
         val lineaTest = orderLineRepository.update(lineaPedidoUpdate)
         assertAll(
@@ -176,7 +174,7 @@ class OrderLineRepositoryImplTest {
             1,
             6.0,
             6.0,
-            UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+            1
         )
         val id = ObjectId("423456789912345678901232").toId<OrderLine>()
         assertAll(
@@ -208,7 +206,7 @@ class OrderLineRepositoryImplTest {
             1,
             6.0,
             6.0,
-            UUID.fromString("fcf9e6bb-6ff1-4aae-8b50-0d3286b20f81")
+            1
         )
         val id = ObjectId("323456789912345678901232").toId<OrderLine>()
         assertAll(
