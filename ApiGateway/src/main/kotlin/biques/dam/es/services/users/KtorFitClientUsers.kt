@@ -7,9 +7,11 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
 
+/**
+ * Creates a KtorFit client for the Users API
+ * @author The BiquesDAM Team
+ */
 object KtorFitClientUsers {
     private const val API_URL = "http://localhost:8383/"
 

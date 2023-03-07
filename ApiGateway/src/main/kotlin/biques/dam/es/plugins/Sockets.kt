@@ -16,8 +16,11 @@ import java.time.Duration
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
+/**
+ * Plugin to configure the sockets of the HTTP server
+ * @author The BiquesDAM Team
+ */
 fun Application.configureSockets() {
-
 
     install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
@@ -25,8 +28,9 @@ fun Application.configureSockets() {
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
+
     routing {
-        webSocket("/ws") { // websocketSession
+        webSocket("/ws") {
             for (frame in incoming) {
                 if (frame is Frame.Text) {
                     val text = frame.readText()

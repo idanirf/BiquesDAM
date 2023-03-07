@@ -1,16 +1,17 @@
 package biques.dam.es.plugins
 
-import biques.dam.es.dto.UserLoginDTO
-import biques.dam.es.exceptions.UserBadRequestException
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
-import biques.dam.es.routes.*
-import biques.dam.es.services.users.KtorFitClientUsers
-import io.ktor.http.*
-import io.ktor.server.routing.*
-import io.ktor.server.response.*
+import biques.dam.es.routes.ordersRoutes
+import biques.dam.es.routes.salesRoutes
+import biques.dam.es.routes.usersRoutes
 import io.ktor.server.application.*
-import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
+/**
+ * Plugin to configure the routing of the HTTP server
+ * @author The BiquesDAM Team
+ */
 fun Application.configureRouting() {
     val userRepository = KtorFitRepositoryUsers()
     routing {

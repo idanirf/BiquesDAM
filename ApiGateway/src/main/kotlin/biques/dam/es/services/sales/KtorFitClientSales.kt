@@ -7,10 +7,11 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
-import mu.KotlinLogging
 
+/**
+ * Creates a KtorFit client for the Sales API
+ * @author The BiquesDAM Team
+ */
 object KtorFitClientSales {
     private const val API_URL = "http://localhost:8080/"
 

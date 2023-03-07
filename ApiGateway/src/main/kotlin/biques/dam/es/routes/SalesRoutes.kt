@@ -7,6 +7,10 @@ import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.services.token.TokensService
+import io.github.smiley4.ktorswaggerui.dsl.get
+import io.github.smiley4.ktorswaggerui.dsl.delete
+import io.github.smiley4.ktorswaggerui.dsl.post
+import io.github.smiley4.ktorswaggerui.dsl.put
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -29,7 +33,24 @@ fun Application.salesRoutes() {
     routing {
         route("/$ENDPOINT") {
             authenticate {
-                get {
+
+                get({
+                    description = "Get all sales"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Sales found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Sales not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -78,7 +99,23 @@ fun Application.salesRoutes() {
 
                 }
 
-                get("/product/{id}") {
+                get("/product/{id}",{
+                    description = "Get a product by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Product found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Product not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]!!
@@ -100,7 +137,23 @@ fun Application.salesRoutes() {
                     }
                 }
 
-                get("/service/{id}") {
+                get("/service/{id}",{
+
+                    description = "Get a service by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Service found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Service not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]!!
@@ -136,7 +189,19 @@ fun Application.salesRoutes() {
                     }
                 }
 
-                post {
+                post({
+                    description = "Create a sale"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.Created to{
+                            description = "Sale created"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -183,8 +248,19 @@ fun Application.salesRoutes() {
 
                 }
 
+                put("/{id}",{
+                    description = "Update a sale"
+                    securitySchemeName = "JWT-Auth"
 
-                put("/{id}") {
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Sale updated"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -231,7 +307,23 @@ fun Application.salesRoutes() {
 
                 }
 
-                delete("/{id}") {
+                delete("/{id}",{
+
+                    description = "Delete a sale"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.NoContent to{
+                            description = "Sale deleted"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Sale not found"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)

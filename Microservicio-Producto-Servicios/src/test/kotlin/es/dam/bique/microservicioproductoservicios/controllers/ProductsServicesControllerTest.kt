@@ -253,7 +253,6 @@ internal class ProductsServicesControllerTest {
             ).toOnSaleCreateDTO()
         )
 
-
         val res = result.body!!
 
         assertAll(
@@ -331,7 +330,7 @@ internal class ProductsServicesControllerTest {
     }
 
     @Test
-    fun updateProduct()  = runTest {
+    fun updateProduct() = runTest {
         coEvery { productService.findByUuid(any()) } returns product
         coEvery { serviceService.findByUuid(any()) } returns service
         coEvery { productService.update(any()) } returns product
@@ -374,7 +373,7 @@ internal class ProductsServicesControllerTest {
     }
 
     @Test
-    fun updateService()  = runTest {
+    fun updateService() = runTest {
         coEvery { productService.findByUuid(any()) } returns product
         coEvery { serviceService.findByUuid(any()) } returns service
         coEvery { productService.update(any()) } returns product
@@ -443,9 +442,8 @@ internal class ProductsServicesControllerTest {
         coEvery { serviceService.update(any()) } throws ServiceNotFoundException("Not found with uuid: ${service.uuid}")
         coEvery { serviceService.findAppointment(any()) } returns appointment
 
-
         val res = assertThrows<ResponseStatusException> {
-            val result = controller.update(
+            controller.update(
                 product.uuid,
                 ProductCreateDTO(
                     image = "actualizado",
@@ -460,7 +458,6 @@ internal class ProductsServicesControllerTest {
                 ).toOnSaleCreateDTO()
             )
         }
-
 
         assertEquals("""404 NOT_FOUND "Not found with uuid: ${product.uuid}"""", res.message)
     }
@@ -542,7 +539,6 @@ internal class ProductsServicesControllerTest {
             "Not found with id: ${product.uuid}",
             res.message
         )
-
     }
 
     @Test
