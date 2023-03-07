@@ -7,6 +7,16 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
+/**
+ * Represents the services that are on sale.
+ * @param id Service identifier.
+ * @param uuid Service unique identifier.
+ * @param image Service image.
+ * @param price Service price.
+ * @param appointment Service appointment identifier.
+ * @param type Service type.
+ * @author The BiquesDam Team.
+ */
 @Serializable
 @Table("Services")
 data class Service(
@@ -29,12 +39,18 @@ data class Service(
 
 ): OnSale
 
-enum class ServiceType(val value: String) {
+/**
+ * Represents the type of service.
+ * @param type Value of the service type.
+ */
+enum class ServiceType(val type: String) {
     REVISION("REVISION"),
     ASSEMBLY("ASSEMBLY"),
     REPLACEMENT("REPLACEMENT"),
     REPAIR("REPAIR");
     companion object {
+
+        /** Returns the ServiceType from a string. */
         fun from(tipo: String): ServiceType {
             return when (tipo.uppercase()) {
                 "REVISION" -> REVISION
@@ -44,5 +60,6 @@ enum class ServiceType(val value: String) {
                 else -> throw IllegalArgumentException("Service unknown.")
             }
         }
+
     }
 }

@@ -6,18 +6,30 @@ import es.dam.bique.microservicioproductoservicios.models.ServiceType
 
 import java.util.*
 
-fun ServiceDTO.toEntity(): Service {
-    return Service(
+/**
+ * Creates a ServiceDTO from a Service
+ * @param Service Service to be converted
+ * @return ServiceDTO
+ * @author The BiquesDam Team
+ */
+fun Service.toDTO(): ServiceDTO{
+    return ServiceDTO(
         id = id,
-        uuid = UUID.fromString(uuid),
+        uuid = uuid.toString(),
         image = image,
         price = price,
-        appointment = UUID.fromString(appointment),
-        type = ServiceType.from(type)
+        appointment = appointment.toString(),
+        type = type.type
     )
 }
 
-fun ServiceDTO.toOnSaleDTO (): OnSaleDTO {
+/**
+ * Creates a Service from a ServiceDTO
+ * @param ServiceDTO ServiceDTO to be converted
+ * @return Service
+ * @author The BiquesDam Team
+ */
+fun ServiceDTO.toOnSaleDTO(): OnSaleDTO {
     return OnSaleDTO(
         productEntity = null,
         serviceEntity = ServiceDTO(
@@ -31,17 +43,12 @@ fun ServiceDTO.toOnSaleDTO (): OnSaleDTO {
     )
 }
 
-fun Service.toDTO(): ServiceDTO{
-    return ServiceDTO(
-        id = id,
-        uuid = uuid.toString(),
-        image = image,
-        price = price,
-        appointment = appointment.toString(),
-        type = type.value
-    )
-}
-
+/**
+ * Creates a Service from a ServiceCreateDTO
+ * @param ServiceCreateDTO ServiceCreateDTO to be converted
+ * @return Service
+ * @author The BiquesDam Team
+ */
 fun ServiceCreateDTO.toModel(uuid: UUID): Service {
     return Service(
         uuid = uuid,
@@ -52,7 +59,13 @@ fun ServiceCreateDTO.toModel(uuid: UUID): Service {
     )
 }
 
-fun ServiceCreateDTO.toOnSaleCreateDTO (): OnSaleCreateDTO {
+/**
+ * Creates a ServiceCreateDTO from a Service
+ * @param Service Service to be converted
+ * @return ServiceCreateDTO
+ * @author The BiquesDam Team
+ */
+fun ServiceCreateDTO.toOnSaleCreateDTO(): OnSaleCreateDTO {
     return OnSaleCreateDTO(
         productEntity = null,
         serviceEntity = ServiceCreateDTO(

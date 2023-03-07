@@ -12,6 +12,12 @@ private val logger = KotlinLogging.logger {}
 
 @Component
 class JWTTokenUtils {
+    /**
+     * Generates a JSON Web Token (JWT) for a given user with a set of claims.
+     * @param user The user for whom the token will be generated.
+     * @return The generated JWT as a String.
+     * @author BiquesDAM-Team
+     */
     fun generateToken(user: User): String {
         logger.info { "Generate token for user: ${user.username}" }
 
@@ -24,6 +30,12 @@ class JWTTokenUtils {
             .sign(Algorithm.HMAC512("BiquesDAM"))
     }
 
+    /**
+     * Verifies the validity of a given JWT.
+     * @param authToken The JWT to be verified.
+     * @return The decoded JWT if it is valid, null otherwise.
+     * @author BiquesDAM-Team
+     */
     fun verify(authToken: String): DecodedJWT? {
         logger.info { "Validating the token: $authToken" }
 

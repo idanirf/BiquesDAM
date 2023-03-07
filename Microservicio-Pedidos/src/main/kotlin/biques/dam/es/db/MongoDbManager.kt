@@ -9,6 +9,11 @@ import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 
+/**
+ * This object provides a centralized access to MongoDB database connections and settings.
+ * It uses the "application.properties" file to read the configuration properties for the MongoDB connection.
+ * @author BiquesDAM-Team
+ */
 
 object MongoDbManager {
     val properties = PropertiesReader("application.properties")

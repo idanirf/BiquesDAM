@@ -23,6 +23,13 @@ class SecurityConfig
     private val userService: UserService,
     private val jwtTokenUtils: JWTTokenUtils
 ) {
+
+    /**
+     * Defines a bean for the authentication manager used in the application.
+     * @param http The HttpSecurity instance to configure.
+     * @return An instance of the [AuthenticationManager] class.
+     * @author BiquesDAM-Team
+     */
     @Bean
     fun authManager(http: HttpSecurity): AuthenticationManager {
         val authenticationManagerBuilder = http.getSharedObject(
@@ -33,6 +40,12 @@ class SecurityConfig
         return authenticationManagerBuilder.build()
     }
 
+    /**
+     * Configures the security filter chain and sets up the authentication and authorization rules.
+     * @param http The HttpSecurity instance to configure.
+     * @return The SecurityFilterChain that contains the configured filters and rules.
+     * @author BiquesDAM-Team
+     */
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         val authenticationManager = authManager(http)

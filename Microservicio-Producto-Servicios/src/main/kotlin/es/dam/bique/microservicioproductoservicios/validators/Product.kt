@@ -3,6 +3,12 @@ package es.dam.bique.microservicioproductoservicios.validators
 import es.dam.bique.microservicioproductoservicios.dto.ProductCreateDTO
 import es.dam.bique.microservicioproductoservicios.exceptions.ProductBadRequestException
 
+/**
+ * Method that validates the fields of the ProductCreateDTO
+ * @param productCreateDTO ProductCreateDTO to validate
+ * @return ProductCreateDTO validated
+ * @author The BiquesDAM Team
+ */
 fun ProductCreateDTO.validate(): ProductCreateDTO {
 
     if (this.image.isBlank())
