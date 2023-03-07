@@ -30,6 +30,11 @@ class StorageService(
         this.initStorageService()
     }
 
+    /**
+     * Initializes the storage service.
+     * @throws StorageBadRequestException If an error occurs while initializing the storage service.
+     * @author BiquesDAM-Team
+     */
     override fun initStorageService() {
         try {
             if (!Files.exists(ruta))
@@ -39,6 +44,12 @@ class StorageService(
         }
     }
 
+    /**
+     * Loads all the files from the storage service.
+     * @return A stream of the files in the storage service.
+     * @throws StorageNotFoundException If the storage service is empty.
+     * @author BiquesDAM-Team
+     */
     override fun loadAll(): Stream<Path> {
         logger.info { "Loading storage..." }
 
@@ -51,12 +62,26 @@ class StorageService(
         }
     }
 
+    /**
+     * Loads a file with the given [fileName] from the storage service.
+     * @param fileName The name of the file to be loaded.
+     * @return The file with the given [fileName].
+     * @throws StorageNotFoundException If the file is not found in the storage service.
+     * @author BiquesDAM-Team
+     */
     override fun loadFile(fileName: String): Path {
         logger.info { "Loading $fileName..." }
 
         return ruta.resolve(fileName)
     }
 
+    /**
+     * Stores the provided multipart file in the file system.
+     * @param file The multipart file to store.
+     * @return The filename under which the file was stored.
+     * @throws StorageBadRequestException If an error occurs while storing the file.
+     * @author BiquesDAM-Team
+     */
     override fun storeFile(file: MultipartFile): String {
         logger.info { "Storing $file..." }
 
@@ -83,6 +108,13 @@ class StorageService(
         }
     }
 
+    /**
+     * Deletes a file with the given [fileName] from the storage service.
+     * @param fileName The name of the file to be deleted.
+     * @throws StorageNotFoundException If the file is not found in the storage service.
+     * @throws StorageBadRequestException If there is an error deleting the file.
+     * @author BiquesDAM-Team
+     */
     override fun deleteFile(fileName: String) {
         logger.info { "Deleting $fileName..." }
 
