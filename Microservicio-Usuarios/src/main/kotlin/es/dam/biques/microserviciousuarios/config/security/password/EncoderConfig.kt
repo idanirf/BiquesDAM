@@ -8,6 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class EncoderConfig {
+
+    /**
+     * Defines a bean for the password encoder used in the application.
+     * @return an instance of the [BCryptPasswordEncoder] class.
+     * @author BiquesDAM-Team
+     */
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
