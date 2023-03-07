@@ -10,7 +10,7 @@ data class OrderDTOCreate(
     val total: Double,
     val iva: Double,
     val orderLine: List<OrderLineCreateDTO>,
-    val cliente: String
+    val cliente: Long
 )
 
 @Serializable
@@ -19,7 +19,7 @@ data class OrderSaveDTO(
     val total: Double,
     val iva: Double,
     val orderLine: List<String>,
-    val cliente: String
+    val cliente: Long
 )
 
 @Serializable
@@ -28,7 +28,7 @@ data class OrderDTOUpdate(
     val total: Double,
     val iva: Double,
     val orderLine: List<String>,
-    val cliente: String
+    val cliente: Long
 )
 
 @Serializable
@@ -39,5 +39,9 @@ data class OrderDTO(
     val total: Double,
     val iva: Double,
     var orderLine: List<String>,
-    val cliente: String
+    val cliente: Long
+)
+
+data class OrderAllDTO(
+    val data: List<OrderDTO>,
 )

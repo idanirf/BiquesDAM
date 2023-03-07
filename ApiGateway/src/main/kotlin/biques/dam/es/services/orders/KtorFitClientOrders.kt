@@ -7,7 +7,6 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
-import io.ktor.serialization.kotlinx.json.*
 
 
 object KtorFitClientOrders {

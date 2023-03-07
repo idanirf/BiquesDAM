@@ -1,0 +1,627 @@
+{
+	"info": {
+		"_postman_id": "1a247900-9561-4e2c-88a9-95fd071b7293",
+		"name": "BiquesDAM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25247269"
+	},
+	"item": [
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMDMxMSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.HnYQ2_ySyKAaw6KEgtcRi7WlUyukybNKKGZn4BmTyunBKsZ8G_VXHHZH1AeJVpvaWi6-YaqG8_zjWNOUuhCF0g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/order",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMzk3OSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.kuhjxu4IPVZd3zhIg78kt_E6PfA4FMiPbDz-bEDlGfE-VkiGwnSpSQFS4mdeE-EXzoCNuxcF3hupqqMC9Kvw2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/order/93248eee-bfb7-4615-9204-ccc882baa146",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"order",
+								"93248eee-bfb7-4615-9204-ccc882baa146"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOiJbVVNFUl0iLCJleHAiOjE2Nzc2NzM1ODU4NTYsImlhdCI6MTY3NzY3MzU4NSwidXNlcm5hbWUiOiJkYXJ0aCJ9.xctr5d1rfeAxK_RWMEfe77Y4jw7ZxcHLI4dfdcpiiYkb-KhylVA948Z_cutxtsVK9rColpyYhTP4l30z5IxDyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\" : \"finished\",\n    \"total\" : 12.0,\n    \"iva\" : 1.0,\n    \"orderLine\" : [\n        {\n            \"product\" : \"db771730-a791-4c74-b690-def563aeaf89\",\n            \"amount\" : 1,\n            \"price\" : 10.0,\n            \"total\" : 10.0,\n            \"employee\" : \"6990678d-d0e2-47aa-a143-9c6dee5d802c\"\n        },\n        {\n            \"product\" : \"6f8db06d-58b7-4839-94cf-614f52b5a096\",\n            \"amount\" : 1,\n            \"price\" : 2.0,\n            \"total\" : 2.0,\n            \"employee\" : \"f2b8817f-ec40-419e-815b-640c136d4950\"\n        }\n    ],\n    \"cliente\" : \"ebc35955-a842-44bc-a9cf-96f6433585a3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/order",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOiJbVVNFUl0iLCJleHAiOjE2Nzc2NzM1ODU4NTYsImlhdCI6MTY3NzY3MzU4NSwidXNlcm5hbWUiOiJkYXJ0aCJ9.xctr5d1rfeAxK_RWMEfe77Y4jw7ZxcHLI4dfdcpiiYkb-KhylVA948Z_cutxtsVK9rColpyYhTP4l30z5IxDyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\" : \"finished\",\n    \"total\" : 11.0,\n    \"iva\" : 1.0,\n    \"orderLine\" : [\n        {\n            \"product\" : \"db771730-a791-4c74-b690-def563aeaf89\",\n            \"amount\" : 1,\n            \"price\" : 9.0,\n            \"total\" : 9.0,\n            \"employee\" : \"6990678d-d0e2-47aa-a143-9c6dee5d802c\"\n        },\n        {\n            \"product\" : \"6f8db06d-58b7-4839-94cf-614f52b5a096\",\n            \"amount\" : 1,\n            \"price\" : 2.0,\n            \"total\" : 2.0,\n            \"employee\" : \"f2b8817f-ec40-419e-815b-640c136d4950\"\n        }\n    ],\n    \"cliente\" : \"ebc35955-a842-44bc-a9cf-96f6433585a3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/order/4d83b14d-bdae-422a-9e41-87fbdaef9cff",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"order",
+								"4d83b14d-bdae-422a-9e41-87fbdaef9cff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMjY0Mywicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.o_-xCsqgaVoFG7zr4sNx7xp6RjREYLZlHj_w1hV3Xal-ityabY2eGKEqCmwgg8kE8LykqlzISlgMPM_qVNLO0w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\" : \"finished\",\n    \"total\" : 11.0,\n    \"iva\" : 1.0,\n    \"orderLine\" : [\n        \"ef4cb2d4-ed40-48e9-a49c-afcd8bba77b7\",\n        \"a2a6fe54-ba8e-4fc2-b8aa-55bb272e4d02\"\n    ],\n    \"cliente\" : \"ebc35955-a842-44bc-a9cf-96f6433585a3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/order/bc410b89-7356-4698-83c4-f6f3405f5d21",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"order",
+								"bc410b89-7356-4698-83c4-f6f3405f5d21"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "users/",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMDMxMSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.HnYQ2_ySyKAaw6KEgtcRi7WlUyukybNKKGZn4BmTyunBKsZ8G_VXHHZH1AeJVpvaWi6-YaqG8_zjWNOUuhCF0g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"ruben\",\n    \"password\" : \"ruben1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"admin1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users/login",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"admin1234\",\n    \"image\": \"prueba.png\",\n    \"rol\": [\"ADMIN\"],\n    \"email\" : \"admin@gmail.com\",\n    \"address\" : \"Aranjuez\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users/register",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMDMxMSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.HnYQ2_ySyKAaw6KEgtcRi7WlUyukybNKKGZn4BmTyunBKsZ8G_VXHHZH1AeJVpvaWi6-YaqG8_zjWNOUuhCF0g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"ruben\",\n    \"password\" : \"ruben1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users/1",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMDMxMSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.HnYQ2_ySyKAaw6KEgtcRi7WlUyukybNKKGZn4BmTyunBKsZ8G_VXHHZH1AeJVpvaWi6-YaqG8_zjWNOUuhCF0g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"admin1234\",\n    \"image\": \"prueba.png\",\n    \"rol\": [\"ADMIN\"],\n    \"email\" : \"admin@gmail.com\",\n    \"address\" : \"Madrid\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users/1",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzMzk3OSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.kuhjxu4IPVZd3zhIg78kt_E6PfA4FMiPbDz-bEDlGfE-VkiGwnSpSQFS4mdeE-EXzoCNuxcF3hupqqMC9Kvw2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"admin1234\",\n    \"image\": \"prueba.png\",\n    \"rol\": [\"ADMIN\"],\n    \"email\" : \"admin@gmail.com\",\n    \"address\" : \"Madrid\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/users/1",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "sales/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzNzAwOSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.2CT1ENNlmEv5JAPddAv5oaGH3EuhJV7Je15hJHvEt0m1Khghw-2ZnJ0e9PIsQAU_WaexCXsEU47EWK_c5H9MLQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productEntity\" : {\n            \"image\" :\"create\",\n            \"brand\" : \"create\",\n            \"model\" : \"create\",\n            \"description\" : \"create\",\n            \"price\" : 0.0,\n            \"discountPercentage\" : 0.0,\n            \"stock\" : \"LIMITED\",\n            \"isAvailable\" : true,\n            \"type\" : \"BIKES\"\n    },\n    \"serviceEntity\" : null,\n    \"type\" :\"PRODUCT\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/sales/e8c8a17a-25e7-41c5-9de9-265923c14483",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"sales",
+								"e8c8a17a-25e7-41c5-9de9-265923c14483"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sales",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzNzAwOSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.2CT1ENNlmEv5JAPddAv5oaGH3EuhJV7Je15hJHvEt0m1Khghw-2ZnJ0e9PIsQAU_WaexCXsEU47EWK_c5H9MLQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/sales",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sales/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzNzAwOSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.2CT1ENNlmEv5JAPddAv5oaGH3EuhJV7Je15hJHvEt0m1Khghw-2ZnJ0e9PIsQAU_WaexCXsEU47EWK_c5H9MLQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/sales/product/4a95a752-de9a-47ec-9808-a34cf0cf739d",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"sales",
+								"product",
+								"4a95a752-de9a-47ec-9808-a34cf0cf739d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sales/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzNzAwOSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.2CT1ENNlmEv5JAPddAv5oaGH3EuhJV7Je15hJHvEt0m1Khghw-2ZnJ0e9PIsQAU_WaexCXsEU47EWK_c5H9MLQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productEntity\" : {\n            \"image\" :\"update\",\n            \"brand\" : \"create\",\n            \"model\" : \"create\",\n            \"description\" : \"create\",\n            \"price\" : 0.0,\n            \"discountPercentage\" : 0.0,\n            \"stock\" : \"LIMITED\",\n            \"isAvailable\" : true,\n            \"type\" : \"BIKES\"\n    },\n    \"serviceEntity\" : null,\n    \"type\" :\"PRODUCT\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/sales/69fd56ef-d063-48c7-87b5-6237938f2db8",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"sales",
+								"69fd56ef-d063-48c7-87b5-6237938f2db8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sales",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NTM3ODJjNC1lYzJiLTQ5ZTgtYjY1My0wNmYxMTdkN2M3YmUiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3ODEzNzAwOSwicm9sIjoiW0FETUlOXSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.2CT1ENNlmEv5JAPddAv5oaGH3EuhJV7Je15hJHvEt0m1Khghw-2ZnJ0e9PIsQAU_WaexCXsEU47EWK_c5H9MLQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productEntity\" : {\n            \"image\" :\"create\",\n            \"brand\" : \"create\",\n            \"model\" : \"create\",\n            \"description\" : \"create\",\n            \"price\" : 0.0,\n            \"discountPercentage\" : 0.0,\n            \"stock\" : \"LIMITED\",\n            \"isAvailable\" : true,\n            \"type\" : \"BIKES\"\n    },\n    \"serviceEntity\" : null,\n    \"type\" :\"PRODUCT\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://magarcia.asuscomm.com:25546/sales",
+							"protocol": "https",
+							"host": [
+								"magarcia",
+								"asuscomm",
+								"com"
+							],
+							"port": "25546",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

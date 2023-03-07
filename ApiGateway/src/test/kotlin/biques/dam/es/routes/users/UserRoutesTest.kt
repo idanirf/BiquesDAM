@@ -1,14 +1,18 @@
 package biques.dam.es.routes.users
 
 import biques.dam.es.dto.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
+import io.ktor.util.*
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.*
+import mu.KotlinLogging
 import org.junit.jupiter.api.*
 import java.util.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
 import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,8 +49,8 @@ class UserRoutesTest {
     )
 
     val loginDTO = UserLoginDTO(
-        username = "Test",
-        password = "Test"
+        username = "admin",
+        password = "admin1234"
     )
 
     @Test
@@ -87,6 +91,7 @@ class UserRoutesTest {
         assertEquals(response.status, HttpStatusCode.OK)
     }
 
+    @OptIn(InternalAPI::class)
     @Test
     @Order(3)
     fun findAll() = testApplication {
@@ -98,9 +103,17 @@ class UserRoutesTest {
             }
         }
 
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }.content.readRemaining().readBytes().decodeToString()
+
+
+        KotlinLogging.logger {}.error { login }
+
         val response = client.get("/users")
 
-        assertEquals(response.status, HttpStatusCode.OK)
+        assertEquals(HttpStatusCode.OK, response.status)
     }
 
     @Test

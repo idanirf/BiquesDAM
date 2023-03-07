@@ -14,6 +14,22 @@ data class OrderDTO(
     val total: Double,
     val iva:Double,
     val orderLine: List<String>,
-    val cliente: String
-) {
-}
+    val cliente: Long
+)
+
+data class OrderUpdateDTO(
+    val id: String,
+    val uuid: String ,
+    val status: String,
+    val total: Double,
+    val iva:Double,
+    val orderLine: List<String>,
+    val cliente: Long
+)
+
+
+
+@Serializable
+data class OrderAllDTO(
+    val data: List<OrderDTO>
+)
