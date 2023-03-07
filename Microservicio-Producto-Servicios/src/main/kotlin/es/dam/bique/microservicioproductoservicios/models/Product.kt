@@ -7,6 +7,21 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
+/**
+ * Represents the products that are on sale.
+ * @param id Product identifier.
+ * @param uuid Product unique identifier.
+ * @param image Product image.
+ * @param brand Product brand.
+ * @param model Product model.
+ * @param description Product description.
+ * @param price Product price.
+ * @param discountPercentage Product discount percentage.
+ * @param stock Product stock.
+ * @param isAvailable Product availability.
+ * @param type Product type.
+ * @author The BiquesDam Team.
+ */
 @Serializable
 @Table("Products")
 data class Product(
@@ -39,6 +54,10 @@ data class Product(
 
     ): OnSale
 
+/**
+ * Represents the stock type.
+ * @param value Value of the stock type.
+ */
 enum class StockType(val value: String){
     HIGH("HIGH"),
     LIMITED("LIMITED"),
@@ -55,6 +74,10 @@ enum class StockType(val value: String){
     }
 }
 
+/**
+ * Represents the product type.
+ * @param value Value of the product type.
+ */
 enum class ProductType(val value: String){
     BIKES("BIKES"),
     E_BIKES("E_BIKES"),
@@ -64,11 +87,11 @@ enum class ProductType(val value: String){
     companion object {
         fun from(tipo: String): ProductType {
             return when (tipo.uppercase()) {
-                "BIKES" -> ProductType.BIKES
-                "E_BIKES" -> ProductType.E_BIKES
-                "COMPONENTS" -> ProductType.COMPONENTS
-                "EQUIPMENT" -> ProductType.EQUIPMENT
-                "ACCESORIES" -> ProductType.ACCESORIES
+                "BIKES" -> BIKES
+                "E_BIKES" -> E_BIKES
+                "COMPONENTS" -> COMPONENTS
+                "EQUIPMENT" -> EQUIPMENT
+                "ACCESORIES" -> ACCESORIES
                 else -> throw IllegalArgumentException("Product type unknown.")
             }
         }

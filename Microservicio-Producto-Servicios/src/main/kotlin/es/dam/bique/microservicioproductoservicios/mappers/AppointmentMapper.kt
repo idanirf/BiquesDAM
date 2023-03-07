@@ -7,28 +7,29 @@ import es.dam.bique.microservicioproductoservicios.models.AssistanceType
 import java.time.LocalDate
 import java.util.*
 
-fun AppointmentDTO.toEntity(): Appointment{
-    return Appointment(
-        id = id,
-        uuid = UUID.fromString(uuid),
-        userId = UUID.fromString(user),
-        assistance = AssistanceType.from(assistance),
-        date = LocalDate.parse(date),
-        description = this.description
-    )
-}
-
+/**
+ * Creates an AppointmentDTO from an Appointment
+ * @param Appointment Appointment to be converted
+ * @return AppointmentDTO
+ * @author The BiquesDam Team
+ */
 fun Appointment.toDTO(): AppointmentDTO{
     return AppointmentDTO(
         id = id,
         uuid = uuid.toString(),
         user = userId.toString(),
-        assistance = assistance.value,
+        assistance = assistance.type,
         date = date.toString(),
         description = description
     )
 }
 
+/**
+ * Creates an Appointment from an AppointmentCreateDTO
+ * @param AppointmentCreateDTO AppointmentCreateDTO to be converted
+ * @return Appointment
+ * @author The BiquesDam Team
+ */
 fun AppointmentCreateDTO.toModel(uuid: UUID): Appointment{
     return Appointment(
         uuid = uuid,

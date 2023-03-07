@@ -6,23 +6,35 @@ import es.dam.bique.microservicioproductoservicios.models.ProductType
 import es.dam.bique.microservicioproductoservicios.models.StockType
 import java.util.*
 
-fun ProductDTO.toEntity (): Product {
-    return Product(
+/**
+ * Creates a ProductDTO from a Product
+ * @param Product Product to be converted
+ * @return ProductDTO
+ * @author The BiquesDam Team
+ */
+fun Product.toDTO(): ProductDTO{
+    return ProductDTO(
         id = id,
-        uuid = UUID.fromString(uuid),
+        uuid = uuid.toString(),
         image = image,
         brand = brand,
         model = model,
         description = description,
         price = price,
         discountPercentage = discountPercentage,
-        stock = StockType.from(stock),
+        stock = stock.value,
         isAvailable = isAvailable,
-        type = ProductType.from(type)
+        type = type.value
     )
 }
 
-fun ProductDTO.toOnSaleDTO (): OnSaleDTO {
+/**
+ * Creates an OnSaleDTO from a ProductDTO
+ * @param ProductDTO ProductDTO to be converted
+ * @return OnSaleDTO
+ * @author The BiquesDam Team
+ */
+fun ProductDTO.toOnSaleDTO(): OnSaleDTO {
     return OnSaleDTO(
         productEntity = ProductDTO(
             id = id,
@@ -42,22 +54,12 @@ fun ProductDTO.toOnSaleDTO (): OnSaleDTO {
     )
 }
 
-fun Product.toDTO(): ProductDTO{
-    return ProductDTO(
-        id = id,
-        uuid = uuid.toString(),
-        image = image,
-        brand = brand,
-        model = model,
-        description = description,
-        price = price,
-        discountPercentage = discountPercentage,
-        stock = stock.value,
-        isAvailable = isAvailable,
-        type = type.value
-    )
-}
-
+/**
+ * Creates a Product from a ProductCreateDTO
+ * @param ProductCreateDTO ProductCreateDTO to be converted
+ * @return Product
+ * @author The BiquesDam Team
+ */
 fun ProductCreateDTO.toModel(uuid : UUID): Product{
     return Product(
         uuid = uuid,
@@ -73,7 +75,13 @@ fun ProductCreateDTO.toModel(uuid : UUID): Product{
     )
 }
 
-fun ProductCreateDTO.toOnSaleCreateDTO (): OnSaleCreateDTO {
+/**
+ * Creates an OnSaleCreateDTO from a ProductCreateDTO
+ * @param ProductCreateDTO ProductCreateDTO to be converted
+ * @return OnSaleCreateDTO
+ * @author The BiquesDam Team
+ */
+fun ProductCreateDTO.toOnSaleCreateDTO(): OnSaleCreateDTO {
     return OnSaleCreateDTO(
         productEntity = ProductCreateDTO(
             image = image,

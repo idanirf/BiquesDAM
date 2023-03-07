@@ -6,8 +6,13 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
+/**
+ * Repository for Appointment
+ * @author The BiquesDam Team
+ */
 @Repository
 interface AppointmentsRepository : CoroutineCrudRepository<Appointment, Long> {
+
     suspend fun findByUuid(uuid: UUID): Flow<Appointment>
 
 }
