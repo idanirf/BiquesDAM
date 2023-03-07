@@ -24,6 +24,15 @@ class StorageController
 @Autowired constructor(
     private val storageService: StorageService
 ) {
+    /**
+     * Retrieves and returns the requested file from the storage service.
+     * @param filename The name of the file to be retrieved.
+     * @param request The HTTP servlet request associated with the request.
+     * @return The ResponseEntity containing the requested file as a Resource object.
+     * @throws StorageNotFoundException if the requested file is not found.
+     * @throws StorageBadRequestException if there is an error retrieving the file or determining its content type.
+     * @author BiquesDAM-Team
+     */
     @GetMapping(value = ["{filename:.+}"])
     @ResponseBody
     fun load(@PathVariable filename: String?, request: HttpServletRequest): ResponseEntity<Resource> =
@@ -55,6 +64,14 @@ class StorageController
             }
         }
 
+    /**
+     * Handles a POST request to upload a file.
+     * @param file The MultipartFile object representing the file to be uploaded.
+     * @return A ResponseEntity object containing the URL, name, and creation date of the uploaded file if successful.
+     * @throws StorageBadRequestException if there is an error with the storage service or the file is empty.
+     * @author BiquesDAM-Team
+     */
+
     @PostMapping(value = [""], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun upload(@RequestPart("file") file: MultipartFile): ResponseEntity<Map<String, String>> = runBlocking {
         return@runBlocking try {
@@ -78,6 +95,15 @@ class StorageController
         }
     }
 
+
+    /**
+     * Handles a DELETE request to delete a file with the given filename.
+     * @param filename The filename of the file to be deleted.
+     * @param request The HttpServletRequest object representing the HTTP request.
+     * @return A ResponseEntity object with a status of OK if the file was successfully deleted.
+     * @throws StorageBadRequestException if there is an error with the storage service.
+     * @author BiquesDAM-Team
+     */
     @DeleteMapping(value = ["{filename:.+}"])
     @ResponseBody
     fun delete(@PathVariable filename: String?, request: HttpServletRequest): ResponseEntity<Resource> = runBlocking {

@@ -5,6 +5,11 @@ import es.dam.biques.microserviciousuarios.dto.UserResponseDTO
 import es.dam.biques.microserviciousuarios.dto.UserUpdateDTO
 import es.dam.biques.microserviciousuarios.models.User
 
+/**
+ * Extension function that converts a [User] object into a [UserResponseDTO] object.
+ * @return the converted [UserResponseDTO] object
+ * @author BiquesDAM-Team
+ */
 fun User.toDTO(): UserResponseDTO {
     return UserResponseDTO(
         id = id,
@@ -17,6 +22,11 @@ fun User.toDTO(): UserResponseDTO {
     )
 }
 
+/**
+ * Extension function that converts a [User] object into a [UserUpdateDTO] object.
+ * @return the converted [UserUpdateDTO] object
+ * @author BiquesDAM-Team
+ */
 fun UserRegisterDTO.toModel(): User {
     return User(
         image = image,
@@ -28,6 +38,11 @@ fun UserRegisterDTO.toModel(): User {
     )
 }
 
+/**
+ * Extension function that converts a [UserUpdateDTO] object into a [User] object.
+ * @return the converted [User] object
+ * @author BiquesDAM-Team
+ */
 fun UserUpdateDTO.toModelFromUpdated(): User {
     return User(
         image = image,

@@ -13,7 +13,7 @@ import io.ktor.serialization.gson.*
  * @author The BiquesDAM Team
  */
 object KtorFitClientOrders {
-    private const val API_URL = "http://localhost:7878/"
+    private const val API_URL = "http://api-order:8282/"
 
     private val ktorfit by lazy {
         Ktorfit.Builder()

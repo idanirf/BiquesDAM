@@ -26,17 +26,37 @@ class UserService
     private val userCachedRepository: UserCachedRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
+
+    /**
+     * Suspend function that creates a new user.
+     * @param userDTO the user to be created
+     * @return the user created
+     * @throws UserBadRequestException if the user already exists
+     * @author BiquesDAM-Team
+     */
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
         return@runBlocking usersRepository.findUserByUsername(username!!).firstOrNull()
             ?: throw UserNotFoundException("User doesn't found with username: $username")
     }
 
+    /**
+     * Suspend function that finds all users.
+     * @return the list of users found
+     * @author BiquesDAM-Team
+     */
     suspend fun findAll() = withContext(Dispatchers.IO) {
         logger.info { "findAll()" }
 
         return@withContext userCachedRepository.findAll()
     }
 
+    /**
+     * Suspend function that finds a user by id.
+     * @param id the id of the user to be found
+     * @return the user found
+     * @throws UserNotFoundException if the user doesn't exist
+     * @author BiquesDAM-Team
+     */
     @Cacheable("USERS")
     suspend fun findUserById(id: Long) = withContext(Dispatchers.IO) {
         return@withContext userCachedRepository.findById(id)
@@ -49,6 +69,13 @@ class UserService
 //            ?: throw UserNotFoundException("User with uuid $uuid not found.")
 //    }
 
+    /**
+     * Suspend function that creates a new user.
+     * @param user the user to be created
+     * @return the created user
+     * @throws UserBadRequestException if the user already exists
+     * @author BiquesDAM-Team
+     */
     suspend fun save(user: User, isAdmin: Boolean = false): User = withContext(Dispatchers.IO) {
         if (usersRepository.findUserByUsername(user.username)
                 .firstOrNull() != null
@@ -76,6 +103,15 @@ class UserService
         }
     }
 
+    /**
+     * Suspend function that updates a user with the given ID.
+     * @param id the ID of the user to be updated
+     * @param user the user to be updated
+     * @return the updated user if it exists, otherwise throw a [UserNotFoundException]
+     * @throws [UserBadRequestException] if the user is not valid
+     * @throws [UserNotFoundException] if the user with the given ID does not exist
+     * @author BiquesDAM-Team
+     */
     suspend fun update(id: Long, user: User): User? = withContext(Dispatchers.IO) {
         try {
             return@withContext userCachedRepository.update(id, user)
@@ -86,6 +122,13 @@ class UserService
         }
     }
 
+    /**
+     * Suspend function that deletes a user with the given ID.
+     * @param id the ID of the user to be deleted
+     * @return the deleted user if it exists, otherwise throw a [UserNotFoundException]
+     * @throws [UserNotFoundException] if the user with the given ID does not exist
+     * @author BiquesDAM-Team
+     */
     suspend fun deleteById(id: Long): User? = withContext(Dispatchers.IO) {
         return@withContext userCachedRepository.deleteById(id)
             ?: throw UserNotFoundException("User with id $id not found.")

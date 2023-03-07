@@ -27,7 +27,12 @@ import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.toList
 
 
-// TODO Mirar catchs
+/**
+ * Configures the routing of the application.
+ * @param orderService the service to use for the order service.
+ * @param orderLineService the service to use for the order line service.
+ * @author BiquesDam-Team
+ */
 fun Application.configureRouting() {
     val orderService = OrderService(OrderRepositoryImpl())
     val orderLineService = OrderLineService(OrderLineRepositoryImpl())
@@ -35,6 +40,11 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello World!")
         }
+
+        /**
+         * Returns all order lines.
+         * @return a list of OrderLineDTO objects representing all order lines in the system.
+         */
         get("/orderline"){
             val res = mutableListOf<OrderLineDTO>()
                 orderLineService.getAllOrderLine().collect { orderLine ->
@@ -42,6 +52,11 @@ fun Application.configureRouting() {
             }
             call.respond(HttpStatusCode.OK, res)
         }
+
+        /**
+         * Returns all orders.
+         * @return an OrderAllDTO object representing all orders in the system.
+         */
         get("/order"){
            val res = mutableListOf<OrderDTO>()
                orderService.getAllOrder().collect { order ->
@@ -56,6 +71,13 @@ fun Application.configureRouting() {
             )
 
         }
+
+        /**
+         * Returns the order with the specified id.
+         * @param id a string representing the UUID of the order to retrieve.
+         * @return an OrderDTO object representing the order with the specified id.
+         * @throws UUIDException if the provided id is not a valid UUID.
+         */
         get("/order/{id}"){
             try {
                 val id = call.parameters["id"]?.toUUID()!!
@@ -65,6 +87,13 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, e.message.toString())
             }
         }
+
+        /**
+         * Returns the order line with the specified id.
+         * @param id a string representing the UUID of the order line to retrieve.
+         * @return an OrderLineDTO object representing the order line with the specified id.
+         * @throws UUIDException if the provided id is not a valid UUID.
+         */
         get("/orderline/{id}"){
             try {
                 val id = call.parameters["id"]?.toUUID()!!
@@ -75,6 +104,13 @@ fun Application.configureRouting() {
             }
         }
 
+        /**
+         * Creates a new order.
+         * @param dto an OrderDTO object representing the order to create.
+         * @return an OrderDTO object representing the newly created order.
+         * @throws OrderNotFoundException if the order specified in the OrderDTO does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         post("/order"){
             try {
                 val dto = call.receive<OrderDTO>()
@@ -88,6 +124,14 @@ fun Application.configureRouting() {
             }
 
         }
+
+        /**
+         * Creates a new order line.
+         * @param dto an OrderLineDTO object representing the order line to create.
+         * @return an OrderLineDTO object representing the newly created order line.
+         * @throws OrderLineNotFoundException if the order line specified in the OrderLineDTO does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         post("/orderline"){
             try {
                 val dto = call.receive<OrderLineDTO>()
@@ -102,6 +146,14 @@ fun Application.configureRouting() {
             }
         }
 
+        /**
+         * Updates the order with the specified id.
+         * @param id a string representing the UUID of the order to update.
+         * @param dto an OrderDTO object representing the updated order information.
+         * @return an OrderDTO object representing the updated order.
+         * @throws OrderNotFoundException if the order with the specified id does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         put("/order/{id}"){
             try {
                 val id = call.parameters["id"]?.toUUID()!!
@@ -126,6 +178,15 @@ fun Application.configureRouting() {
             }
 
         }
+
+        /**
+         * Updates the order line with the specified id.
+         * @param id a string representing the UUID of the order line to update.
+         * @param dto an OrderLineDTO object representing the updated order line information.
+         * @return an OrderLineDTO object representing the updated order line.
+         * @throws OrderLineNotFoundException if the order line with the specified id does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         put("/orderline/{id}"){
             try{
                 val id = call.parameters["id"]?.toUUID()!!
@@ -139,6 +200,13 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, e.reasons)
             }
         }
+
+        /**
+         * Deletes the order with the specified id.
+         * @param id a string representing the UUID of the order to delete.
+         * @throws OrderNotFoundException if the order with the specified id does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         delete("/order/{id}"){
             try {
                 val id = call.parameters["id"]?.toUUID()!!
@@ -151,6 +219,13 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, e.reasons)
             }
         }
+
+        /**
+         * Deletes the order line with the specified id.
+         * @param id a string representing the UUID of the order line to delete.
+         * @throws OrderLineNotFoundException if the order line with the specified id does not exist.
+         * @throws RequestValidationException if the provided request body is not valid.
+         */
         delete("/orderline/{id}"){
             try {
                 val id = call.parameters["id"]?.toUUID()!!

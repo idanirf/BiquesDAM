@@ -22,6 +22,10 @@ import mu.KotlinLogging
 import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 
+/**
+ * Represents the users routes of the application.
+ * @author BiquesDAM-Team
+ */
 private val logger = KotlinLogging.logger {}
 private const val ENDPOINT = "users"
 
@@ -32,6 +36,10 @@ fun Application.usersRoutes() {
     routing {
 
         route("/$ENDPOINT") {
+            /**
+             * Login with username and password.
+             * @throws UserBadRequestException if the user is not found.
+             */
             post("/login",{
 
                 description = "Login a user"
@@ -63,6 +71,10 @@ fun Application.usersRoutes() {
                 }
             }
 
+            /**
+             * Register a new user.
+             * @throws UserBadRequestException if the user doesn't create.
+             */
             post("/register",{
 
                     description = "Register a user"
@@ -94,6 +106,10 @@ fun Application.usersRoutes() {
             }
 
             authenticate {
+                /**
+                 * Retrieves all users.
+                 * @throws UserNotFoundException if the users are not found.
+                 */
                 get({
                     description = "Get all users"
                     securitySchemeName = "JWT-Auth"
@@ -126,6 +142,10 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Retrieves a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 */
                 get("/{id}",{
                     description = "Get a user by id"
                     securitySchemeName = "JWT-Auth"
@@ -159,6 +179,11 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Updates a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 * @throws UserBadRequestException if the user doesn't update.
+                 */
                 put("/{id}",{
                     description = "Update a user by id"
                     securitySchemeName = "JWT-Auth"
@@ -196,6 +221,10 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Deletes a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 */
                 delete("/{id}",{
                     description = "Delete a user by id"
                     securitySchemeName = "JWT-Auth"

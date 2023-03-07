@@ -1,8 +1,11 @@
 package biques.dam.es.routes
 
+import biques.dam.es.dto.AppointmentCreateDTO
 import biques.dam.es.dto.FinalSaleDTO
 import biques.dam.es.dto.FinalServiceDTO
 import biques.dam.es.dto.SaleCreateDTO
+import biques.dam.es.exceptions.OrderBadRequestException
+import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
@@ -23,6 +26,10 @@ import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
 
+/**
+ * Represents the sales routes of the application.
+ * @author BiquesDAM-Team
+ */
 private const val ENDPOINT = "sales"
 
 fun Application.salesRoutes() {
@@ -33,6 +40,10 @@ fun Application.salesRoutes() {
     routing {
         route("/$ENDPOINT") {
             authenticate {
+                /**
+                 * Retrieves all sales.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
 
                 get({
                     description = "Get all sales"
@@ -99,6 +110,11 @@ fun Application.salesRoutes() {
 
                 }
 
+                /**
+                 * Retrieves a sale by id.
+                 * @param id a string representing the id of the sale.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
                 get("/product/{id}",{
                     description = "Get a product by id"
                     securitySchemeName = "JWT-Auth"
@@ -137,6 +153,11 @@ fun Application.salesRoutes() {
                     }
                 }
 
+                /**
+                 * Retrieves a service by id.
+                 * @param id a string representing the id of the service.
+                 * @throws SaleNotFoundException if the service is not found.
+                 */
                 get("/service/{id}",{
 
                     description = "Get a service by id"
@@ -189,6 +210,11 @@ fun Application.salesRoutes() {
                     }
                 }
 
+                /**
+                 * Creates a sale.
+                 * @param dto a SaleCreateDTO representing the sale to be created.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
                 post({
                     description = "Create a sale"
                     securitySchemeName = "JWT-Auth"
@@ -248,10 +274,43 @@ fun Application.salesRoutes() {
 
                 }
 
+                post("/appointments") {
+                    try {
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
                 put("/{id}",{
                     description = "Update a sale"
                     securitySchemeName = "JWT-Auth"
 
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+
+                            val dto = call.receive<AppointmentCreateDTO>()
+
+                            val result = async {
+                                appointmentRepository.save("Bearer $token", dto)
+                            }
+
+                            val res = result.await()
+
+                            call.respond(HttpStatusCode.Created, res)
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
+                        }
+
+                    } catch (e: SaleNotFoundException) {
+                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    }
+                }
+
+
+                /**
+                 * Updates an existing sale by ID.
+                 * @throws SaleNotFoundException if the specified order ID cannot be found.
+                 * @throws SaleBadRequestException if there is a problem with the request body.
+                 */
+                put("/{id}") {
                     response {
                         HttpStatusCode.OK to{
                             description = "Sale updated"
@@ -307,6 +366,10 @@ fun Application.salesRoutes() {
 
                 }
 
+                /**
+                 * Deletes an existing order by ID.
+                 * @throws OrderNotFoundException if the specified order ID cannot be found.
+                 */
                 delete("/{id}",{
 
                     description = "Delete a sale"

@@ -12,11 +12,21 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import java.util.UUID
 
+/**
+ * Implementation of the IOrdersLinneRepository interface.
+ * @author BiquesDAM-Team
+ */
 @Single
 @Named("KtorFitRepositoryOrdersLine")
 class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
     private val client by lazy { KtorFitClientOrders.instance }
 
+    /**
+     * Returns a flow of all orders lines.
+     * @param token the access token for authentication.
+     * @return a flow of all orders lines in the database.
+     * @throws OrderLineNotFoundException if the orders lines are not found.
+     */
 
     override suspend fun findAll(token: String): Flow<OrderLineDTO> = withContext(Dispatchers.IO) {
         val call = async {
@@ -30,6 +40,13 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
         }
     }
 
+    /**
+     * Finds an order line by its ID.
+     * @param token the access token for authentication.
+     * @param id the ID of the order line to find.
+     * @return the order line object
+     * @throws OrderLineNotFoundException if the order line is not found.
+     */
     override suspend fun findById(token: String, id: UUID): OrderLineDTO = withContext(Dispatchers.IO) {
         val call = async {
             client.getByIdOrderLine(token, id.toString())
@@ -42,6 +59,13 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
         }
     }
 
+    /**
+     * Saves a new order line.
+     * @param token the access token for authentication.
+     * @param entity the new order line to save.
+     * @return the saved order line object.
+     * @throws OrderLineNotFoundException if the order line cannot be saved.
+     */
     override suspend fun save(token: String, entity: OrderLineCreateDTO): OrderLineDTO = withContext(Dispatchers.IO) {
         val call = async {
             client.createOrderLine(token, entity)
@@ -54,6 +78,14 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
        }
     }
 
+    /**
+     * Updates an existing order line with the specified ID.
+     * @param token the access token for authentication.
+     * @param id the ID of the order line to update.
+     * @param entity the new order line data to update.
+     * @return the updated order line object.
+     * @throws OrderLineNotFoundException if the order line to update is not found.
+     */
     override suspend fun update(token: String, id: UUID, entity: OrderLineUpdateDTO): OrderLineDTO = withContext(Dispatchers.IO) {
         val call = async {
             client.updateOrderLine(token, id.toString(), entity)
@@ -66,6 +98,12 @@ class KtorFitRepositoryOrdersLine: IOrdersLineRepository {
         }
     }
 
+    /**
+     * Deletes an order line with the specified ID.
+     * @param token the access token for authentication.
+     * @param id the ID of the order line to delete.
+     * @throws OrderLineNotFoundException if the order line to delete is not found.
+     */
     override suspend fun delete(token: String, id: UUID) = withContext(Dispatchers.IO) {
         val call = async {
             client.deleteOrderLine(token, id.toString())
