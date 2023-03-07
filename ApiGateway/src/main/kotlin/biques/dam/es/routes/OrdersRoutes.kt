@@ -5,6 +5,7 @@ import biques.dam.es.exceptions.OrderBadRequestException
 import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.repositories.orders.KtorFitRepositoryOrders
 import biques.dam.es.repositories.ordersLine.KtorFitRepositoryOrdersLine
+import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
 import biques.dam.es.services.token.TokensService
 import io.ktor.http.*
@@ -29,6 +30,7 @@ fun Application.ordersRoutes() {
     val orderRepository by inject<KtorFitRepositoryOrders>(named("KtorFitRepositoryOrders"))
     val orderLineRepository by inject<KtorFitRepositoryOrdersLine>(named("KtorFitRepositoryOrdersLine"))
     val userRepopsitory by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
+    val salesRepository by inject<KtorFitRepositorySales>(named("KtorFitRepositorySales"))
     val tokenService by inject<TokensService>()
 
     routing {
@@ -43,13 +45,16 @@ fun Application.ordersRoutes() {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
-                        //if(originalToken.payload.getClaim("rol").split(",").toSet().toString())
-
-                        val orderDTO = async {
-                            orderRepository.findAll("Bearer $token").toList()
+                        if (originalToken.payload.getClaim("rol").toString().contains("ADMIN") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+                            val orderDTO = async {
+                                orderRepository.findAll("Bearer $token").toList()
+                            }
+                            call.respond(HttpStatusCode.OK, orderDTO.await())
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-
-                        call.respond(HttpStatusCode.OK, orderDTO.await())
                     } catch (e: OrderNotFoundException) {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
@@ -70,8 +75,6 @@ fun Application.ordersRoutes() {
                         }.await()
 
                         val res = mutableListOf<OrderLineDTO>()
-
-
                         orderDTO.orderLine.forEach {
                             res.add(
                                 async {
@@ -79,7 +82,21 @@ fun Application.ordersRoutes() {
                                 }.await()
                             )
                         }
-                        val cliente = userRepopsitory.findById("Bearer $token", orderDTO.cliente.toLong())
+                        val sales = salesRepository.findAll("Bearer $token")
+                        res.forEach { sale ->
+                            sales.forEach { rep ->
+                                if (rep.type == "PRODUCT") {
+                                    if (rep.productEntity?.uuid == sale.uuid) {
+                                        sale.sale = rep.productEntity?.model
+                                    }
+                                } else {
+                                    if (rep.serviceEntity?.uuid == sale.uuid) {
+                                        sale.sale = rep.serviceEntity?.type
+                                    }
+                                }
+                            }
+                        }
+                        val cliente = userRepopsitory.findById("Bearer $token", orderDTO.cliente)
 
                         val finalOrder = FinalOrderDTO(
                             orderDTO.uuid,
@@ -104,7 +121,7 @@ fun Application.ordersRoutes() {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
 
-                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                        if (originalToken.payload.getClaim("rol").toString().contains("ADMIN") ||
                             originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
                         ) {
                             val orderCreate = call.receive<OrderDTOCreate>()
@@ -151,7 +168,7 @@ fun Application.ordersRoutes() {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
 
-                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                        if (originalToken.payload.getClaim("rol").toString().contains("ADMIN") ||
                             originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
                         ) {
                             val id = UUID.fromString(call.parameters["id"])!!

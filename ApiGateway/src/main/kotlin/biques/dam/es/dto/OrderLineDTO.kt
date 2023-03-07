@@ -16,11 +16,11 @@ import kotlinx.serialization.Serializable
 data class OrderLineDTO(
     val id: String?,
     val uuid: String?,
-    val sale: String?,
+    var sale: String?,
     val amount: Int?,
     val price: Double?,
     val total: Double?,
-    val employee: String?
+    val employee: Long?
 )
 
 /**
@@ -37,7 +37,7 @@ data class OrderLineCreateDTO(
     val amount: Int,
     val price: Double,
     val total: Double,
-    val employee: String
+    val employee: Long
 )
 
 /**
@@ -54,5 +54,5 @@ data class OrderLineUpdateDTO(
     val amount: Int,
     val price: Double,
     val total: Double,
-    val employee: String
+    val employee: Long
 )
