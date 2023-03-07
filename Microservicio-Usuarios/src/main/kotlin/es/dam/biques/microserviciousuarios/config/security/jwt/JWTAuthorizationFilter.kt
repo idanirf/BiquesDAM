@@ -19,6 +19,14 @@ class JWTAuthorizationFilter(
     authManager: AuthenticationManager,
 ) : BasicAuthenticationFilter(authManager) {
 
+    /**
+     * A filter used to authenticate requests based on a JWT token sent in the Authorization header.
+     * If the header is present and contains a valid token, the user is authenticated and their credentials
+     * are stored in the security context. Otherwise, the request is forwarded to the next filter in the chain.
+     * @throws IOException if an I/O error occurs while processing the request
+     * @throws ServletException if an error occurs while processing the request
+     * @author BiquesDAM-Team
+     */
     @Throws(IOException::class, ServletException::class)
     override fun doFilterInternal(
         req: HttpServletRequest,
@@ -37,6 +45,12 @@ class JWTAuthorizationFilter(
         chain.doFilter(req, res)
     }
 
+    /**
+     * Obtains the authentication from the token.
+     * @param token The token to verify.
+     * @return The authentication.
+     * @author BiquesDAM-Team
+     */
     private fun getAuthentication(token: String): UsernamePasswordAuthenticationToken? = runBlocking {
         logger.info { "Obteniendo autenticación" }
         val tokenDecoded = jwtTokenUtil.verify(token) ?: return@runBlocking null

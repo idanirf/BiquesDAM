@@ -21,9 +21,13 @@ import java.nio.file.StandardCopyOption
 import java.util.*
 import java.util.stream.Stream
 
-
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Class to manage the storage of files
+ * @param path Path where the files will be stored
+ * @author The BiquesDAM Team
+ */
 @Service
 class StorageService(
     @Value("\${upload.root-location}") path: String,
@@ -36,7 +40,11 @@ class StorageService(
         initStorageDirectory()
     }
 
-    final fun initStorageDirectory() {
+    /**
+     * Method to create the directory where the files will be stored
+     * @author The BiquesDAM Team
+     */
+    private final fun initStorageDirectory() {
         if (!Files.exists(rootLocation)) {
             logger.info { "Creating storage directory: $rootLocation" }
             Files.createDirectory(rootLocation)
@@ -48,13 +56,19 @@ class StorageService(
     }
 
 
+    /**
+     * Saves a MultipartFile in the storage
+     * @param file MultipartFile to save
+     * @return The name of the file stored
+     * @throws StorageBadRequestException If the file is empty or the path is not authorised
+     * @author The BiquesDAM Team
+     */
     override fun store(file: MultipartFile): String {
 
         logger.info { "Saving file: ${file.originalFilename}" }
 
         val filename = StringUtils.cleanPath(file.originalFilename.toString())
         val extension = StringUtils.getFilenameExtension(filename).toString()
-        //val justFilename = filename.replace(".$extension", "")
         val storedFilename = UUID.randomUUID().toString() + "." + extension
         try {
             if (file.isEmpty) {
@@ -77,7 +91,14 @@ class StorageService(
         }
     }
 
-
+    /**
+     * Saves a MultipartFile in the storage with the name provided by the user
+     * @param file MultipartFile to save
+     * @param filenameFromUser Name of the file to save
+     * @return The name of the file stored
+     * @throws StorageBadRequestException If the file is empty or the path is not authorised
+     * @author The BiquesDAM Team
+     */
     override fun store(file: MultipartFile, filenameFromUser: String): String {
 
         logger.info { "Saving file: ${file.originalFilename}" }
@@ -106,6 +127,12 @@ class StorageService(
         }
     }
 
+    /**
+     * Loads all the files stored in the storage
+     * @return A Stream with the paths of the files stored
+     * @throws StorageBadRequestException If there is an error while reading the files stored in the storage directory
+     * @author The BiquesDAM Team
+     */
     override fun loadAll(): Stream<Path> {
 
         logger.info { "Loading all files" }
@@ -119,7 +146,12 @@ class StorageService(
         }
     }
 
-
+    /**
+     * Loads a file stored in the storage
+     * @param filename Name of the file to load
+     * @return The path of the file stored
+     * @author The BiquesDAM Team
+     */
     override fun load(filename: String): Path {
 
         logger.info { "Loading file: $filename" }
@@ -127,6 +159,13 @@ class StorageService(
         return rootLocation.resolve(filename)
     }
 
+    /**
+     * Loads a file stored in the storage as a Resource
+     * @param filename Name of the file to load
+     * @return The Resource of the file stored
+     * @throws StorageFileNotFoundException If the file is not found or it is not readable
+     * @author The BiquesDAM Team
+     */
     override fun loadAsResource(filename: String): Resource {
 
         logger.info { "Loading file as resource: $filename" }
@@ -146,13 +185,23 @@ class StorageService(
         }
     }
 
+    /**
+     * Deletes all the files stored in the storage
+     * @author The BiquesDAM Team
+     */
     override fun deleteAll() {
 
         logger.info { "Deleting all files" }
 
         FileSystemUtils.deleteRecursively(rootLocation.toFile())
+
     }
 
+    /**
+     * Initializes the storage directory
+     * @throws StorageBadRequestException If there is an error while creating the storage directory
+     * @author The BiquesDAM Team
+     */
     override fun init() {
 
         logger.info { "Initializing storage file directory" }
@@ -165,6 +214,13 @@ class StorageService(
         }
     }
 
+    /**
+     * Deletes a file stored in the storage
+     * @param filename Name of the file to delete
+     * @throws StorageFileNotFoundException If the file is not found
+     * @throws StorageBadRequestException If there is an error while deleting the file
+     * @author The BiquesDAM Team
+     */
     override fun delete(filename: String) {
 
         logger.info { "Deleting file: $filename" }
@@ -183,6 +239,12 @@ class StorageService(
 
     }
 
+    /**
+     * Obtains the URL of a file stored in the storage
+     * @param filename Name of the file to obtain the URL
+     * @return The URL of the file stored
+     * @author The BiquesDAM Team
+     */
     override fun getUrl(filename: String): String {
         logger.info { "Obtaining file: $filename" }
 

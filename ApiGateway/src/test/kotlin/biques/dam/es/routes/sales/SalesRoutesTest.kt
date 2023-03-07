@@ -188,6 +188,7 @@ class SalesRoutesTest {
 
         val res = client.post("/sales") {
             contentType(ContentType.Application.Json)
+
             setBody(createProduct)
             header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
         }

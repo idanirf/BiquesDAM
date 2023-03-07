@@ -1,13 +1,10 @@
-version: '3.7'
+version: "3.9"
 services:
-  # API Productos-Servicios
-  mariadb-products:
-    image: mariadb
-    container_name: mariadb-products
-    environment:
-      MARIADB_ROOT_PASSWORD: biquesdam
-      MARIADB_DATABASE: biquesdam
-      MARIADB_USER: biquesdam
-      MARIADB_PASSWORD: biquesdam
+  api-products:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    container_name: api-products
     ports:
-      - "8484:3306"
+      - "8080:8080"
+

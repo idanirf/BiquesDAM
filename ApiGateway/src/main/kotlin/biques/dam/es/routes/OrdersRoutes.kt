@@ -20,7 +20,11 @@ import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
 
-private const val ENDPOINT = "order"
+private const val ENDPOINT = "orders"
+/**
+ * Defines the routes for the orders API endpoints.
+ * @author BiquedDAM-Team
+ */
 
 fun Application.ordersRoutes() {
     val orderRepository by inject<KtorFitRepositoryOrders>(named("KtorFitRepositoryOrders"))
@@ -32,7 +36,11 @@ fun Application.ordersRoutes() {
     routing {
         route("/$ENDPOINT") {
             authenticate {
-                // ORDERS
+
+                /**
+                 * Retrieves all orders.
+                 * @throws OrderNotFoundException if the order is not found.
+                 */
                 get {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -52,6 +60,11 @@ fun Application.ordersRoutes() {
                     }
                 }
 
+                /**
+                 * Retrieves an order by id.
+                 * @param id the id of the order to retrieve.
+                 * @throws OrderNotFoundException if the order is not found.
+                 */
                 get("/{id}") {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
@@ -99,6 +112,10 @@ fun Application.ordersRoutes() {
                     }
                 }
 
+                /**
+                 * Creates a new order.
+                 * @throws OrderBadRequestException if there is a problem with the request body.
+                 */
                 post {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -141,6 +158,11 @@ fun Application.ordersRoutes() {
                     }
                 }
 
+                /**
+                 * Updates an existing order by ID.
+                 * @throws OrderNotFoundException if the specified order ID cannot be found.
+                 * @throws OrderBadRequestException if there is a problem with the request body.
+                 */
                 put("/{id}") {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -185,6 +207,10 @@ fun Application.ordersRoutes() {
                     }
                 }
 
+                /**
+                 * Deletes an existing order by ID.
+                 * @throws OrderNotFoundException if the specified order ID cannot be found.
+                 */
                 delete("/{id}") {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
