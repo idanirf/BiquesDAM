@@ -3,6 +3,10 @@ package biques.dam.es.validator
 import biques.dam.es.dto.OrderLineDTO
 import io.ktor.server.plugins.requestvalidation.*
 
+/**
+ * This class is used to validate the OrderLineDTO
+ * @author BiquesDam-Teams
+ */
 fun RequestValidationConfig.orderLineValidation(){
     validate<OrderLineDTO>{ orderLine ->
         if(orderLine.amount < 0){
