@@ -7,7 +7,11 @@ import org.bson.types.ObjectId
 import org.litote.kmongo.id.toId
 import java.util.*
 
-
+/**
+ * Creates an Order from OrderDTO
+ * @return OrderDTO
+ * @author BiquesDAM-Team
+ */
 fun OrderDTO.toEntity(): Order{
     return Order(
         id = ObjectId(this.id).toId(),
@@ -20,6 +24,11 @@ fun OrderDTO.toEntity(): Order{
     )
 }
 
+/**
+ * Creates an OrderDTO from Order
+ * @return OrderDTO
+ * @author BiquesDAM-Team
+ */
 fun Order.toDTO(): OrderDTO{
     return OrderDTO(
         id = id.toString(),
@@ -32,6 +41,11 @@ fun Order.toDTO(): OrderDTO{
     )
 }
 
+/**
+ * Creates an Order from OrderUpdateDTO
+ * @return OrderDTO
+ * @author BiquesDAM-Team
+ */
 fun OrderUpdateDTO.toEntity(): Order {
     return Order(
         id = ObjectId(this.id).toId(),

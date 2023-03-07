@@ -3,7 +3,11 @@ package biques.dam.es.utils
 import java.io.FileNotFoundException
 import java.util.*
 
-
+/**
+ * Class to read properties from a file
+ * @param fileName name of the file
+ * @throws FileNotFoundException if the file is not found
+ */
 class PropertiesReader(private val fileName: String) {
     private val properties = Properties()
 
