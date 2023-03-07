@@ -29,7 +29,6 @@ class OrderLineRoute {
     private val orderLineDto = orderLine.toDto()
 
 
-    //FINDALL
     @Test
     fun getAll() = testApplication {
         environment { config }

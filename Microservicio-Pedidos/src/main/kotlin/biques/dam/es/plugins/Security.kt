@@ -11,6 +11,11 @@ import org.koin.core.parameter.parametersOf
 import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
 
+/**
+ * Configures JWT authentication with the provided token config params and JWT service.
+ *
+ * @throws ConfigurationException if the configuration properties for JWT are missing or invalid
+ */
 fun Application.configureSecurity() {
 
     val tokenConfigParams = mapOf<String, String>(
