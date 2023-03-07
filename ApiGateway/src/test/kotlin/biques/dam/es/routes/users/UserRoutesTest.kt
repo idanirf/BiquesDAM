@@ -13,13 +13,11 @@ import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import mu.KotlinLogging
-import org.eclipse.jetty.http.HttpHeader
 import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.test.assertEquals
 
-/*private val json = Json {
+val json = Json {
     prettyPrint = true
     isLenient = true
     ignoreUnknownKeys = true
@@ -99,10 +97,6 @@ class UserRoutesTest {
         }
 
         assertEquals(response.status, HttpStatusCode.OK)
-
-        val result = response.bodyAsText()
-        val dto = json.decodeFromString<UserTokenDTO>(result)
-        dto.token
     }
 
     @OptIn(InternalAPI::class)
@@ -120,12 +114,17 @@ class UserRoutesTest {
         val login = client.post("/users/login") {
             contentType(ContentType.Application.Json)
             setBody(loginDTO)
-        }.content.readRemaining().readBytes().decodeToString()
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
 
 
-        KotlinLogging.logger {}.error { login }
-
-        val response = client.get("/users")
+        val response = client.get("/users") {
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
+        }
 
         assertEquals(HttpStatusCode.OK, response.status)
     }
@@ -150,9 +149,8 @@ class UserRoutesTest {
 
         val result = login.bodyAsText()
         val dto = json.decodeFromString<UserTokenDTO>(result)
-        dto.token
 
-        val response = client.get("/users/1"){
+        val response = client.get("/users/1") {
             header(HttpHeaders.Authorization, "Bearer " + dto.token)
         }
 
@@ -170,10 +168,22 @@ class UserRoutesTest {
             }
         }
 
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
+
         val response = client.put("/users/1") {
             contentType(ContentType.Application.Json)
             setBody(updateDTO)
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
         }
+
 
         assertEquals(response.status, HttpStatusCode.OK)
     }
@@ -189,10 +199,20 @@ class UserRoutesTest {
             }
         }
 
-        val response = client.delete("/users/1")
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
+
+        val response = client.delete("/users/1") {
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
+        }
 
         assertEquals(response.status, HttpStatusCode.NoContent)
     }
 }
-
- */
