@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 object KtorFitClientSales {
-    private const val API_URL = "http://localhost:8080/"
+    private const val API_URL = "http://api-products:8080/"
 
     private val ktorfit by lazy {
         Ktorfit.Builder()
