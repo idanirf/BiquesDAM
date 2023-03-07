@@ -14,11 +14,21 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import java.util.*
 
+/**
+ * Implementation of the IAppointmentRepository interface.
+ * @author BiquesDAM-Team
+ */
 @Single
 @Named("KtorFitRepositoryAppointment")
 class KtorFitRepositoryAppointment : IAppointmentRepository {
     private val client by lazy { KtorFitClientSales.instance }
 
+    /**
+     * Returns a flow of all appointments.
+     * @param token the access token for authentication.
+     * @return a flow of all appointments in the database.
+     * @throws AppointmentNotFoundException if the appointments are not found.
+     */
     override suspend fun findAll(token: String): Flow<AppointmentDTO> = withContext(Dispatchers.IO) {
         val call = async {
             client.getAllAppointments(token).asFlow()
@@ -30,6 +40,13 @@ class KtorFitRepositoryAppointment : IAppointmentRepository {
             throw AppointmentNotFoundException("Error getting appointments: ${e.message}")
         }
     }
+
+    /**
+     * Deletes an appointment with the specified ID.
+     * @param token the access token for authentication.
+     * @param id the ID of the appointment to delete.
+     * @throws AppointmentNotFoundException if the appointment to delete is not found.
+     */
 
     override suspend fun delete(token: String, id: UUID) = withContext(Dispatchers.IO) {
         val call = async {
@@ -43,6 +60,14 @@ class KtorFitRepositoryAppointment : IAppointmentRepository {
         }
     }
 
+    /**
+     * Updates an existing appointment with the specified ID.
+     * @param token the access token for authentication.
+     * @param id the ID of the appointment to update.
+     * @param entity the new appointment data to update.
+     * @return the updated appointment object.
+     * @throws AppointmentNotFoundException if the appointment to update is not found.
+     */
     override suspend fun update(token: String, id: UUID, entity: AppointmentCreateDTO): AppointmentDTO = withContext(Dispatchers.IO){
         val call = async {
             client.updateAppointment(token, id.toString(), entity)
@@ -55,6 +80,14 @@ class KtorFitRepositoryAppointment : IAppointmentRepository {
         }
     }
 
+    /**
+     * Saves a new appointment.
+     * @param token the access token for authentication.
+     * @param entity the new appointment to save.
+     * @return the saved appointment object.
+     * @throws AppointmentConflictIntegrityException if there is a conflict with the integrity of the appointment data.
+     */
+
     override suspend fun save(token: String, entity: AppointmentCreateDTO): AppointmentDTO = withContext(Dispatchers.IO) {
         val call = async {
             client.createAppointments(token, entity)
@@ -66,6 +99,12 @@ class KtorFitRepositoryAppointment : IAppointmentRepository {
         }
     }
 
+    /**
+    * Finds an appointment by its ID.
+    * @param token the access token for authentication.
+    * @param id the ID of the appointment to find.
+    * @return the appointment object
+    */
     override suspend fun findById(token: String, id: UUID): AppointmentDTO = withContext(Dispatchers.IO) {
         val call = async {
             client.getAppointmentById(token, id.toString())

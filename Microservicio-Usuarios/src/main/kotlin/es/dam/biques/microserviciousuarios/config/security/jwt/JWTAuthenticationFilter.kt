@@ -20,7 +20,13 @@ class JWTAuthenticationFilter(
     private val jwtTokenUtil: JWTTokenUtils,
     private val authenticationManager: AuthenticationManager
 ) : UsernamePasswordAuthenticationFilter() {
-
+    /**
+     * Overrides the default attemptAuthentication method of the parent class to authenticate a user by their credentials
+     * @param req The HttpServletRequest object that contains the user's request information.
+     * @param response The HttpServletResponse object that contains the response information to be sent back to the user.
+     * @return An instance of the Authentication interface that represents the authentication of the user.
+     * @author BiquesDAM-Team
+     */
     @OptIn(ExperimentalSerializationApi::class)
     override fun attemptAuthentication(req: HttpServletRequest, response: HttpServletResponse): Authentication {
         logger.info { "Triying to authenticate..." }
@@ -33,6 +39,14 @@ class JWTAuthenticationFilter(
         return authenticationManager.authenticate(auth)
     }
 
+    /**
+    Overrides the default successfulAuthentication method of the parent class to handle successful user authentication.
+     * @param req The HttpServletRequest object that contains the user's request information.
+     * @param res The HttpServletResponse object that contains the response information to be sent back to the user.
+     * @param chain The FilterChain object that manages the filter processing of the request.
+     * @param auth An instance of the Authentication interface that represents the authentication of the user.
+     * @author BiquesDAM-Team
+     */
     override fun successfulAuthentication(
         req: HttpServletRequest?, res: HttpServletResponse, chain: FilterChain?,
         auth: Authentication
@@ -44,6 +58,13 @@ class JWTAuthenticationFilter(
         res.addHeader("Authorization", token)
     }
 
+    /**
+     * Overrides the default unsuccessfulAuthentication method of the parent class to handle failed user authentication.
+     * @param request The HttpServletRequest object that contains the user's request information.
+     * @param response The HttpServletResponse object that contains the response information to be sent back to the user.
+     * @param failed An instance of the AuthenticationException interface that represents the reason for the authentication failure.
+     * @author BiquesDAM-Team
+     */
     override fun unsuccessfulAuthentication(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -63,6 +84,11 @@ private data class BadCredentialsError(
     val status: Int = 401,
     val message: String = "User or password incorrect.",
 ) {
+    /**
+     * Returns a JSON string representation of the object using the Jackson ObjectMapper.
+     * @return A JSON string representing the object.
+     * @author BiquesDAM-Team
+     */
     override fun toString(): String {
         return ObjectMapper().writeValueAsString(this)
     }

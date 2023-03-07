@@ -101,6 +101,18 @@ class UsersController @Autowired constructor(
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/{id}")
+
+    /**
+     * Updates the user with the given [id] with the new information provided in [userDTO].
+     * Only a user with the role "SUPERADMIN" or the user itself can update its information.
+     * @param user the authenticated user making the request.
+     * @param id the id of the user to update.
+     * @param userDTO the updated user information.
+     * @return a [ResponseEntity] containing the updated user information in the body if successful.
+     * @throws ResponseStatusException with status [HttpStatus.NOT_FOUND] if the user with the given id does not exist.
+     * @throws ResponseStatusException with status [HttpStatus.BAD_REQUEST] if the provided information is invalid.
+     * @author BiquesDAM-Team
+     */
     suspend fun update(
         @AuthenticationPrincipal user: User,
         @PathVariable id: Long, @RequestBody userDTO: UserUpdateDTO
@@ -123,6 +135,14 @@ class UsersController @Autowired constructor(
         }
     }
 
+    /**
+     * Endpoint para eliminar un usuario.
+     * Requiere el rol de "SUPERADMIN" para ser accedido.
+     * @param id Identificador del usuario a eliminar.
+     * @throws ResponseStatusException si no se encuentra el usuario o si ocurre un error de solicitud.
+     * @return Un objeto ResponseEntity sin cuerpo y con el código de estado HTTP correspondiente.
+     * @author BiquesDAM-Team
+     */
     @PreAuthorize("hasAnyRole('SUPERADMIN')")
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: Long): ResponseEntity<UserResponseDTO> {

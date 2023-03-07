@@ -18,6 +18,10 @@ import mu.KotlinLogging
 import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 
+/**
+ * Represents the users routes of the application.
+ * @author BiquesDAM-Team
+ */
 private val logger = KotlinLogging.logger {}
 private const val ENDPOINT = "users"
 
@@ -28,6 +32,10 @@ fun Application.usersRoutes() {
 
     routing {
         route("/$ENDPOINT") {
+            /**
+             * Login with username and password.
+             * @throws UserBadRequestException if the user is not found.
+             */
             post("/login") {
                 logger.debug { "API Gateway -> /login" }
 
@@ -45,6 +53,10 @@ fun Application.usersRoutes() {
                 }
             }
 
+            /**
+             * Register a new user.
+             * @throws UserBadRequestException if the user doesn't create.
+             */
             post("/register") {
                 logger.debug { "API Gateway -> /register" }
 
@@ -63,6 +75,10 @@ fun Application.usersRoutes() {
             }
 
             authenticate {
+                /**
+                 * Retrieves all users.
+                 * @throws UserNotFoundException if the users are not found.
+                 */
                 get {
                     logger.debug { "API Gateway -> /users" }
                     try {
@@ -80,6 +96,10 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Retrieves a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 */
                 get("/{id}") {
                     logger.debug { "API Gateway -> /users/id" }
 
@@ -98,6 +118,11 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Updates a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 * @throws UserBadRequestException if the user doesn't update.
+                 */
                 put("/{id}") {
                     logger.debug { "API Gateway -> /users/id" }
 
@@ -119,6 +144,10 @@ fun Application.usersRoutes() {
                     }
                 }
 
+                /**
+                 * Deletes a user by id.
+                 * @throws UserNotFoundException if the user is not found.
+                 */
                 delete("/{id}") {
                     logger.debug { "API Gateway -> /users/id" }
 
