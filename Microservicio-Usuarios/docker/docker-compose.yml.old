@@ -2,7 +2,7 @@ version: "3.9"
 services:
   mariadb-user:
     image: mariadb
-    container_name: db-users
+    container_name: mariadb-user
     environment:
       MARIADB_ROOT_PASSWORD: biquesdam
       MARIADB_DATABASE: biquesdam
@@ -10,14 +10,3 @@ services:
       MARIADB_PASSWORD: biquesdam
     ports:
       - "3306:3306"
-
-  api-users:
-    build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
-    container_name: api-users
-    ports:
-      - "8383:8383"
-    depends_on:
-      - mariadb-user
-

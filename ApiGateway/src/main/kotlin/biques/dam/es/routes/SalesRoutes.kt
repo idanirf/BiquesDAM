@@ -1,5 +1,6 @@
 package biques.dam.es.routes
 
+import biques.dam.es.dto.AppointmentCreateDTO
 import biques.dam.es.dto.FinalSaleDTO
 import biques.dam.es.dto.FinalServiceDTO
 import biques.dam.es.dto.SaleCreateDTO
@@ -181,6 +182,33 @@ fun Application.salesRoutes() {
                         call.respond(HttpStatusCode.NotFound, e.message.toString())
                     }
 
+                }
+
+                post("/appointments") {
+                    try {
+                        val originalToken = call.principal<JWTPrincipal>()!!
+                        val token = tokenService.generateToken(originalToken)
+
+                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
+                            originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
+                        ) {
+
+                            val dto = call.receive<AppointmentCreateDTO>()
+
+                            val result = async {
+                                appointmentRepository.save("Bearer $token", dto)
+                            }
+
+                            val res = result.await()
+
+                            call.respond(HttpStatusCode.Created, res)
+                        } else {
+                            call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
+                        }
+
+                    } catch (e: SaleNotFoundException) {
+                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    }
                 }
 
 

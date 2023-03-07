@@ -3,6 +3,7 @@ package biques.dam.es.routes.users
 import biques.dam.es.dto.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.config.*
@@ -10,10 +11,17 @@ import io.ktor.server.testing.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
-import mu.KotlinLogging
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.*
 import java.util.*
 import kotlin.test.assertEquals
+
+val json = Json {
+    prettyPrint = true
+    isLenient = true
+    ignoreUnknownKeys = true
+}
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -106,12 +114,17 @@ class UserRoutesTest {
         val login = client.post("/users/login") {
             contentType(ContentType.Application.Json)
             setBody(loginDTO)
-        }.content.readRemaining().readBytes().decodeToString()
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
 
 
-        KotlinLogging.logger {}.error { login }
-
-        val response = client.get("/users")
+        val response = client.get("/users") {
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
+        }
 
         assertEquals(HttpStatusCode.OK, response.status)
     }
@@ -127,7 +140,19 @@ class UserRoutesTest {
             }
         }
 
-        val response = client.get("/users/1")
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
+
+        val response = client.get("/users/1") {
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
+        }
 
         assertEquals(response.status, HttpStatusCode.OK)
     }
@@ -143,10 +168,22 @@ class UserRoutesTest {
             }
         }
 
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
+
         val response = client.put("/users/1") {
             contentType(ContentType.Application.Json)
             setBody(updateDTO)
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
         }
+
 
         assertEquals(response.status, HttpStatusCode.OK)
     }
@@ -162,7 +199,19 @@ class UserRoutesTest {
             }
         }
 
-        val response = client.delete("/users/1")
+        val login = client.post("/users/login") {
+            contentType(ContentType.Application.Json)
+            setBody(loginDTO)
+        }
+
+        assertEquals(login.status, HttpStatusCode.OK)
+
+        val result = login.bodyAsText()
+        val dto = json.decodeFromString<UserTokenDTO>(result)
+
+        val response = client.delete("/users/1") {
+            header(HttpHeaders.Authorization, "Bearer " + dto.token)
+        }
 
         assertEquals(response.status, HttpStatusCode.NoContent)
     }

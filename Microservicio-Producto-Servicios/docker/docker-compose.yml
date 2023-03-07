@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  # API Productos-Servicios
+  mariadb-products:
+    image: mariadb
+    container_name: mariadb-products
+    environment:
+      MARIADB_ROOT_PASSWORD: biquesdam
+      MARIADB_DATABASE: biquesdam
+      MARIADB_USER: biquesdam
+      MARIADB_PASSWORD: biquesdam
+    ports:
+      - "8484:3306"
