@@ -39,34 +39,77 @@ data class User(
     @Serializable(with = LocalDateTimeSerializer::class)
     val lastPasswordChangeAt: LocalDateTime = LocalDateTime.now()
 ) : UserDetails {
+
+    /**
+     *  Extension function that converts a [User] object into a [UserResponseDTO] object.
+     *  @return the converted [UserResponseDTO] object
+     *  @author BiquesDAM-Team
+     */
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return rol.split(",").map { SimpleGrantedAuthority("ROLE_${it.trim()}") }.toMutableList()
     }
 
+    /**
+     * Returns the password string.
+     * @return the password string.
+     * @author BiquesDAM-Team
+     */
     override fun getPassword(): String {
         return password
     }
 
+    /**
+     * Returns the username string.
+     * @return the username string. Cannot be null or empty string.
+     * @author BiquesDAM-Team
+     */
     override fun getUsername(): String {
         return username
     }
 
+    /**
+     * Returns true if the user's account has expired, false otherwise.
+     * @return true if the user's account has expired, false otherwise. The default value is false.
+     * @author BiquesDAM-Team
+     */
     override fun isAccountNonExpired(): Boolean {
         return true
     }
 
+    /**
+     * Returns true if the user is locked or disabled, false otherwise.
+     * @return true if the user is locked or disabled, false otherwise. The default value is false.
+     * @author BiquesDAM-Team
+     */
     override fun isAccountNonLocked(): Boolean {
         return true
     }
 
+    /**
+     * Returns true if the user's credentials (password) has expired, false otherwise.
+     * @return true if the user's credentials (password) has expired, false otherwise. The default value is false.
+     * @author BiquesDAM-Team
+     */
     override fun isCredentialsNonExpired(): Boolean {
         return true
     }
 
+    /**
+     * Returns true if the user is enabled, false otherwise.
+     * @return true if the user is enabled, false otherwise. The default value is false.
+     * @author BiquesDAM-Team
+     */
     override fun isEnabled(): Boolean {
         return true
     }
 
+    /**
+     * Enum class that represents the different types of users.
+     * @property SUPERADMIN the superadmin user type
+     * @property ADMIN the admin user type
+     * @property CLIENT the client user type
+     * @author BiquesDAM-Team
+     */
     enum class TipoUsuario {
         SUPERADMIN, ADMIN, CLIENT
     }
