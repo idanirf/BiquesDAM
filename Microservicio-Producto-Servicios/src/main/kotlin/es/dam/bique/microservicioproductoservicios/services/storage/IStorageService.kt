@@ -5,6 +5,10 @@ import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Path
 import java.util.stream.Stream
 
+/**
+ * Interface to define the methods to manage the storage of files
+ * @author The BiquesDAM Team
+ */
 interface IStorageService {
 
     fun init()

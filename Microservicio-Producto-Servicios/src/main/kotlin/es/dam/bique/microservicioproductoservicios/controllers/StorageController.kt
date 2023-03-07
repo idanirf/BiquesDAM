@@ -18,12 +18,23 @@ import java.time.LocalDateTime
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Controller for the storage service.
+ * @author The BiquesDAM Team
+ */
 @RestController
 @RequestMapping("/products&services/storage")
 class StorageController
-@Autowired constructor(
-    private val storageService: StorageService
-    ){
+@Autowired constructor(private val storageService: StorageService) {
+
+    /**
+     * Returns the file with the given name.
+     * @param filename The name of the file to return.
+     * @param request The HTTP request.
+     * @return The file with the given name.
+     * @throws StorageBadRequestException If the file is not valid.
+     * @author The BiquesDAM Team
+     */
     @GetMapping(value = ["{filename:.+}"])
     @ResponseBody
     fun serverFile(@PathVariable filename: String?, request: HttpServletRequest): ResponseEntity<Resource> = runBlocking {
@@ -50,6 +61,14 @@ class StorageController
             .body<Resource?>(file)
     }
 
+    /**
+     * Uploads a file to the server.
+     * @param file The file to upload.
+     * @return The URL of the file.
+     * @throws StorageBadRequestException If the file is not valid.
+     * @throws StorageException If the file cannot be saved.
+     * @author The BiquesDAM Team
+     */
     @PostMapping(value = [""], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadFile(@RequestPart("file") file: MultipartFile): ResponseEntity<Map<String, String>> = runBlocking {
 
@@ -78,6 +97,14 @@ class StorageController
         }
     }
 
+    /**
+     * Deletes a file from the server.
+     * @param filename The name of the file to delete.
+     * @return The URL of the file.
+     * @throws StorageBadRequestException If the file is not valid.
+     * @throws StorageException If the file cannot be deleted.
+     * @author The BiquesDAM Team
+     */
     @DeleteMapping(value = ["{filename:.+}"])
     @ResponseBody
     fun deleteFile(@PathVariable filename: String?): ResponseEntity<Resource> = runBlocking {
