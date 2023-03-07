@@ -3,6 +3,8 @@ package biques.dam.es.routes
 import biques.dam.es.dto.FinalSaleDTO
 import biques.dam.es.dto.FinalServiceDTO
 import biques.dam.es.dto.SaleCreateDTO
+import biques.dam.es.exceptions.OrderBadRequestException
+import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
@@ -19,6 +21,10 @@ import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
 
+/**
+ * Represents the sales routes of the application.
+ * @author BiquesDAM-Team
+ */
 private const val ENDPOINT = "sales"
 
 fun Application.salesRoutes() {
@@ -29,6 +35,10 @@ fun Application.salesRoutes() {
     routing {
         route("/$ENDPOINT") {
             authenticate {
+                /**
+                 * Retrieves all sales.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
                 get {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -78,6 +88,11 @@ fun Application.salesRoutes() {
 
                 }
 
+                /**
+                 * Retrieves a sale by id.
+                 * @param id a string representing the id of the sale.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
                 get("/product/{id}") {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
@@ -100,6 +115,11 @@ fun Application.salesRoutes() {
                     }
                 }
 
+                /**
+                 * Retrieves a service by id.
+                 * @param id a string representing the id of the service.
+                 * @throws SaleNotFoundException if the service is not found.
+                 */
                 get("/service/{id}") {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
@@ -136,6 +156,11 @@ fun Application.salesRoutes() {
                     }
                 }
 
+                /**
+                 * Creates a sale.
+                 * @param dto a SaleCreateDTO representing the sale to be created.
+                 * @throws SaleNotFoundException if the sale is not found.
+                 */
                 post {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -184,6 +209,11 @@ fun Application.salesRoutes() {
                 }
 
 
+                /**
+                 * Updates an existing sale by ID.
+                 * @throws SaleNotFoundException if the specified order ID cannot be found.
+                 * @throws SaleBadRequestException if there is a problem with the request body.
+                 */
                 put("/{id}") {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
@@ -231,6 +261,10 @@ fun Application.salesRoutes() {
 
                 }
 
+                /**
+                 * Deletes an existing order by ID.
+                 * @throws OrderNotFoundException if the specified order ID cannot be found.
+                 */
                 delete("/{id}") {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
