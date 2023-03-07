@@ -19,7 +19,7 @@ import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.util.*
 
-private const val ENDPOINT = "order"
+private const val ENDPOINT = "orders"
 
 fun Application.ordersRoutes() {
     val orderRepository by inject<KtorFitRepositoryOrders>(named("KtorFitRepositoryOrders"))

@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  api-products:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    container_name: api-products
+    ports:
+      - "8080:8080"
+

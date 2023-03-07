@@ -1,0 +1,54 @@
+
+services:
+
+  pedidos-server:
+    build: .
+    container_name: pedidos-server
+    ports:
+      - "8385:8385"
+  # MONGO DB
+  mongodb-server-pedidos:
+    image: mongo
+    container_name: mongo-server-pedidos
+    ports:
+      - 27040:27040
+    expose:
+      - 27040
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pedidos
+      MONGO_INITDB_DATABASE: order
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27040/
+    command: --auth
+    # Monto la unidad y le cargo unos datos
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - mongo-vol:/data/db
+    networks:
+      - mongo-network
+    # restart: always
+
+  # MONGO EXPRESS
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-empress
+    ports:
+      - 8081:8081
+    networks:
+      - mongo-network
+    depends_on:
+      - mongodb-server-pedidos
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongoadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongopass
+      ME_CONFIG_MONGODB_SERVER: mongodb-server
+    restart: unless-stopped
+
+# Mi volumenes de datos compartidos
+volumes:
+  mongo-vol:
+
+# Si queremos que tengan una red propia a otros contenedores
+networks:
+  mongo-network:
+    driver: bridge
