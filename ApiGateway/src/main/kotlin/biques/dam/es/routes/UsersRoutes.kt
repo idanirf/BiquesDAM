@@ -7,6 +7,10 @@ import biques.dam.es.exceptions.UserBadRequestException
 import biques.dam.es.exceptions.UserNotFoundException
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
 import biques.dam.es.services.token.TokensService
+import io.github.smiley4.ktorswaggerui.dsl.post
+import io.github.smiley4.ktorswaggerui.dsl.delete
+import io.github.smiley4.ktorswaggerui.dsl.get
+import io.github.smiley4.ktorswaggerui.dsl.put
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -27,16 +31,30 @@ private const val ENDPOINT = "users"
 
 fun Application.usersRoutes() {
     val userRepository by inject<KtorFitRepositoryUsers>(named("KtorFitRepositoryUsers"))
-    //val userRepository = KtorFitRepositoryUsers()
     val tokenService by inject<TokensService>()
 
     routing {
+
         route("/$ENDPOINT") {
             /**
              * Login with username and password.
              * @throws UserBadRequestException if the user is not found.
              */
-            post("/login") {
+            post("/login",{
+
+                description = "Login a user"
+                securitySchemeName = "JWT-Auth"
+
+                response{
+                    HttpStatusCode.Created to {
+                        description = "User logged in"
+                    }
+                    HttpStatusCode.BadRequest to {
+                        description = "Bad request"
+                    }
+                }
+
+            }) {
                 logger.debug { "API Gateway -> /login" }
 
                 try {
@@ -57,7 +75,20 @@ fun Application.usersRoutes() {
              * Register a new user.
              * @throws UserBadRequestException if the user doesn't create.
              */
-            post("/register") {
+            post("/register",{
+
+                    description = "Register a user"
+                    securitySchemeName = "JWT-Auth"
+
+                    response{
+                        HttpStatusCode.Created to {
+                            description = "User registered"
+                        }
+                        HttpStatusCode.BadRequest to {
+                            description = "Bad request"
+                        }
+                    }
+            }) {
                 logger.debug { "API Gateway -> /register" }
 
                 try {
@@ -79,7 +110,22 @@ fun Application.usersRoutes() {
                  * Retrieves all users.
                  * @throws UserNotFoundException if the users are not found.
                  */
-                get {
+                get({
+                    description = "Get all users"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to {
+                            description = "Users found"
+                        }
+                        HttpStatusCode.NotFound to {
+                            description = "Users not found"
+                        }
+                        HttpStatusCode.BadRequest to {
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     logger.debug { "API Gateway -> /users" }
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
@@ -100,7 +146,22 @@ fun Application.usersRoutes() {
                  * Retrieves a user by id.
                  * @throws UserNotFoundException if the user is not found.
                  */
-                get("/{id}") {
+                get("/{id}",{
+                    description = "Get a user by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to {
+                            description = "User found"
+                        }
+                        HttpStatusCode.NotFound to {
+                            description = "User not found"
+                        }
+                        HttpStatusCode.BadRequest to {
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {
@@ -123,7 +184,23 @@ fun Application.usersRoutes() {
                  * @throws UserNotFoundException if the user is not found.
                  * @throws UserBadRequestException if the user doesn't update.
                  */
-                put("/{id}") {
+                put("/{id}",{
+                    description = "Update a user by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to {
+                            description = "User updated"
+                        }
+                        HttpStatusCode.NotFound to {
+                            description = "User not found"
+                        }
+                        HttpStatusCode.BadRequest to {
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {
@@ -148,7 +225,22 @@ fun Application.usersRoutes() {
                  * Deletes a user by id.
                  * @throws UserNotFoundException if the user is not found.
                  */
-                delete("/{id}") {
+                delete("/{id}",{
+                    description = "Delete a user by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.NoContent to {
+                            description = "User deleted"
+                        }
+                        HttpStatusCode.NotFound to {
+                            description = "User not found"
+                        }
+                        HttpStatusCode.BadRequest to {
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     logger.debug { "API Gateway -> /users/id" }
 
                     try {

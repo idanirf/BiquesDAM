@@ -73,33 +73,6 @@ internal class ServicesServiceTest {
     }
 
     @Test
-    fun findByUuid() = runTest {
-        coEvery { repository.findByUuid(any()) } returns flowOf(entity)
-
-        val result = service.findByUuid(entity.uuid)
-
-        assertAll(
-            { assertEquals(entity.image, result.image) },
-            { assertEquals(entity.price, result.price) },
-        )
-
-        coVerify { repository.findByUuid(any()) }
-    }
-
-    @Test
-    fun findByUuidNotFound() = runTest {
-        coEvery { repository.findByUuid(any()) } returns flowOf()
-
-        val res = assertThrows<ServiceNotFoundException> {
-            service.findByUuid(entity.uuid)
-        }
-
-        assertEquals("Not found with uuid: ${entity.uuid}", res.message)
-
-        coVerify { repository.findByUuid(any()) }
-    }
-
-    @Test
     fun findById() = runTest {
         coEvery { repository.findById(any()) } returns entity
 
@@ -127,6 +100,33 @@ internal class ServicesServiceTest {
     }
 
     @Test
+    fun findByUuid() = runTest {
+        coEvery { repository.findByUuid(any()) } returns flowOf(entity)
+
+        val result = service.findByUuid(entity.uuid)
+
+        assertAll(
+            { assertEquals(entity.image, result.image) },
+            { assertEquals(entity.price, result.price) },
+        )
+
+        coVerify { repository.findByUuid(any()) }
+    }
+
+    @Test
+    fun findByUuidNotFound() = runTest {
+        coEvery { repository.findByUuid(any()) } returns flowOf()
+
+        val res = assertThrows<ServiceNotFoundException> {
+            service.findByUuid(entity.uuid)
+        }
+
+        assertEquals("Not found with uuid: ${entity.uuid}", res.message)
+
+        coVerify { repository.findByUuid(any()) }
+    }
+
+    @Test
     fun save() = runTest {
         coEvery { appointmentRepository.findByUuid(any()) } returns appointment
         coEvery { repository.findByUuid(any()) } returns flowOf(entity)
@@ -144,7 +144,7 @@ internal class ServicesServiceTest {
     }
 
     @Test
-    fun saveRepresentanteNotExists() = runTest {
+    fun saveAppointmentNotExists() = runTest {
         coEvery { appointmentRepository.findByUuid(any()) } throws AppointmentNotFoundException("Appointment not found with uuid: ${appointment.uuid}")
         coEvery { repository.save(any()) } returns entity
 

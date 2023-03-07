@@ -65,33 +65,6 @@ internal class ProductsServiceTest {
     }
 
     @Test
-    fun findByUuid() = runTest {
-        coEvery { repository.findByUuid(any()) } returns product
-
-        val result = service.findByUuid(product.uuid)
-
-        assertAll(
-            { assertEquals(product.description, result.description) },
-            { assertEquals(product.brand, result.brand) },
-        )
-
-        coVerify { repository.findByUuid(any()) }
-    }
-
-    @Test
-    fun findByUuidNotFound() = runTest {
-        coEvery { repository.findByUuid(any()) } returns null
-
-        val res = assertThrows<ProductNotFoundException> {
-            service.findByUuid(product.uuid)
-        }
-
-        assertEquals("Not found with uuid: ${product.uuid}", res.message)
-
-        coVerify { repository.findByUuid(any()) }
-    }
-
-    @Test
     fun findById() = runTest{
         coEvery { repository.findById(any()) } returns product
 
@@ -116,6 +89,33 @@ internal class ProductsServiceTest {
         assertEquals("Not found with id: ${product.id}", res.message)
 
         coVerify { repository.findById(any()) }
+    }
+
+    @Test
+    fun findByUuid() = runTest {
+        coEvery { repository.findByUuid(any()) } returns product
+
+        val result = service.findByUuid(product.uuid)
+
+        assertAll(
+            { assertEquals(product.description, result.description) },
+            { assertEquals(product.brand, result.brand) },
+        )
+
+        coVerify { repository.findByUuid(any()) }
+    }
+
+    @Test
+    fun findByUuidNotFound() = runTest {
+        coEvery { repository.findByUuid(any()) } returns null
+
+        val res = assertThrows<ProductNotFoundException> {
+            service.findByUuid(product.uuid)
+        }
+
+        assertEquals("Not found with uuid: ${product.uuid}", res.message)
+
+        coVerify { repository.findByUuid(any()) }
     }
 
     @Test

@@ -6,19 +6,33 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.server.auth.jwt.*
 import org.koin.core.annotation.Single
-import java.util.*
 
+/**
+ * Service that generates and verifies JWT tokens
+ * @param tokenConfig The configuration of the tokens
+ * @author The BiquesDAM Team
+ */
 @Single
 class TokensService(
-    private val tokenConfig: TokenConfig
-) {
+    private val tokenConfig: TokenConfig) {
+
+    /**
+     * Generates a JWT token
+     * @return The generated token
+     * @author The BiquesDAM Team
+     */
     fun verifyJWT(): JWTVerifier {
         return JWT.require(Algorithm.HMAC512(tokenConfig.secret))
-            //.withAudience(tokenConfig.audience)
             .withIssuer(tokenConfig.issuer)
             .build()
     }
 
+    /**
+     * Generates a JWT token
+     * @param token The token to generate
+     * @return The generated token as a String
+     * @author The BiquesDAM Team
+     */
     fun generateToken(token: JWTPrincipal): String{
             return JWT.create()
                 .withIssuer(token.payload.issuer)

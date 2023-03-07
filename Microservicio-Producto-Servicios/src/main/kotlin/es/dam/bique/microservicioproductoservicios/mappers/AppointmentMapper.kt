@@ -9,7 +9,6 @@ import java.util.*
 
 /**
  * Creates an AppointmentDTO from an Appointment
- * @param Appointment Appointment to be converted
  * @return AppointmentDTO
  * @author The BiquesDam Team
  */
@@ -26,7 +25,6 @@ fun Appointment.toDTO(): AppointmentDTO{
 
 /**
  * Creates an Appointment from an AppointmentCreateDTO
- * @param AppointmentCreateDTO AppointmentCreateDTO to be converted
  * @return Appointment
  * @author The BiquesDam Team
  */

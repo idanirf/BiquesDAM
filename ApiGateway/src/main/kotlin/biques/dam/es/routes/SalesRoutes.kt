@@ -10,6 +10,10 @@ import biques.dam.es.exceptions.SaleNotFoundException
 import biques.dam.es.repositories.appointment.KtorFitRepositoryAppointment
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.services.token.TokensService
+import io.github.smiley4.ktorswaggerui.dsl.get
+import io.github.smiley4.ktorswaggerui.dsl.delete
+import io.github.smiley4.ktorswaggerui.dsl.post
+import io.github.smiley4.ktorswaggerui.dsl.put
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -40,7 +44,24 @@ fun Application.salesRoutes() {
                  * Retrieves all sales.
                  * @throws SaleNotFoundException if the sale is not found.
                  */
-                get {
+
+                get({
+                    description = "Get all sales"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Sales found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Sales not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -94,7 +115,23 @@ fun Application.salesRoutes() {
                  * @param id a string representing the id of the sale.
                  * @throws SaleNotFoundException if the sale is not found.
                  */
-                get("/product/{id}") {
+                get("/product/{id}",{
+                    description = "Get a product by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Product found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Product not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]!!
@@ -121,7 +158,23 @@ fun Application.salesRoutes() {
                  * @param id a string representing the id of the service.
                  * @throws SaleNotFoundException if the service is not found.
                  */
-                get("/service/{id}") {
+                get("/service/{id}",{
+
+                    description = "Get a service by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Service found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Service not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = call.parameters["id"]!!
@@ -162,7 +215,19 @@ fun Application.salesRoutes() {
                  * @param dto a SaleCreateDTO representing the sale to be created.
                  * @throws SaleNotFoundException if the sale is not found.
                  */
-                post {
+                post({
+                    description = "Create a sale"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.Created to{
+                            description = "Sale created"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -213,6 +278,9 @@ fun Application.salesRoutes() {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
+                put("/{id}",{
+                    description = "Update a sale"
+                    securitySchemeName = "JWT-Auth"
 
                         if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
                             originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
@@ -243,6 +311,15 @@ fun Application.salesRoutes() {
                  * @throws SaleBadRequestException if there is a problem with the request body.
                  */
                 put("/{id}") {
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Sale updated"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -293,7 +370,23 @@ fun Application.salesRoutes() {
                  * Deletes an existing order by ID.
                  * @throws OrderNotFoundException if the specified order ID cannot be found.
                  */
-                delete("/{id}") {
+                delete("/{id}",{
+
+                    description = "Delete a sale"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.NoContent to{
+                            description = "Sale deleted"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Sale not found"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)

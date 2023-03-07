@@ -1,8 +1,6 @@
 package es.dam.bique.microservicioproductoservicios.repositories.products
 
 import es.dam.bique.microservicioproductoservicios.models.*
-import es.dam.bique.microservicioproductoservicios.repositories.appointments.AppointmentsCachedRepository
-import es.dam.bique.microservicioproductoservicios.repositories.appointments.AppointmentsRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -12,12 +10,10 @@ import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDate
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
