@@ -283,7 +283,7 @@ internal class ProductsServicesControllerTest {
                 image = "create",
                 price = 0.1f,
                 appointment = appointment.uuid.toString(),
-                type = ServiceType.REVISION.value
+                type = ServiceType.REVISION.type
             ).toOnSaleCreateDTO()
         )
 
@@ -309,7 +309,7 @@ internal class ProductsServicesControllerTest {
         val result = controller.create(
             AppointmentCreateDTO(
                 userId = "e2613745-ad51-460f-8aa2-733379be7d13",
-                assistance = AssistanceType.ANY.value,
+                assistance = AssistanceType.ANY.type,
                 date = "2023-03-03",
                 description = "create"
             )
@@ -387,7 +387,7 @@ internal class ProductsServicesControllerTest {
                 image = "actualizado",
                 price = 0.1f,
                 appointment = appointment.uuid.toString(),
-                type = ServiceType.REVISION.value
+                type = ServiceType.REVISION.type
             ).toOnSaleCreateDTO()
         )
 
@@ -414,7 +414,7 @@ internal class ProductsServicesControllerTest {
             appointment.uuid,
             AppointmentCreateDTO(
                 userId = "e2613745-ad51-460f-8aa2-733379be7d13",
-                assistance = AssistanceType.ANY.value,
+                assistance = AssistanceType.ANY.type,
                 date = "2023-03-03",
                 description = "update"
             )
@@ -474,7 +474,7 @@ internal class ProductsServicesControllerTest {
                 appointment.uuid,
                 AppointmentCreateDTO(
                     userId = "e2613745-ad51-460f-8aa2-733379be7d13",
-                    assistance = AssistanceType.ANY.value,
+                    assistance = AssistanceType.ANY.type,
                     date = "2023-03-03",
                     description = "update"
                 )
