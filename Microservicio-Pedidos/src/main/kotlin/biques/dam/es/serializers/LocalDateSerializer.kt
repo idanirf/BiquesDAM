@@ -7,6 +7,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDate
 
+/**
+ * Serializer for LocalDate objects.
+ * @author BiquesDAM-Team
+ */
 object LocalDateSerializer : KSerializer<LocalDate> {
     override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
 
