@@ -21,6 +21,13 @@ import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Controller to manage products, services and appointments via an HTTP request
+ * @param productsService service to manage products
+ * @param appointmentService service to manage appointments
+ * @param servicesService service to manage services
+ * @author The BiquesDAM Team
+ */
 @RestController
 @RequestMapping("/products&services")
 class ProductsServicesController
@@ -30,7 +37,11 @@ class ProductsServicesController
         private val servicesService: ServicesService
     )  {
 
-
+    /**
+     * Get all products and services
+     * @return list of products and services
+     * @author The BiquesDAM Team
+     */
     @GetMapping("/list")
     suspend fun findAll(): ResponseEntity<AllSaleDTO> {
 
@@ -60,6 +71,11 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Get all appointments
+     * @return list of appointments
+     * @author The BiquesDAM Team
+     */
     @GetMapping("/appointments")
     suspend fun findAllAppointments(): ResponseEntity<List<AppointmentDTO>> {
         logger.info {" On sale controller - findAll appointments() "}
@@ -71,6 +87,12 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Get OnSaleDTO by id
+     * @param id id of the product or service
+     * @return product or service with the id passed as parameter
+     * @author The BiquesDAM Team
+     */
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: Long): ResponseEntity<AllSaleDTO> {
 
@@ -110,6 +132,12 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Get AppointmentDTO by id
+     * @param id id of the appointment
+     * @return appointment with the id passed as parameter
+     * @author The BiquesDAM Team
+     */
     @GetMapping("/appointments/{id}")
     suspend fun findAppointmentById(@PathVariable id: Long): ResponseEntity<AppointmentDTO> {
 
@@ -124,6 +152,13 @@ class ProductsServicesController
         }
     }
 
+    /**
+     * Create a product or service
+     * @param entityDto product or service to create
+     * @return product or service created
+     * @throws ResponseStatusException if the product or service is not valid, or it already exists
+     * @author The BiquesDAM Team
+     */
     @PostMapping("")
     suspend fun create(@Valid @RequestBody entityDto: OnSaleCreateDTO): ResponseEntity<OnSaleDTO> {
 
@@ -151,6 +186,13 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Create an appointment
+     * @param entityDto appointment to create
+     * @return appointment created
+     * @throws ResponseStatusException if the appointment is not valid, or it already exists
+     * @author The BiquesDAM Team
+     */
     @PostMapping("/appointments")
     suspend fun create(@Valid @RequestBody entityDto: AppointmentCreateDTO): ResponseEntity<AppointmentDTO> {
 
@@ -168,6 +210,14 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Update a product or service
+     * @param uuid id of the product or service to update
+     * @param entityDto product or service to update
+     * @return product or service updated
+     * @throws ResponseStatusException if the product or service is not valid, or it does not exist
+     * @author The BiquesDAM Team
+     */
     @PutMapping("/{uuid}")
     suspend fun update(@PathVariable uuid: UUID, @Valid @RequestBody entityDto: OnSaleCreateDTO): ResponseEntity<OnSaleDTO> {
 
@@ -198,6 +248,14 @@ class ProductsServicesController
         }
     }
 
+    /**
+     * Update an appointment
+     * @param uuid id of the appointment to update
+     * @param entityDTO appointment to update
+     * @return appointment updated
+     * @throws ResponseStatusException if the appointment is not valid, or it does not exist
+     * @author The BiquesDAM Team
+     */
     @PutMapping("/appointments/{uuid}")
     suspend fun update(@PathVariable uuid: UUID, @Valid @RequestBody entityDTO: AppointmentCreateDTO): ResponseEntity<AppointmentDTO> {
 
@@ -215,7 +273,13 @@ class ProductsServicesController
         }
     }
 
-
+    /**
+     * Delete a product or service
+     * @param uuid id of the product or service to delete
+     * @return product or service deleted
+     * @throws ResponseStatusException if the product or service does not exist
+     * @author The BiquesDAM Team
+     */
     @DeleteMapping("/{uuid}")
     suspend fun delete(@PathVariable uuid: UUID): ResponseEntity<OnSaleDTO> {
 
@@ -237,6 +301,13 @@ class ProductsServicesController
 
     }
 
+    /**
+     * Delete an appointment
+     * @param uuid id of the appointment to delete
+     * @return appointment deleted
+     * @throws ResponseStatusException if the appointment does not exist
+     * @author The BiquesDAM Team
+     */
     @DeleteMapping("/appointments/{uuid}")
     suspend fun deleteAppointment(@PathVariable uuid: UUID): ResponseEntity<AppointmentDTO> {
 

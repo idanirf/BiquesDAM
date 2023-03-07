@@ -11,18 +11,27 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Repository for products with cache
+ * @param productsRepository repository for products
+ * @author The BiquesDAM Team
+ */
 @Repository
 class ProductsCachedRepository
     @Autowired constructor(
         private val productsRepository: ProductsRepository
     ) : IProductsCachedRepository {
 
+    /**
+     * Find all products
+     * @return a flow of products
+     * @author The BiquesDAM Team
+     */
     override suspend fun findAll(): Flow<Product> = withContext(Dispatchers.IO) {
 
         logger.info { "Cached products - findAll()" }
@@ -30,6 +39,12 @@ class ProductsCachedRepository
 
     }
 
+    /**
+     * Find product by id
+     * @param id Product identifier
+     * @return Product found
+     * @author The BiquesDam Team
+     */
     @Cacheable("products")
     override suspend fun findById(id: Long): Product? = withContext(Dispatchers.IO) {
 
@@ -38,6 +53,11 @@ class ProductsCachedRepository
 
     }
 
+    /**
+     * Find product by uuid
+     * @param uuid Product uuid
+     * @return Product found
+     */
     @Cacheable("products")
     suspend fun findByUuid(uuid: UUID): Product? = withContext(Dispatchers.IO) {
 
@@ -46,6 +66,12 @@ class ProductsCachedRepository
 
     }
 
+    /**
+     * Save product
+     * @param entity Product to save
+     * @return Product saved
+     * @author The BiquesDam Team
+     */
     @CachePut("products")
     override suspend fun save(entity: Product): Product = withContext(Dispatchers.IO) {
 
@@ -54,6 +80,11 @@ class ProductsCachedRepository
 
     }
 
+    /**
+     * Update product
+     * @param entity Product to update
+     * @return Product updated or null if not found
+     */
     @CachePut("products")
     override suspend fun update(entity: Product): Product? = withContext(Dispatchers.IO) {
         logger.info { "Cached products - update() product: $entity" }
@@ -76,6 +107,13 @@ class ProductsCachedRepository
         return@withContext null
     }
 
+    /**
+     * Delete product
+     * @param entity Product to delete
+     * @return true if deleted, false if not found
+     * @throws ProductConflictIntegrityException if product is in use by other entities
+     * @author The BiquesDam Team
+     */
     @CacheEvict("products")
     override suspend fun delete(entity: Product): Boolean = withContext(Dispatchers.IO) {
 

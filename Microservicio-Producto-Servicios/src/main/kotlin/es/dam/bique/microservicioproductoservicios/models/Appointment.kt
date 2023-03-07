@@ -9,6 +9,16 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDate
 import java.util.*
 
+/**
+ * Represents the appointments an user is able to do.
+ * @param id Appointment identifier.
+ * @param uuid Appointment unique identifier.
+ * @param userId User identifier.
+ * @param assistance Type of assistance.
+ * @param date Date of the appointment.
+ * @param description Description of the appointment.
+ * @author The BiquesDam Team.
+ */
 @Serializable
 @Table("Appointments")
 data class Appointment(
@@ -31,10 +41,16 @@ data class Appointment(
     val description: String
 )
 
-enum class AssistanceType(val value: String){
+/**
+ * Represents the type of assistance.
+ * @param type Value of the assistance type.
+ */
+enum class AssistanceType(val type: String){
     ANY("ANY"),
     TECHNICAL("TECHNICAL");
     companion object {
+
+        /** Returns the AssistanceType from a string. */
         fun from(tipo: String): AssistanceType {
             return when (tipo.uppercase()){
                 "ANY" -> ANY
@@ -42,6 +58,7 @@ enum class AssistanceType(val value: String){
                 else -> throw IllegalArgumentException("Assistance type unknown.")
             }
         }
+
     }
 }
 

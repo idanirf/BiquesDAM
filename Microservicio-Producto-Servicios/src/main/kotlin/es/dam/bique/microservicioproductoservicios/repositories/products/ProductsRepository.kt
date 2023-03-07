@@ -6,7 +6,13 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
+/**
+ * Repository for products
+ * @author The BiquesDAM Team
+ */
 @Repository
 interface ProductsRepository : CoroutineCrudRepository<Product, Long> {
+
     suspend fun findByUuid(uuid: UUID): Flow<Product>
+
 }
