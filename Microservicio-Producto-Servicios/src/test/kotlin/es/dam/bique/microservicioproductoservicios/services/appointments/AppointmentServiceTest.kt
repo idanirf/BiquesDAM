@@ -60,6 +60,33 @@ internal class AppointmentServiceTest {
     }
 
     @Test
+    fun findById() = runTest{
+        coEvery { repository.findById(any()) } returns appointment
+
+        val result = service.findById(appointment.id!!)
+
+        assertAll(
+            { assertEquals(appointment.description, result.description) },
+            { assertEquals(appointment.date, result.date) },
+        )
+
+        coVerify { repository.findById(any()) }
+    }
+
+    @Test
+    fun findByIdNotFound() = runTest {
+        coEvery { repository.findById(any()) } returns null
+
+        val res = assertThrows<AppointmentNotFoundException> {
+            service.findById(appointment.id!!)
+        }
+
+        assertEquals("Appointment not found with id: ${appointment.id}", res.message)
+
+        coVerify { repository.findById(any()) }
+    }
+
+    @Test
     fun findByUuid() = runTest {
         coEvery { repository.findByUuid(any()) } returns appointment
 
@@ -85,33 +112,6 @@ internal class AppointmentServiceTest {
         assertEquals("Appointment not found with uuid: ${appointment.uuid}", res.message)
 
         coVerify { repository.findByUuid(any()) }
-    }
-
-    @Test
-    fun findById() = runTest{
-        coEvery { repository.findById(any()) } returns appointment
-
-        val result = service.findById(appointment.id!!)
-
-        assertAll(
-            { assertEquals(appointment.description, result.description) },
-            { assertEquals(appointment.date, result.date) },
-        )
-
-        coVerify { repository.findById(any()) }
-    }
-
-    @Test
-    fun findByIdNotFound() = runTest {
-        coEvery { repository.findById(any()) } returns null
-
-        val res = assertThrows<AppointmentNotFoundException> {
-            service.findById(appointment.id!!)
-        }
-
-        assertEquals("Appointment not found with id: ${appointment.id}", res.message)
-
-        coVerify { repository.findById(any()) }
     }
 
     @Test

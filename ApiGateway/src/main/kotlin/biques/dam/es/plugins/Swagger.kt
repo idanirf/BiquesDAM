@@ -5,24 +5,32 @@ import io.github.smiley4.ktorswaggerui.dsl.AuthScheme
 import io.github.smiley4.ktorswaggerui.dsl.AuthType
 import io.ktor.server.application.*
 
+/**
+ * Plugin to configure the Swagger UI
+ * @author The BiquesDAM Team
+ */
 fun Application.configureSwagger() {
+
     install(SwaggerUI) {
+
         swagger {
             swaggerUrl = "swagger"
             forwardRoot = false
         }
+
         info {
             title = "BIQUESDAM API REST"
             version = "latest"
-            description = "Proyecto final mixto para los módulos de AD y PSP."
+            description = "Final project for the PSP and AD modules."
             contact {
                 name = "BIQUESDAM"
                 url = "https://github.com/idanirf/BiquesDAM"
             }
         }
+
         server {
             url = environment.config.property("server.baseSecureUrl").getString()
-            description = "API Gateway que conecta todos los microservicios."
+            description = "API Gateway that connects every microservice."
         }
 
         schemasInComponentSection = true

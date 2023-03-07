@@ -8,7 +8,10 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
 
-
+/**
+ * Creates a KtorFit client for the Orders API
+ * @author The BiquesDAM Team
+ */
 object KtorFitClientOrders {
     private const val API_URL = "http://api-order:8282/"
 
