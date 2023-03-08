@@ -278,9 +278,7 @@ fun Application.salesRoutes() {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
-                put("/{id}",{
-                    description = "Update a sale"
-                    securitySchemeName = "JWT-Auth"
+
 
                         if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]") ||
                             originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")
@@ -310,7 +308,9 @@ fun Application.salesRoutes() {
                  * @throws SaleNotFoundException if the specified order ID cannot be found.
                  * @throws SaleBadRequestException if there is a problem with the request body.
                  */
-                put("/{id}") {
+                put("/{id}",{
+                    description = "Update a sale"
+                    securitySchemeName = "JWT-Auth"
                     response {
                         HttpStatusCode.OK to{
                             description = "Sale updated"
