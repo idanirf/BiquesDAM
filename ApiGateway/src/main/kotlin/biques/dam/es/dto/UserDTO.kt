@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserRegisterDTO(
-    val image: String?,
+    val image: String,
     val rol: Set<String>,
     val email: String,
     val username: String,
@@ -35,7 +35,7 @@ data class UserRegisterDTO(
  */
 @Serializable
 data class UserUpdateDTO(
-    val image: String?,
+    val image: String,
     val rol: Set<String>,
     val email: String,
     val username: String,
@@ -67,13 +67,13 @@ data class UserLoginDTO(
  */
 @Serializable
 data class UserResponseDTO(
-    val id: Long?,
-    val uuid: String?,
-    val image: String?,
-    val rol: Set<String>?,
-    val email: String?,
-    val username: String?,
-    val address: String?
+    val id: Long,
+    val uuid: String,
+    val image: String,
+    val rol: Set<String>,
+    val email: String,
+    val username: String,
+    val address: String
 )
 
 /**
@@ -83,8 +83,8 @@ data class UserResponseDTO(
  */
 @Serializable
 data class UserTokenDTO(
-    val user: UserResponseDTO?,
-    val token: String?
+    val user: UserResponseDTO,
+    val token: String
 )
 
 /**
@@ -92,5 +92,5 @@ data class UserTokenDTO(
  * @param data a list of user responses.
  */
 data class UserDataDTO(
-    val data: List<UserResponseDTO>?
+    val data: List<UserResponseDTO>
 )
