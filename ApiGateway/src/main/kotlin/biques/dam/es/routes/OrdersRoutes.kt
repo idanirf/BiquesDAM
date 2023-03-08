@@ -76,8 +76,8 @@ fun Application.ordersRoutes() {
                         } else {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-                    } catch (e: OrderNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "No orders were found")
                     }
                 }
 
@@ -124,11 +124,11 @@ fun Application.ordersRoutes() {
                             sales.forEach { rep ->
                                 if (rep.type == "PRODUCT") {
                                     if (rep.productEntity?.uuid == sale.uuid) {
-                                        sale.sale = rep.productEntity?.model
+                                        sale.sale = rep.productEntity.model
                                     }
                                 } else {
                                     if (rep.serviceEntity?.uuid == sale.uuid) {
-                                        sale.sale = rep.serviceEntity?.type
+                                        sale.sale = rep.serviceEntity.type
                                     }
                                 }
                             }
@@ -144,8 +144,8 @@ fun Application.ordersRoutes() {
                             cliente
                         )
                         call.respond(HttpStatusCode.OK, finalOrder)
-                    } catch (e: OrderNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "The order with that uuid was not found")
                     }
                 }
 
@@ -200,8 +200,8 @@ fun Application.ordersRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: OrderBadRequestException) {
-                        call.respond(HttpStatusCode.BadRequest, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.BadRequest, "Error creating order")
                     }
                 }
 
@@ -262,10 +262,10 @@ fun Application.ordersRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: OrderNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error updating order")
                     } catch (e: OrderBadRequestException) {
-                        call.respond(HttpStatusCode.BadRequest, e.message.toString())
+                        call.respond(HttpStatusCode.BadRequest,"Error updating order")
                     }
                 }
 
@@ -315,8 +315,8 @@ fun Application.ordersRoutes() {
                         } else {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
-                    } catch (e: OrderNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound,"Order not found")
                     }
                 }
             }
