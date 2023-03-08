@@ -11,7 +11,12 @@ import org.koin.core.parameter.parametersOf
 import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
 
+/**
+ * PLugin to configure the security of the HTTP server
+ * @author The BiquesDAM Team
+ */
 fun Application.configureSecurity() {
+
     val tokenConfigParams = mapOf<String, String>(
         "audience" to environment.config.property("jwt.audience").getString(),
         "secret" to environment.config.property("jwt.secret").getString(),

@@ -8,7 +8,6 @@ import java.util.*
 
 /**
  * Creates a ServiceDTO from a Service
- * @param Service Service to be converted
  * @return ServiceDTO
  * @author The BiquesDam Team
  */
@@ -25,7 +24,6 @@ fun Service.toDTO(): ServiceDTO{
 
 /**
  * Creates a Service from a ServiceDTO
- * @param ServiceDTO ServiceDTO to be converted
  * @return Service
  * @author The BiquesDam Team
  */
@@ -45,7 +43,6 @@ fun ServiceDTO.toOnSaleDTO(): OnSaleDTO {
 
 /**
  * Creates a Service from a ServiceCreateDTO
- * @param ServiceCreateDTO ServiceCreateDTO to be converted
  * @return Service
  * @author The BiquesDam Team
  */
@@ -60,8 +57,7 @@ fun ServiceCreateDTO.toModel(uuid: UUID): Service {
 }
 
 /**
- * Creates a ServiceCreateDTO from a Service
- * @param Service Service to be converted
+ * Creates an OnSaleCreateDTO from a Service
  * @return ServiceCreateDTO
  * @author The BiquesDam Team
  */

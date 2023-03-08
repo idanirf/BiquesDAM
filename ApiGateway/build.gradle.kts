@@ -47,7 +47,6 @@ dependencies {
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta16")
     implementation("io.github.smiley4:ktor-swagger-ui:$ktor_swagger_ui_version")
 
-
     implementation("io.ktor:ktor-client-serialization:2.1.3")
     implementation("io.ktor:ktor-client-content-negotiation:2.1.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.1.3")

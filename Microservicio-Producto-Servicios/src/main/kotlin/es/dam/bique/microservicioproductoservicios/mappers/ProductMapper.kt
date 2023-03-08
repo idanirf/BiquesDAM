@@ -8,7 +8,6 @@ import java.util.*
 
 /**
  * Creates a ProductDTO from a Product
- * @param Product Product to be converted
  * @return ProductDTO
  * @author The BiquesDam Team
  */
@@ -30,7 +29,6 @@ fun Product.toDTO(): ProductDTO{
 
 /**
  * Creates an OnSaleDTO from a ProductDTO
- * @param ProductDTO ProductDTO to be converted
  * @return OnSaleDTO
  * @author The BiquesDam Team
  */
@@ -56,7 +54,6 @@ fun ProductDTO.toOnSaleDTO(): OnSaleDTO {
 
 /**
  * Creates a Product from a ProductCreateDTO
- * @param ProductCreateDTO ProductCreateDTO to be converted
  * @return Product
  * @author The BiquesDam Team
  */
@@ -77,7 +74,6 @@ fun ProductCreateDTO.toModel(uuid : UUID): Product{
 
 /**
  * Creates an OnSaleCreateDTO from a ProductCreateDTO
- * @param ProductCreateDTO ProductCreateDTO to be converted
  * @return OnSaleCreateDTO
  * @author The BiquesDam Team
  */

@@ -8,6 +8,10 @@ import biques.dam.es.repositories.ordersLine.KtorFitRepositoryOrdersLine
 import biques.dam.es.repositories.sales.KtorFitRepositorySales
 import biques.dam.es.repositories.users.KtorFitRepositoryUsers
 import biques.dam.es.services.token.TokensService
+import io.github.smiley4.ktorswaggerui.dsl.delete
+import io.github.smiley4.ktorswaggerui.dsl.get
+import io.github.smiley4.ktorswaggerui.dsl.post
+import io.github.smiley4.ktorswaggerui.dsl.put
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -41,7 +45,24 @@ fun Application.ordersRoutes() {
                  * Retrieves all orders.
                  * @throws OrderNotFoundException if the order is not found.
                  */
-                get {
+
+                get({
+                        description = "Get all orders"
+                        securitySchemeName = "JWT-Auth"
+
+                        response {
+                            HttpStatusCode.OK to{
+                                description = "Orders found"
+                            }
+                            HttpStatusCode.NotFound to{
+                                description = "Orders not found"
+                            }
+                            HttpStatusCode.BadRequest to{
+                                description = "Bad request"
+                            }
+                        }
+
+                    }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -65,7 +86,23 @@ fun Application.ordersRoutes() {
                  * @param id the id of the order to retrieve.
                  * @throws OrderNotFoundException if the order is not found.
                  */
-                get("/{id}") {
+                get("/{id}",{
+                    description = "Get an order by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Order found"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Order not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+
+                }) {
                     try {
                         val token = tokenService.generateToken(call.principal()!!)
                         val id = UUID.fromString(call.parameters["id"])!!
@@ -116,7 +153,17 @@ fun Application.ordersRoutes() {
                  * Creates a new order.
                  * @throws OrderBadRequestException if there is a problem with the request body.
                  */
-                post {
+                post({
+
+                    description = "Create an order"
+                    securitySchemeName = "JWT-Auth"
+
+                    response{
+                        HttpStatusCode.Created to{
+                            description = "Order created"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -163,7 +210,22 @@ fun Application.ordersRoutes() {
                  * @throws OrderNotFoundException if the specified order ID cannot be found.
                  * @throws OrderBadRequestException if there is a problem with the request body.
                  */
-                put("/{id}") {
+                put("/{id}",{
+                    description = "Update an order by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.OK to{
+                            description = "Order updated"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Order not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
@@ -211,7 +273,22 @@ fun Application.ordersRoutes() {
                  * Deletes an existing order by ID.
                  * @throws OrderNotFoundException if the specified order ID cannot be found.
                  */
-                delete("/{id}") {
+                delete("/{id}",{
+                    description = "Delete an order by id"
+                    securitySchemeName = "JWT-Auth"
+
+                    response {
+                        HttpStatusCode.NoContent to{
+                            description = "Order deleted"
+                        }
+                        HttpStatusCode.NotFound to{
+                            description = "Order not found"
+                        }
+                        HttpStatusCode.BadRequest to{
+                            description = "Bad request"
+                        }
+                    }
+                }) {
                     try {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
