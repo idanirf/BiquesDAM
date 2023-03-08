@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  mariadb-user:
+    image: mariadb
+    container_name: mariadb-user
+    environment:
+      MARIADB_ROOT_PASSWORD: biquesdam
+      MARIADB_DATABASE: biquesdam
+      MARIADB_USER: biquesdam
+      MARIADB_PASSWORD: biquesdam
+    ports:
+      - "3306:3306"

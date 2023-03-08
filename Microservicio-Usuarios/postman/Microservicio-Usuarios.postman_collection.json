@@ -1,0 +1,452 @@
+{
+	"info": {
+		"_postman_id": "29b71a52-661d-436e-bb2a-d9330f76b6fe",
+		"name": "Microservicio-Usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25247215"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8383/users/register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image\": \"https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png\",\r\n    \"rol\": [\r\n        \"SUPERADMIN\", \"ADMIN\"\r\n    ],\r\n    \"email\": \"mireya@correo.com\",\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\",\r\n    \"address\": \"Ugena\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNjc2YmQwYy03MTczLTRkNGYtYjI1NC05NmYwMTYyYzQ1NDgiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjI0OCwicm9sIjoiW1NVUEVSQURNSU4sICBBRE1JTl0iLCJ1c2VybmFtZSI6Im1pcmV5YSJ9.SFFxzfPowVBeMD0ajzyzTiQXUx1RU1MWXno72_4uA5tJORGoI2Oce0Ez3dDRpXyy4V5D2oIkl4-JKPPECXc0Sg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNjc2YmQwYy03MTczLTRkNGYtYjI1NC05NmYwMTYyYzQ1NDgiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjI0OCwicm9sIjoiW1NVUEVSQURNSU4sICBBRE1JTl0iLCJ1c2VybmFtZSI6Im1pcmV5YSJ9.SFFxzfPowVBeMD0ajzyzTiQXUx1RU1MWXno72_4uA5tJORGoI2Oce0Ez3dDRpXyy4V5D2oIkl4-JKPPECXc0Sg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/12",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNjc2YmQwYy03MTczLTRkNGYtYjI1NC05NmYwMTYyYzQ1NDgiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjI0OCwicm9sIjoiW1NVUEVSQURNSU4sICBBRE1JTl0iLCJ1c2VybmFtZSI6Im1pcmV5YSJ9.SFFxzfPowVBeMD0ajzyzTiQXUx1RU1MWXno72_4uA5tJORGoI2Oce0Ez3dDRpXyy4V5D2oIkl4-JKPPECXc0Sg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/5",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNjc2YmQwYy03MTczLTRkNGYtYjI1NC05NmYwMTYyYzQ1NDgiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjI0OCwicm9sIjoiW1NVUEVSQURNSU4sICBBRE1JTl0iLCJ1c2VybmFtZSI6Im1pcmV5YSJ9.SFFxzfPowVBeMD0ajzyzTiQXUx1RU1MWXno72_4uA5tJORGoI2Oce0Ez3dDRpXyy4V5D2oIkl4-JKPPECXc0Sg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image\": \"https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png\",\r\n    \"rol\": [\r\n        \"SUPERADMIN\",\r\n        \"ADMIN\"\r\n    ],\r\n    \"email\": \"mireya@correo.com\",\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\",\r\n    \"address\": \"Ugena\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/5",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNjc2YmQwYy03MTczLTRkNGYtYjI1NC05NmYwMTYyYzQ1NDgiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjI0OCwicm9sIjoiW1NVUEVSQURNSU4sICBBRE1JTl0iLCJ1c2VybmFtZSI6Im1pcmV5YSJ9.SFFxzfPowVBeMD0ajzyzTiQXUx1RU1MWXno72_4uA5tJORGoI2Oce0Ez3dDRpXyy4V5D2oIkl4-JKPPECXc0Sg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image\": \"https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png\",\r\n    \"rol\": [\r\n        \"SUPERADMIN\",\r\n        \"ADMIN\"\r\n    ],\r\n    \"email\": \"mireya@correo.com\",\r\n    \"username\": \"mireya\",\r\n    \"password\": \"mireya1234\",\r\n    \"address\": \"Ugena\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users (no autorizado)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxZjczZDI3NC00NzIwLTRiMTMtYWUyYS05ZDY5NDk1NDk3NjYiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjUyMSwicm9sIjoiW0NMSUVOVF0iLCJ1c2VybmFtZSI6ImpvcmdlIn0.LZKSxI9N0hxHLgD9jK3OAeIdLgHVeExJWt-OCtT-xpEOB1U4Ms-ShLEfLGjQUUkKQ3VaK4mhdt-s6hgoC7ETpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jorge\",\r\n    \"password\": \"jorge1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/1 (no autorizado)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxZjczZDI3NC00NzIwLTRiMTMtYWUyYS05ZDY5NDk1NDk3NjYiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjUyMSwicm9sIjoiW0NMSUVOVF0iLCJ1c2VybmFtZSI6ImpvcmdlIn0.LZKSxI9N0hxHLgD9jK3OAeIdLgHVeExJWt-OCtT-xpEOB1U4Ms-ShLEfLGjQUUkKQ3VaK4mhdt-s6hgoC7ETpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jorge\",\r\n    \"password\": \"jorge1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/1 (no autorizado)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxZjczZDI3NC00NzIwLTRiMTMtYWUyYS05ZDY5NDk1NDk3NjYiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjUyMSwicm9sIjoiW0NMSUVOVF0iLCJ1c2VybmFtZSI6ImpvcmdlIn0.LZKSxI9N0hxHLgD9jK3OAeIdLgHVeExJWt-OCtT-xpEOB1U4Ms-ShLEfLGjQUUkKQ3VaK4mhdt-s6hgoC7ETpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rol\": [\r\n        \"CLIENT\"\r\n    ],\r\n    \"email\": \"jorge@correo.com\",\r\n    \"image\": \"https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png\",\r\n    \"username\": \"jorge\",\r\n    \"password\": \"jorge1234\",\r\n    \"address\": \"Leganés\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8383/users/1 (no autorizado)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxZjczZDI3NC00NzIwLTRiMTMtYWUyYS05ZDY5NDk1NDk3NjYiLCJpc3MiOiJCaXF1ZXNVc3VhcmlvcyIsImV4cCI6MTY3Nzk1NjUyMSwicm9sIjoiW0NMSUVOVF0iLCJ1c2VybmFtZSI6ImpvcmdlIn0.LZKSxI9N0hxHLgD9jK3OAeIdLgHVeExJWt-OCtT-xpEOB1U4Ms-ShLEfLGjQUUkKQ3VaK4mhdt-s6hgoC7ETpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rol\": [\r\n        \"CLIENT\"\r\n    ],\r\n    \"email\": \"jorge@correo.com\",\r\n    \"image\": \"https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png\",\r\n    \"username\": \"jorge\",\r\n    \"password\": \"jorge1234\",\r\n    \"address\": \"Leganés\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8383/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

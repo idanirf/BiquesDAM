@@ -1,0 +1,20 @@
+services:
+  mongodb-pedidos:
+    image: mongo
+    container_name: mongodb-pedidos
+    ports:
+      - 27017:27017
+
+  api-order:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    container_name: api-order
+    ports:
+      - "8282:8282"
+    depends_on:
+      - mongodb-pedidos
+
+
+
+
