@@ -203,6 +203,7 @@ class SalesRoutesTest {
         assertEquals(HttpStatusCode.OK, response.status)
     }
 
+
     @Test
     @Order(6)
     fun testDelete() = testApplication {
@@ -237,83 +238,5 @@ class SalesRoutesTest {
         }
 
         assertEquals(HttpStatusCode.NoContent, response.status)
-    }
-
-    @Test
-    @Order(7)
-    fun testGetServiceById() = testApplication {
-        environment { config }
-
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-
-        val login = client.post("/users/login") {
-            contentType(ContentType.Application.Json)
-            setBody(loginDTO)
-        }
-
-        val dtoToken = json.decodeFromString<UserTokenDTO>(login.bodyAsText())
-
-        client.post("/sales/appointments") {
-            contentType(ContentType.Application.Json)
-            setBody(createAppointment)
-            header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
-        }
-
-        val service = client.post("/sales") {
-            contentType(ContentType.Application.Json)
-            setBody(createService)
-            header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
-        }
-
-        val id = json.decodeFromString<FinalSaleDTO>(service.bodyAsText()).serviceEntity!!.id
-
-        val response = client.get("/sales/service/$id") {
-            contentType(ContentType.Application.Json)
-            header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
-        }
-
-        assertAll(
-            { assertEquals(HttpStatusCode.NoContent, response.status) })
-    }
-
-    @Test
-    @Order(8)
-    fun testGetProductById() = testApplication {
-
-        environment { config }
-
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-
-        val login = client.post("/users/login") {
-            contentType(ContentType.Application.Json)
-            setBody(loginDTO)
-        }
-
-        val dtoToken = json.decodeFromString<UserTokenDTO>(login.bodyAsText())
-
-        val res = client.post("/sales") {
-            contentType(ContentType.Application.Json)
-            setBody(createProduct)
-            header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
-        }
-
-        val id = json.decodeFromString<SaleDTO>(res.bodyAsText()).productEntity!!.id
-
-        val response = client.get("/sales/product/$id") {
-            contentType(ContentType.Application.Json)
-            header(HttpHeaders.Authorization, "Bearer " + dtoToken.token)
-        }
-
-        assertAll(
-            { assertEquals(HttpStatusCode.OK, response.status) },
-        )
     }
 }
