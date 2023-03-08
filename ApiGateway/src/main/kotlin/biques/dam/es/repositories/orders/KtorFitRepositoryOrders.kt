@@ -3,8 +3,6 @@ package biques.dam.es.repositories.orders
 import biques.dam.es.dto.OrderDTO
 import biques.dam.es.dto.OrderDTOUpdate
 import biques.dam.es.dto.OrderSaveDTO
-import biques.dam.es.exceptions.AppointmentConflictIntegrityException
-import biques.dam.es.exceptions.AppointmentNotFoundException
 import biques.dam.es.exceptions.OrderErrorException
 import biques.dam.es.exceptions.OrderNotFoundException
 import biques.dam.es.services.orders.KtorFitClientOrders
@@ -14,6 +12,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import java.util.*
+
 /**
  * Implementation of the IOrdersRepository interface.
  * @author BiquesDAM-Team
@@ -24,7 +23,7 @@ class KtorFitRepositoryOrders : IOrdersRepository {
     private val client by lazy { KtorFitClientOrders.instance }
 
     /**
-     * Returns a flow of all orders.
+     * Returns a list of all orders.
      * @param token the access token for authentication.
      * @return a flow of all orders in the database.
      * @throws OrderNotFoundException if the orders are not found.
