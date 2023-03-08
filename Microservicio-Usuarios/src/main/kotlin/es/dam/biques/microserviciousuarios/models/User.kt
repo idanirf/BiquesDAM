@@ -16,7 +16,6 @@ import java.util.*
 data class User(
     @Id
     val id: Long? = null,
-//    @Serializable(with = UUIDSerializer::class)
     val uuid: String = UUID.randomUUID().toString(),
     val image: String? = null,
     @Column("rol")
