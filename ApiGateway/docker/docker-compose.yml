@@ -9,8 +9,7 @@ services:
       MARIADB_DATABASE: biquesdam
       MARIADB_USER: biquesdam
       MARIADB_PASSWORD: biquesdam
-    ports:
-      - "3306:3306"
+  
 
   api-users:
     build:
@@ -26,8 +25,6 @@ services:
   mongodb-pedidos:
     image: mongo
     container_name: mongodb-pedidos
-    ports:
-      - 27017:27017
 
   api-order:
     build:
@@ -45,8 +42,6 @@ services:
       context: ../../Microservicio-Producto-Servicios
       dockerfile: ./docker/Dockerfile
     container_name: api-products
-    ports:
-      - "8080:8080"
 
 
   gateway:
