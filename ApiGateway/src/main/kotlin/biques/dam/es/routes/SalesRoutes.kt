@@ -104,8 +104,8 @@ fun Application.salesRoutes() {
 
                         call.respond(HttpStatusCode.OK, result)
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Sales not found")
                     }
 
                 }
@@ -148,8 +148,8 @@ fun Application.salesRoutes() {
 
                         call.respond(HttpStatusCode.NotFound, "Product not found with uuid: $id")
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Sale with that id was not found")
                     }
                 }
 
@@ -205,8 +205,8 @@ fun Application.salesRoutes() {
 
                         call.respond(HttpStatusCode.NotFound, "Service not found with uuid: $id")
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Sale with that id was not found")
                     }
                 }
 
@@ -268,8 +268,8 @@ fun Application.salesRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error creating sale")
                     }
 
                 }
@@ -297,8 +297,8 @@ fun Application.salesRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error creating appointment")
                     }
                 }
 
@@ -360,8 +360,8 @@ fun Application.salesRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error updating sale")
                     }
 
                 }
@@ -391,7 +391,7 @@ fun Application.salesRoutes() {
                         val originalToken = call.principal<JWTPrincipal>()!!
                         val token = tokenService.generateToken(originalToken)
 
-                        if (originalToken.payload.getClaim("rol").toString().contains("[ADMIN]")) {
+                        if (originalToken.payload.getClaim("rol").toString().contains("SUPERADMIN")) {
                             val id = call.parameters["id"]
 
                             val result = async {
@@ -403,8 +403,8 @@ fun Application.salesRoutes() {
                             call.respond(HttpStatusCode.Unauthorized, "You are not authorized")
                         }
 
-                    } catch (e: SaleNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Sale with that id was not found")
                     }
 
                 }

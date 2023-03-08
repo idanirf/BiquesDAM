@@ -66,8 +66,8 @@ fun Application.usersRoutes() {
 
                     call.respond(HttpStatusCode.OK, user.await())
 
-                } catch (e: UserBadRequestException) {
-                    call.respond(HttpStatusCode.BadRequest, e.message.toString())
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, "Username or password is invalid")
                 }
             }
 
@@ -100,8 +100,8 @@ fun Application.usersRoutes() {
 
                     call.respond(HttpStatusCode.Created, user.await())
 
-                } catch (e: UserBadRequestException) {
-                    call.respond(HttpStatusCode.BadRequest, e.message.toString())
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, "This user is already registered")
                 }
             }
 
@@ -137,8 +137,8 @@ fun Application.usersRoutes() {
 
                         call.respond(HttpStatusCode.OK, users)
 
-                    } catch (e: UserNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error getting users")
                     }
                 }
 
@@ -174,8 +174,8 @@ fun Application.usersRoutes() {
 
                         call.respond(HttpStatusCode.OK, user.await())
 
-                    } catch (e: UserNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound,"User with that id was not found")
                     }
                 }
 
@@ -214,10 +214,10 @@ fun Application.usersRoutes() {
 
                         call.respond(HttpStatusCode.OK, updatedUser.await())
 
-                    } catch (e: UserNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "Error updating user")
                     } catch (e: UserBadRequestException) {
-                        call.respond(HttpStatusCode.BadRequest, e.message.toString())
+                        call.respond(HttpStatusCode.BadRequest, "Error updating user")
                     }
                 }
 
@@ -250,8 +250,8 @@ fun Application.usersRoutes() {
                         userRepository.delete("Bearer $token", id!!.toLong())
 
                         call.respond(HttpStatusCode.NoContent)
-                    } catch (e: UserNotFoundException) {
-                        call.respond(HttpStatusCode.NotFound, e.message.toString())
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.NotFound, "User with that id was not found")
                     }
                 }
             }
